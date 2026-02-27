@@ -16,6 +16,7 @@ El proyecto está diseñado bajo un enfoque **Mobile First**, garantizando una e
 
 * **Diseño (UI/UX):** [Ver prototipo en Figma](https://www.figma.com/design/EU3E9ctU3psxUbATXqMH4m/ConectaUNET?node-id=0-1&t=unonzLhXC4o5f1z7-1)
 * **Repositorio:** [Ver proyecto StageU en GitHub](https://github.com/FerdVI/StageU)
+* **Repositorio:** [Ver proyecto EmprendiUNET en GitHub](https://github.com/AngelVivas-20005/EmprendiUNET)
 
 ## 👥 Equipo 11
 
