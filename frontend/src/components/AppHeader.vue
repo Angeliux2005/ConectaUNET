@@ -21,11 +21,12 @@
     <NotificationsModal v-if="isNotificationsOpen" @close="isNotificationsOpen = false" />
   </header>
 
-  <header v-else class="w-full h-[72px] bg-white border-b border-gray-100 flex items-center justify-between px-6 lg:px-12 shadow-sm shrink-0 z-50 fixed top-0 left-0">
+  <header v-else class="w-full h-[72px] bg-white border-b-0 sm:border-b border-gray-100 flex items-center justify-center sm:justify-between px-6 lg:px-12 shadow-none sm:shadow-sm shrink-0 z-50 fixed top-0 left-0">
     <router-link to="/eventos" class="text-[#002177] font-bold text-[22px] tracking-tight truncate hover:opacity-80 transition-opacity">
       ConectaUNET
     </router-link>
-    <div>
+    
+    <div class="hidden sm:block">
       <router-link to="/eventos" class="bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-bold px-5 py-2.5 rounded-lg shadow-sm transition-colors text-[14px]">
         Volver al Inicio
       </router-link>
