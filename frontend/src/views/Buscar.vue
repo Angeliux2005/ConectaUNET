@@ -60,8 +60,14 @@
         <SearchCard
           v-for="evento in eventosFiltrados"
           :key="evento.id"
-          v-bind="evento"
-          tagColor="bg-purple-100 text-purple-600"
+          :imagen="evento.imagen"
+          :titulo="evento.titulo"
+          :etiqueta="evento.etiqueta"
+          :descripcion="evento.descripcion"
+          :ubicacion="evento.ubicacion"
+          :autor="evento.autor"
+          :avatar="evento.avatar"
+          :tagColor="evento.tagColor"
         />
       </div>
 
@@ -69,8 +75,14 @@
         <SearchCard
           v-for="emp in emprendimientosFiltrados"
           :key="emp.id"
-          v-bind="emp"
-          tagColor="bg-green-100 text-green-600"
+          :imagen="emp.imagen"
+          :titulo="emp.titulo"
+          :etiqueta="emp.etiqueta"
+          :descripcion="emp.descripcion"
+          :ubicacion="emp.ubicacion"
+          :autor="emp.autor"
+          :avatar="emp.avatar"
+          :tagColor="emp.tagColor"
         />
       </div>
     </div>
@@ -79,7 +91,7 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import SearchCard from './SearchCard.vue'
+import SearchCard from '../components/SearchCard.vue'
 
 const tabActiva = ref('eventos')
 const query = ref('')
@@ -89,7 +101,10 @@ const eventos = [
     id: 1,
     titulo: 'Festival de Musica Andina',
     categoria: 'Musica',
+    etiqueta: 'Musica',
+    tagColor: 'bg-purple-100 text-purple-600',
     descripcion: 'Presentaciones en vivo con agrupaciones universitarias y artistas invitados.',
+    ubicacion: 'Auditorio Central',
     autor: 'Cultura UNET',
     imagen: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=300&q=80',
     avatar: 'https://i.pravatar.cc/40?img=12'
@@ -98,7 +113,10 @@ const eventos = [
     id: 2,
     titulo: 'Feria Gastronomica Universitaria',
     categoria: 'Comida',
+    etiqueta: 'Comida',
+    tagColor: 'bg-orange-100 text-orange-600',
     descripcion: 'Sabores regionales preparados por estudiantes emprendedores y chefs locales.',
+    ubicacion: 'Mini Hall',
     autor: 'Bienestar Estudiantil',
     imagen: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=300&q=80',
     avatar: 'https://i.pravatar.cc/40?img=22'
@@ -107,7 +125,10 @@ const eventos = [
     id: 3,
     titulo: 'Misa de Accion de Gracias',
     categoria: 'Misa',
+    etiqueta: 'Misa',
+    tagColor: 'bg-sky-100 text-sky-600',
     descripcion: 'Encuentro espiritual de cierre de semestre en la capilla universitaria.',
+    ubicacion: 'Capilla del B',
     autor: 'Pastoral UNET',
     imagen: 'https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=300&q=80',
     avatar: 'https://i.pravatar.cc/40?img=32'
@@ -119,7 +140,10 @@ const emprendimientos = [
     id: 101,
     titulo: 'Ropa Creativa ULA',
     categoria: 'Ropa',
+    etiqueta: 'Ropa',
+    tagColor: 'bg-emerald-100 text-emerald-600',
     descripcion: 'Coleccion de prendas urbanas con disenos inspirados en la vida universitaria.',
+    ubicacion: 'Local 3, Bloque A',
     autor: 'Ana Perez',
     imagen: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=300&q=80',
     avatar: 'https://i.pravatar.cc/40?img=5'
@@ -128,7 +152,10 @@ const emprendimientos = [
     id: 102,
     titulo: 'Accesorios Artesanales Merida',
     categoria: 'Accesorios',
+    etiqueta: 'Accesorios',
+    tagColor: 'bg-amber-100 text-amber-700',
     descripcion: 'Pulseras, collares y piezas tejidas a mano con materiales sostenibles.',
+    ubicacion: 'Pasillo de emprendimientos',
     autor: 'Luis Gonzalez',
     imagen: 'https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=300&q=80',
     avatar: 'https://i.pravatar.cc/40?img=45'
@@ -137,7 +164,10 @@ const emprendimientos = [
     id: 103,
     titulo: 'Diseno de Flyers Academicos',
     categoria: 'Servicios',
+    etiqueta: 'Servicios',
+    tagColor: 'bg-blue-100 text-blue-600',
     descripcion: 'Creacion de piezas graficas para eventos estudiantiles y marcas personales.',
+    ubicacion: 'Cowork UNET',
     autor: 'Maria Rivas',
     imagen: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=300&q=80',
     avatar: 'https://i.pravatar.cc/40?img=16'
@@ -146,7 +176,10 @@ const emprendimientos = [
     id: 104,
     titulo: 'Snack Bar Estudiantil',
     categoria: 'Comida',
+    etiqueta: 'Comida',
+    tagColor: 'bg-orange-100 text-orange-600',
     descripcion: 'Meriendas saludables y combos rapidos para estudiantes durante la jornada.',
+    ubicacion: 'Mini hall',
     autor: 'Carlos Mora',
     imagen: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=300&q=80',
     avatar: 'https://i.pravatar.cc/40?img=29'
