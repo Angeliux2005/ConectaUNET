@@ -11,6 +11,7 @@ import DetallesEvento from './views/detalles-evento.vue'
 import DetallesEmprendimientoInformacion from './views/detalles-emprendimiento-informacion.vue'
 import Emprendimientos from './views/emprendimientos.vue'
 import Publicacion from './views/publicacion.vue'
+import Buscar from './views/Buscar.vue'
 import Privacidad from './views/privacidad.vue'
 import Terminos from './views/terminos.vue'
 import Contacto from './views/contacto.vue'
@@ -33,6 +34,7 @@ const routes = [
   { name: 'DetallesEmprendimientoInformacion', path: '/detalles-emprendimiento-informacion', component: DetallesEmprendimientoInformacion },
   { name: 'Emprendimientos', path: '/emprendimientos', component: Emprendimientos },
   { name: 'Publicacion', path: '/publicacion', component: Publicacion },
+  { name: 'Buscar', path: '/buscar', component: Buscar },
   { name: '404 - Not Found', path: '/:pathMatch(.*)*', component: NotFound }
 ]
 
