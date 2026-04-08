@@ -6,6 +6,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add a name']
   },
+  username: {
+    type: String,
+    required: [true, 'Please add a username'],
+    unique: true,
+    trim: true,
+    lowercase: true,
+    match: [/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers and underscores']
+  },
   email: {
     type: String,
     required: [true, 'Please add an email'],
@@ -19,7 +27,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add a password'],
     minlength: 6,
-    select: false 
+    select: false
   },
   role: {
     type: String,
@@ -33,13 +41,17 @@ const userSchema = new mongoose.Schema({
   identityCard: {
     type: String
   },
+  avatar: {
+    type: String,
+    default: ''
+  },
   createdAt: {
     type: Date,
     default: Date.now
   }
 });
 
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next();
   }
@@ -47,7 +59,7 @@ userSchema.pre('save', async function(next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-userSchema.methods.matchPassword = async function(enteredPassword) {
+userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
