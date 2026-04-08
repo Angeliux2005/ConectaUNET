@@ -13,29 +13,35 @@ const emprendimientoSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, 'Please add a description']
-  },
-  tags: {
-    type: [String],
-    default: []
+    default: ''
   },
   location: {
     type: String,
-    required: [true, 'Please add a location']
+    required: [true, 'Please add a delivery location']
+  },
+  schedule: {
+    type: String,
+    default: ''
   },
   socialLinks: {
-    instagram: String,
-    twitter: String,
-    facebook: String
+    whatsapp: { type: String, default: '' },
+    instagram: { type: String, default: '' },
+    email: { type: String, default: '' }
+  },
+  profileImage: {
+    type: String,
+    default: ''
   },
   coverImage: {
     type: String,
-    default: 'no-image.jpg'
+    default: ''
   },
-  followersCount: {
-    type: Number,
-    default: 0
-  },
+  followers: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
+    }
+  ],
   status: {
     type: String,
     enum: ['active', 'inactive'],
@@ -51,6 +57,13 @@ const emprendimientoSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+emprendimientoSchema.virtual('followersCount').get(function () {
+  return this.followers.length;
+});
+
+emprendimientoSchema.set('toJSON', { virtuals: true });
+emprendimientoSchema.set('toObject', { virtuals: true });
 
 const Emprendimiento = mongoose.model('Emprendimiento', emprendimientoSchema);
 export default Emprendimiento;

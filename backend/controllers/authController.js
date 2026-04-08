@@ -3,32 +3,29 @@ import generateToken from '../utils/generateToken.js';
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, username, email, password } = req.body;
 
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ $or: [{ email }, { username }] });
 
     if (userExists) {
-      return res.status(400).json({ success: false, message: 'El usuario ya existe' });
+      const field = userExists.email === email ? 'correo' : 'nombre de usuario';
+      return res.status(400).json({ success: false, message: `El ${field} ya está en uso` });
     }
 
-    const user = await User.create({
-      name,
-      email,
-      password,
-    });
+    const user = await User.create({ name, username, email, password });
 
-    if (user) {
-      res.status(201).json({
-        success: true,
+    res.status(201).json({
+      success: true,
+      data: {
         _id: user._id,
         name: user.name,
+        username: user.username,
         email: user.email,
+        avatar: user.avatar,
         role: user.role,
-        token: generateToken(user._id),
-      });
-    } else {
-      res.status(400).json({ success: false, message: 'Datos de usuario inválidos' });
-    }
+        token: generateToken(user._id)
+      }
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -36,21 +33,32 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { login, password } = req.body;
 
-    const user = await User.findOne({ email }).select('+password');
+    if (!login || !password) {
+      return res.status(400).json({ success: false, message: 'Por favor ingresa usuario/correo y contraseña' });
+    }
+
+    // Allow login by email or username
+    const user = await User.findOne({
+      $or: [{ email: login }, { username: login.toLowerCase() }]
+    }).select('+password');
 
     if (user && (await user.matchPassword(password))) {
       res.json({
         success: true,
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        token: generateToken(user._id),
+        data: {
+          _id: user._id,
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          avatar: user.avatar,
+          role: user.role,
+          token: generateToken(user._id)
+        }
       });
     } else {
-      res.status(401).json({ success: false, message: 'Correo o contraseña incorrectos' });
+      res.status(401).json({ success: false, message: 'Correo/usuario o contraseña incorrectos' });
     }
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -64,15 +72,59 @@ export const getUserProfile = async (req, res) => {
     if (user) {
       res.json({
         success: true,
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        career: user.career
+        data: {
+          _id: user._id,
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          avatar: user.avatar,
+          career: user.career,
+          identityCard: user.identityCard,
+          role: user.role
+        }
       });
     } else {
       res.status(404).json({ success: false, message: 'Usuario no encontrado' });
     }
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const updateUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+    }
+
+    const { name, career, identityCard, avatar } = req.body;
+
+    if (name) user.name = name;
+    if (career) user.career = career;
+    if (identityCard) user.identityCard = identityCard;
+    if (avatar !== undefined) user.avatar = avatar;
+
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    const updated = await user.save();
+
+    res.json({
+      success: true,
+      data: {
+        _id: updated._id,
+        name: updated.name,
+        username: updated.username,
+        email: updated.email,
+        avatar: updated.avatar,
+        career: updated.career,
+        identityCard: updated.identityCard,
+        role: updated.role
+      }
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

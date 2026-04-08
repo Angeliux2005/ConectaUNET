@@ -1,5 +1,14 @@
 import express from 'express';
-import { getEventos, createEvento } from '../controllers/eventoController.js';
+import {
+  getEventos,
+  getEventoById,
+  createEvento,
+  updateEvento,
+  deleteEvento,
+  toggleAttend,
+  getMuroComentarios,
+  addMuroComentario
+} from '../controllers/eventoController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -7,5 +16,16 @@ const router = express.Router();
 router.route('/')
   .get(getEventos)
   .post(protect, createEvento);
+
+router.route('/:id')
+  .get(getEventoById)
+  .put(protect, updateEvento)
+  .delete(protect, deleteEvento);
+
+router.post('/:id/attend', protect, toggleAttend);
+
+router.route('/:id/muro')
+  .get(getMuroComentarios)
+  .post(protect, addMuroComentario);
 
 export default router;

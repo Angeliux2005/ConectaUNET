@@ -8,20 +8,18 @@ const publicacionSchema = new mongoose.Schema({
   },
   content: {
     type: String,
-    required: [true, 'Please add content text']
+    default: ''
   },
   image: {
     type: String,
-    default: ''
+    required: [true, 'Please add an image URL']
   },
-  likesCount: {
-    type: Number,
-    default: 0
-  },
-  commentsCount: {
-    type: Number,
-    default: 0
-  },
+  likes: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
+    }
+  ],
   emprendimiento: {
     type: mongoose.Schema.ObjectId,
     ref: 'Emprendimiento',
@@ -37,6 +35,20 @@ const publicacionSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+publicacionSchema.virtual('likesCount').get(function () {
+  return this.likes.length;
+});
+
+publicacionSchema.virtual('commentsCount', {
+  ref: 'Comentario',
+  localField: '_id',
+  foreignField: 'publicacion',
+  count: true
+});
+
+publicacionSchema.set('toJSON', { virtuals: true });
+publicacionSchema.set('toObject', { virtuals: true });
 
 const Publicacion = mongoose.model('Publicacion', publicacionSchema);
 export default Publicacion;
