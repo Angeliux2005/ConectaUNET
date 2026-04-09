@@ -14,6 +14,7 @@ import Publicacion from './views/publicacion.vue'
 import Buscar from './views/Buscar.vue'
 import NuevoEvento from './views/nuevo-evento.vue'
 import NuevoEmprendimiento from './views/nuevo-emprendimiento.vue'
+import EditarEvento from './views/editar-evento.vue'
 import Privacidad from './views/privacidad.vue'
 import Terminos from './views/terminos.vue'
 import Contacto from './views/contacto.vue'
@@ -39,6 +40,7 @@ const routes = [
   { name: 'PerfilMisEmprendimientos', path: '/perfil-mis-emprendimientos', component: PerfilMisEmprendimientos },
   { name: 'DetallesEvento', path: '/eventos/:id', component: DetallesEvento },
   { name: 'Emprendimientos', path: '/emprendimientos', component: Emprendimientos },
+  { name: 'EditarEvento', path: '/editar-evento/:id', component: EditarEvento },
   { name: 'EditarEmprendimiento', path: '/editar-emprendimiento', component: EditarEmprendimiento },
   { name: 'Publicacion', path: '/publicacion', component: Publicacion },
   { name: 'Muro', path: '/muro-evento', component: MuroEvento },

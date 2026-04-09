@@ -175,7 +175,7 @@
                   </div>
 
                   <div class="mt-4 md:mt-6 flex gap-2 md:gap-4 w-full">
-                    <button class="flex-1 bg-white border border-gray-200 text-gray-700 font-bold text-[12px] md:text-[14px] py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-gray-50 transition-colors">
+                    <button @click="$router.push(`/editar-evento/${evento._id}`)" class="flex-1 bg-white border border-gray-200 text-gray-700 font-bold text-[12px] md:text-[14px] py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-gray-50 transition-colors">
                       Editar Evento
                     </button>
                     <button @click="$router.push(`/detalles-evento/${evento._id}`)" class="flex-1 bg-[#1e3a8a] text-white font-bold text-[12px] md:text-[14px] py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-[#152a6b] shadow-sm transition-colors">
