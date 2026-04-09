@@ -59,7 +59,7 @@ const emprendimientoSchema = new mongoose.Schema({
 });
 
 emprendimientoSchema.virtual('followersCount').get(function () {
-  return this.followers.length;
+  return (this.followers || []).length;
 });
 
 emprendimientoSchema.set('toJSON', { virtuals: true });

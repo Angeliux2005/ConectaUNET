@@ -37,7 +37,7 @@ const publicacionSchema = new mongoose.Schema({
 });
 
 publicacionSchema.virtual('likesCount').get(function () {
-  return this.likes.length;
+  return (this.likes || []).length;
 });
 
 publicacionSchema.virtual('commentsCount', {
