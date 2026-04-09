@@ -1,7 +1,7 @@
 <template>
   <article @click="navegar" class="cursor-pointer bg-white rounded-[24px] overflow-hidden shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100/50 transition-transform duration-300 hover:-translate-y-1 flex flex-col">
     <div class="relative h-[220px] w-full">
-      <img :src="imagen" :alt="titulo" class="w-full h-full object-cover" />
+      <img :src="imagen || 'https://images.unsplash.com/photo-1497493292307-31c376b6e479?q=80&w=2000'" :alt="titulo" class="w-full h-full object-cover" />
       <div class="absolute top-5 left-5 bg-[#1e3a8a] text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
         {{ etiqueta }}
       </div>
