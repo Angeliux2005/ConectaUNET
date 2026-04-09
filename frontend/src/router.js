@@ -18,6 +18,7 @@ import Contacto from './views/contacto.vue'
 import Acerca from './views/acerca.vue'
 import NotFound from './views/not-found.vue'
 import Notificaciones from './views/notificaciones.vue'
+import MuroEvento from './views/muro-evento.vue'
 
 const routes = [
   { name: 'Login', path: '/', component: Login },
@@ -35,6 +36,7 @@ const routes = [
   { name: 'DetallesEmprendimientoInformacion', path: '/detalles-emprendimiento-informacion', component: DetallesEmprendimientoInformacion },
   { name: 'Emprendimientos', path: '/emprendimientos', component: Emprendimientos },
   { name: 'Publicacion', path: '/publicacion', component: Publicacion },
+  { name: 'Muro', path: '/muro-evento', component: MuroEvento },
   { name: 'Buscar', path: '/buscar', component: Buscar },
   { name: 'Notificaciones', path: '/notificaciones', component: Notificaciones },
   { name: '404 - Not Found', path: '/:pathMatch(.*)*', component: NotFound }
