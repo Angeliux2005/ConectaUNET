@@ -29,7 +29,7 @@ router.route('/:id')
 
 router.post('/:id/follow', protect, toggleFollow);
 
-router.route('/:emprendimientoId/publicaciones')
+router.route('/:id/publicaciones')
   .get(getPublicacionesByEmprendimiento)
   .post(protect, createPublicacion);
 

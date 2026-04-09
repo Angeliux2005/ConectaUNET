@@ -4,6 +4,7 @@ import connectDB from '../config/db.js';
 import User from '../models/User.js';
 import Evento from '../models/Evento.js';
 import Emprendimiento from '../models/Emprendimiento.js';
+import Publicacion from '../models/Publicacion.js';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ const seed = async () => {
   await User.deleteMany({ username: { $in: ['mariaseed', 'carlosseed'] } });
   await Emprendimiento.deleteMany({});
   await Evento.deleteMany({});
+  await Publicacion.deleteMany({});
 
   const [u1, u2] = await User.create([
     {
@@ -257,11 +259,72 @@ const seed = async () => {
     },
   ];
 
-  await Emprendimiento.insertMany(emprendimientos);
+  const emps = await Emprendimiento.insertMany(emprendimientos);
   console.log('✓ 10 emprendimientos insertados');
 
   await Evento.insertMany(eventos);
   console.log('✓ 10 eventos insertados');
+
+  // ── Publicaciones (3 por emprendimiento) ────────────────────────────────────
+  const [
+    arquiPasteles, techPrint, cafeteria, creativaUNET, bikeRide,
+    plantasUNET, apuntesExpres, fotoEstudio, repasos, sportGear
+  ] = emps;
+
+  const publicaciones = [
+    // ArquiPasteles
+    { title: '¡Nuevos sabores de temporada!', content: 'Esta semana estrenamos pastel de maracuyá y de guanábana. Pásate por el Hall del Bloque B y pruébalos antes de que se agoten.', image: img(292), emprendimiento: arquiPasteles._id, author: u1._id },
+    { title: 'Pedidos para el día de las madres', content: 'Aceptamos pedidos personalizados con diseño arquitectónico. ¡Escríbenos por WhatsApp con anticipación!', image: img(431), emprendimiento: arquiPasteles._id, author: u1._id },
+    { title: 'Gracias por su apoyo', content: 'Cerramos el mes con más de 50 pasteles vendidos. Gracias a toda la comunidad UNET por confiar en nosotros.', image: img(453), emprendimiento: arquiPasteles._id, author: u1._id },
+
+    // TechPrint UNET
+    { title: 'Impresión 3D en menos de 24 horas', content: 'Trae tu archivo STL y te lo imprimimos en PLA o PETG. Ideal para prototipos de final de semestre.', image: img(48), emprendimiento: techPrint._id, author: u1._id },
+    { title: 'Grabado láser disponible', content: 'Personalizamos llaveros, portadas de cuadernos y placas. Precios especiales para estudiantes UNET.', image: img(119), emprendimiento: techPrint._id, author: u1._id },
+    { title: 'Nueva filament: carbono y madera', content: 'Ya tenemos filamento de fibra de carbono y efecto madera. Perfectos para maquetas y proyectos de diseño industrial.', image: img(430), emprendimiento: techPrint._id, author: u1._id },
+
+    // Cafetería El Rincón
+    { title: 'Menú de esta semana', content: 'Lunes: pabellón. Martes: pollo guisado. Miércoles: pasta bolognesa. Jueves: carne mechada. Viernes: especial del chef.', image: img(102), emprendimiento: cafeteria._id, author: u1._id },
+    { title: 'Desayunos desde las 7 AM', content: 'Arepas, cachapas, tequeños y jugos naturales te esperan cada mañana. ¡Empieza el día con energía!', image: img(493), emprendimiento: cafeteria._id, author: u1._id },
+    { title: 'Promoción del viernes', content: 'Todos los viernes almuerzo + refresco por precio especial. Solo en El Rincón, planta baja del Bloque A.', image: img(429), emprendimiento: cafeteria._id, author: u1._id },
+
+    // Diseños CreativaUNET
+    { title: 'Identidad de marca completa', content: 'Logo, paleta de colores, tipografía y manual de uso. Ideal para emprendimientos estudiantiles que quieren verse profesionales.', image: img(156), emprendimiento: creativaUNET._id, author: u1._id },
+    { title: 'Diseño de volantes y afiches', content: 'Material publicitario para tus eventos, clases de repaso o ventas. Entrega digital en 48 horas.', image: img(338), emprendimiento: creativaUNET._id, author: u1._id },
+    { title: 'Portafolio 2026', content: 'Mira nuestros últimos trabajos en Instagram @creativaunet. Cada diseño cuenta una historia.', image: img(396), emprendimiento: creativaUNET._id, author: u1._id },
+
+    // BikeRide Express
+    { title: 'Entrega en todo el campus', content: 'Llevamos documentos, encargos y hasta comida dentro del campus. Tiempo promedio de entrega: 15 minutos.', image: img(213), emprendimiento: bikeRide._id, author: u1._id },
+    { title: 'Ahora también fuera del campus', content: 'Extendimos nuestro rango a las urbanizaciones aledañas. Cotiza tu envío por WhatsApp.', image: img(504), emprendimiento: bikeRide._id, author: u1._id },
+    { title: 'Flota renovada', content: 'Incorporamos dos bicicletas nuevas a nuestra flota. Más rapidez y confiabilidad para tus entregas.', image: img(374), emprendimiento: bikeRide._id, author: u1._id },
+
+    // PlantasUNET
+    { title: 'Suculentas de temporada', content: 'Nuevas variedades de suculentas y cactus disponibles. Perfectas para decorar tu cuarto o escritorio de estudio.', image: img(145), emprendimiento: plantasUNET._id, author: u2._id },
+    { title: 'Macetas pintadas a mano', content: 'Cada maceta es única. Diseños geométricos, florales y personalizados. ¡Pídela con tu nombre!', image: img(399), emprendimiento: plantasUNET._id, author: u2._id },
+    { title: 'Taller de terrarios este viernes', content: 'Aprende a armar tu propio terrario con plantas naturales. Cupos limitados, inscríbete por Instagram @plantasunet.', image: img(360), emprendimiento: plantasUNET._id, author: u2._id },
+
+    // ApuntesExprés
+    { title: 'Guías de Cálculo I disponibles', content: 'Resúmenes de todos los temas con ejercicios resueltos. Descarga instantánea por solo 1$.', image: img(20), emprendimiento: apuntesExpres._id, author: u2._id },
+    { title: 'Nuevos apuntes: Física II', content: 'Acaba de subirse el compendio de Electromagnetismo con más de 30 ejercicios resueltos paso a paso.', image: img(317), emprendimiento: apuntesExpres._id, author: u2._id },
+    { title: 'Pack completo de Ingeniería Básica', content: 'Cálculo I y II, Física I y II, Química General. Todo por un precio especial de temporada.', image: img(459), emprendimiento: apuntesExpres._id, author: u2._id },
+
+    // FotoEstudio Campus
+    { title: 'Sesiones de portafolio universitario', content: 'Fotos profesionales para tu perfil de LinkedIn y portafolio académico. Fondo blanco o locación en campus.', image: img(64), emprendimiento: fotoEstudio._id, author: u2._id },
+    { title: 'Fotografía para eventos UNET', content: 'Cubrimos tu evento: talleres, graduaciones, ferias. Entrega de fotos editadas en menos de 48 horas.', image: img(188), emprendimiento: fotoEstudio._id, author: u2._id },
+    { title: 'Mini sesión de carnet estudiantil', content: 'Fotos de carnet con fondo azul o blanco, listas en el momento. Lunes y miércoles con cita previa.', image: img(375), emprendimiento: fotoEstudio._id, author: u2._id },
+
+    // RepasosIngeniería
+    { title: 'Clases de Cálculo este sábado', content: 'Repaso de integrales y series. Trae tus dudas y ejercicios del parcial. Aula 204, Bloque E.', image: img(279), emprendimiento: repasos._id, author: u2._id },
+    { title: 'Tutorías personalizadas', content: '¿Necesitas apoyo individual? Ofrecemos tutorías de 1 hora entre semana. Contáctanos por WhatsApp.', image: img(376), emprendimiento: repasos._id, author: u2._id },
+    { title: 'Resultados de nuestros estudiantes', content: 'El 80% de los estudiantes que asistieron a nuestros repasos aprobaron el último parcial. ¡Únete al grupo!', image: img(405), emprendimiento: repasos._id, author: u2._id },
+
+    // SportGear UNET
+    { title: 'Alquiler de balones y redes', content: 'Balones de fútbol, voleibol y básquet disponibles por horas. Presenta tu carnet estudiantil.', image: img(358), emprendimiento: sportGear._id, author: u2._id },
+    { title: 'Venta de implementos deportivos', content: 'Guantes, rodilleras, tobilleras y más. Precios por debajo del mercado para la comunidad UNET.', image: img(452), emprendimiento: sportGear._id, author: u2._id },
+    { title: 'Torneos interfacultad: equipos inscribirse', content: 'Coordinamos el torneo de fútbol sala de mayo. Inscribe a tu equipo antes del 30 de abril.', image: img(422), emprendimiento: sportGear._id, author: u2._id },
+  ];
+
+  await Publicacion.insertMany(publicaciones);
+  console.log('✓ 30 publicaciones insertadas (3 por emprendimiento)');
 
   await mongoose.disconnect();
   console.log('Seed completado.');

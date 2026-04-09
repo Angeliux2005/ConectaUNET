@@ -82,104 +82,36 @@
         </ul>
       </div>
 
-      <div class="mt-8 md:mt-10 px-px md:px-0 grid grid-cols-3 gap-px md:gap-8">
-        
-        <article class="flex flex-col bg-gray-100 md:bg-white md:rounded-2xl md:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] md:border md:border-gray-100 overflow-hidden group cursor-pointer active:opacity-80 transition-all hover:md:shadow-md">
+      <div v-if="loadingPubs" class="mt-8 md:mt-10 flex justify-center py-12">
+        <div class="w-8 h-8 border-4 border-[#1e3a8a] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+
+      <div v-else-if="publicaciones.length === 0" class="mt-8 md:mt-10 text-center py-16 text-gray-400">
+        <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+        <p class="text-[15px] font-medium">Este emprendimiento aún no tiene publicaciones</p>
+      </div>
+
+      <div v-else class="mt-8 md:mt-10 px-px md:px-0 grid grid-cols-3 gap-px md:gap-8">
+        <article
+          v-for="pub in publicaciones"
+          :key="pub._id"
+          @click="router.push(`/publicaciones/${pub._id}`)"
+          class="flex flex-col bg-gray-100 md:bg-white md:rounded-2xl md:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] md:border md:border-gray-100 overflow-hidden group cursor-pointer active:opacity-80 transition-all hover:md:shadow-md"
+        >
           <div class="aspect-square md:aspect-auto md:h-[220px] w-full overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Placa" />
+            <img :src="pub.image" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" :alt="pub.title" />
           </div>
           <div class="hidden md:flex flex-col flex-grow p-6">
-            <h3 class="text-[17px] font-bold text-[#001D6B] mb-2 leading-tight line-clamp-1">Prototipado de Placas V2.0</h3>
-            <p class="text-[14px] text-gray-500 leading-relaxed mb-5 line-clamp-2">
-              Probando la nueva arquitectura de bajo consumo para nuestros nodos de monitoreo...
-            </p>
+            <h3 class="text-[17px] font-bold text-[#001D6B] mb-2 leading-tight line-clamp-1">{{ pub.title }}</h3>
+            <p class="text-[14px] text-gray-500 leading-relaxed mb-5 line-clamp-2">{{ pub.content }}</p>
             <div class="mt-auto flex items-center gap-4 text-gray-400 text-[13px] font-medium">
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg> 134</span>
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg> 12</span>
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                {{ pub.likesCount }}
+              </span>
             </div>
           </div>
         </article>
-
-        <article class="flex flex-col bg-gray-100 md:bg-white md:rounded-2xl md:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] md:border md:border-gray-100 overflow-hidden group cursor-pointer active:opacity-80 transition-all hover:md:shadow-md">
-          <div class="aspect-square md:aspect-auto md:h-[220px] w-full overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Cultivo" />
-          </div>
-          <div class="hidden md:flex flex-col flex-grow p-6">
-            <h3 class="text-[17px] font-bold text-[#001D6B] mb-2 leading-tight line-clamp-1">Instalación en la Terraza UNET</h3>
-            <p class="text-[14px] text-gray-500 leading-relaxed mb-5 line-clamp-2">
-              Nuestro primer despliegue a gran escala para el huerto experimental de ingeniería...
-            </p>
-            <div class="mt-auto flex items-center gap-4 text-gray-400 text-[13px] font-medium">
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg> 89</span>
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg> 5</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="flex flex-col bg-gray-100 md:bg-white md:rounded-2xl md:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] md:border md:border-gray-100 overflow-hidden group cursor-pointer active:opacity-80 transition-all hover:md:shadow-md">
-          <div class="aspect-square md:aspect-auto md:h-[220px] w-full overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="App" />
-          </div>
-          <div class="hidden md:flex flex-col flex-grow p-6">
-            <h3 class="text-[17px] font-bold text-[#001D6B] mb-2 leading-tight line-clamp-1">Nueva Dashboard para Usuarios</h3>
-            <p class="text-[14px] text-gray-500 leading-relaxed mb-5 line-clamp-2">
-              Actualizamos nuestra app con visualizaciones de datos en tiempo real más intuitivas...
-            </p>
-            <div class="mt-auto flex items-center gap-4 text-gray-400 text-[13px] font-medium">
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg> 215</span>
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg> 32</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="flex flex-col bg-gray-100 md:bg-white md:rounded-2xl md:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] md:border md:border-gray-100 overflow-hidden group cursor-pointer active:opacity-80 transition-all hover:md:shadow-md">
-          <div class="aspect-square md:aspect-auto md:h-[220px] w-full overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Workshop" />
-          </div>
-          <div class="hidden md:flex flex-col flex-grow p-6">
-            <h3 class="text-[17px] font-bold text-[#001D6B] mb-2 leading-tight line-clamp-1">Workshop: Tecnología y Agro</h3>
-            <p class="text-[14px] text-gray-500 leading-relaxed mb-5 line-clamp-2">
-              Compartiendo nuestra experiencia en el último foro de innovación tecnológica...
-            </p>
-            <div class="mt-auto flex items-center gap-4 text-gray-400 text-[13px] font-medium">
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg> 156</span>
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg> 10</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="flex flex-col bg-gray-100 md:bg-white md:rounded-2xl md:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] md:border md:border-gray-100 overflow-hidden group cursor-pointer active:opacity-80 transition-all hover:md:shadow-md">
-          <div class="aspect-square md:aspect-auto md:h-[220px] w-full overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1496171367470-9ed9a91ea931?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Dashboard" />
-          </div>
-          <div class="hidden md:flex flex-col flex-grow p-6">
-            <h3 class="text-[17px] font-bold text-[#001D6B] mb-2 leading-tight line-clamp-1">Eficiencia Energética</h3>
-            <p class="text-[14px] text-gray-500 leading-relaxed mb-5 line-clamp-2">
-              Integrando paneles solares compactos para la autonomía total de nuestros sensores...
-            </p>
-            <div class="mt-auto flex items-center gap-4 text-gray-400 text-[13px] font-medium">
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg> 72</span>
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg> 4</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="flex flex-col bg-gray-100 md:bg-white md:rounded-2xl md:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] md:border md:border-gray-100 overflow-hidden group cursor-pointer active:opacity-80 transition-all hover:md:shadow-md">
-          <div class="aspect-square md:aspect-auto md:h-[220px] w-full overflow-hidden relative">
-            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Sostenibilidad" />
-          </div>
-          <div class="hidden md:flex flex-col flex-grow p-6">
-            <h3 class="text-[17px] font-bold text-[#001D6B] mb-2 leading-tight line-clamp-1">El Futuro es Verde</h3>
-            <p class="text-[14px] text-gray-500 leading-relaxed mb-5 line-clamp-2">
-              Nuestro compromiso con la sostenibilidad se refleja en cada línea de código...
-            </p>
-            <div class="mt-auto flex items-center gap-4 text-gray-400 text-[13px] font-medium">
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg> 184</span>
-              <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg> 21</span>
-            </div>
-          </div>
-        </article>
-
       </div>
 
       <section v-if="masEmprendimientos.length > 0" class="hidden md:block mt-24 px-2">
@@ -224,23 +156,31 @@ const route = useRoute()
 const router = useRouter()
 const emp = ref(null)
 const masEmprendimientos = ref([])
+const publicaciones = ref([])
+const loadingPubs = ref(true)
 
 const cargar = async (id) => {
+  loadingPubs.value = true
   try {
-    const [resEmp, resTodos] = await Promise.all([
+    const [resEmp, resTodos, resPubs] = await Promise.all([
       fetch(`/api/emprendimientos/${id}`),
-      fetch('/api/emprendimientos')
+      fetch('/api/emprendimientos'),
+      fetch(`/api/emprendimientos/${id}/publicaciones`)
     ])
     const jsonEmp = await resEmp.json()
     const jsonTodos = await resTodos.json()
+    const jsonPubs = await resPubs.json()
 
     if (jsonEmp.success) emp.value = jsonEmp.data
     if (jsonTodos.success) {
       const otros = jsonTodos.data.filter(e => e._id !== id)
       masEmprendimientos.value = otros.sort(() => Math.random() - 0.5).slice(0, 3)
     }
+    if (jsonPubs.success) publicaciones.value = jsonPubs.data
   } catch (error) {
     console.error('Error al cargar el emprendimiento:', error)
+  } finally {
+    loadingPubs.value = false
   }
 }
 

@@ -39,7 +39,7 @@ const routes = [
   { name: 'DetallesEvento', path: '/eventos/:id', component: DetallesEvento },
   { name: 'Emprendimientos', path: '/emprendimientos', component: Emprendimientos },
   { name: 'EditarEmprendimiento', path: '/editar-emprendimiento', component: EditarEmprendimiento },
-  { name: 'Publicacion', path: '/publicacion', component: Publicacion },
+  { name: 'Publicacion', path: '/publicaciones/:id', component: Publicacion },
   { name: 'Muro', path: '/muro-evento', component: MuroEvento },
   { name: 'Buscar', path: '/buscar', component: Buscar },
   { name: 'NuevoEvento', path: '/nuevo-evento', component: NuevoEvento },
