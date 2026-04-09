@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen bg-[#F8F9FB] flex flex-col font-sans w-full overflow-hidden">
+  <div class="min-h-screen bg-[#F8F9FB] flex flex-col font-sans w-full overflow-hidden relative">
     <AppHeader />
 
-    <main class="flex-grow w-full max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 mt-[72px] pb-16 pt-8">
+    <main class="flex-grow w-full max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 mt-[72px] pb-28 md:pb-16 pt-8">
 
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="hidden md:flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="relative w-full md:max-w-md">
           <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -28,7 +28,7 @@
         </div>
       </div>
 
-      <div class="mt-8 flex items-center gap-3 overflow-x-auto pb-4 scrollbar-hide">
+      <div class="hidden md:flex mt-8 items-center gap-3 overflow-x-auto pb-4 scrollbar-hide">
         <button class="shrink-0 bg-[#254291] text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-[#1a337a] transition-colors shadow-sm tracking-wide">Comida</button>
         <button class="shrink-0 bg-[#254291] text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-[#1a337a] transition-colors shadow-sm tracking-wide">Accesorios</button>
         <button class="shrink-0 bg-[#254291] text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-[#1a337a] transition-colors shadow-sm tracking-wide">Prepadurias</button>
@@ -49,17 +49,13 @@
           </div>
           <div class="p-6 md:p-8 flex-grow flex flex-col">
             <h3 class="text-[22px] font-bold text-gray-900 mb-2 tracking-tight">Arquipasteles</h3>
-            <p class="text-[15px] text-gray-600 leading-relaxed mb-6">
-              Pasteles
-            </p>
-
+            <p class="text-[15px] text-gray-600 leading-relaxed mb-6">Pasteles</p>
             <div class="space-y-4 mt-auto mb-8">
               <div class="flex items-center gap-3 text-sm font-semibold text-gray-700">
                 <svg class="w-5 h-5 text-[#1e3a8a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 Cochineras
               </div>
             </div>
-
             <div class="border-t border-gray-100 pt-5 flex items-center justify-between mt-auto">
               <div class="flex items-center gap-3">
                 <img src="https://i.pravatar.cc/100?img=9" alt="Kimberly" class="w-10 h-10 rounded-full object-cover shadow-sm bg-gray-100" />
@@ -84,17 +80,13 @@
           </div>
           <div class="p-6 md:p-8 flex-grow flex flex-col">
             <h3 class="text-[22px] font-bold text-gray-900 mb-2 tracking-tight">Accesorios</h3>
-            <p class="text-[15px] text-gray-600 leading-relaxed mb-6">
-              Accesorios
-            </p>
-
-                        <div class="space-y-4 mt-auto mb-8">
+            <p class="text-[15px] text-gray-600 leading-relaxed mb-6">Accesorios varios</p>
+            <div class="space-y-4 mt-auto mb-8">
               <div class="flex items-center gap-3 text-sm font-semibold text-gray-700">
                 <svg class="w-5 h-5 text-[#1e3a8a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 Hall del B
               </div>
             </div>
-
             <div class="border-t border-gray-100 pt-5 flex items-center justify-between mt-auto">
               <div class="flex items-center gap-3">
                 <img src="https://i.pravatar.cc/100?img=9" alt="Kimberly" class="w-10 h-10 rounded-full object-cover shadow-sm bg-gray-100" />
@@ -119,17 +111,13 @@
           </div>
           <div class="p-6 md:p-8 flex-grow flex flex-col">
             <h3 class="text-[22px] font-bold text-gray-900 mb-2 tracking-tight">Artesania</h3>
-            <p class="text-[15px] text-gray-600 leading-relaxed mb-6">
-              Artesania
-            </p>
-
-                        <div class="space-y-4 mt-auto mb-8">
+            <p class="text-[15px] text-gray-600 leading-relaxed mb-6">Artesanias hechas a mano</p>
+            <div class="space-y-4 mt-auto mb-8">
               <div class="flex items-center gap-3 text-sm font-semibold text-gray-700">
                 <svg class="w-5 h-5 text-[#1e3a8a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 Sotano del C
               </div>
             </div>
-
             <div class="border-t border-gray-100 pt-5 flex items-center justify-between mt-auto">
               <div class="flex items-center gap-3">
                 <img src="https://i.pravatar.cc/100?img=9" alt="Kimberly" class="w-10 h-10 rounded-full object-cover shadow-sm bg-gray-100" />
@@ -145,17 +133,25 @@
       </div>
     </main>
 
-    <AppFooter />
+    <nav class="md:hidden fixed bottom-0 w-full bg-white h-[70px] flex justify-around items-center px-2 border-t border-[#E5E7EB] shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)] z-50">
+      <button @click="$router.push('/eventos')" class="text-[#6B7280] hover:text-[#1e3a8a] transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"></path><path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"></path></svg></button>
+      <button @click="$router.push('/buscar')" class="text-[#1e3a8a] transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path></svg></button>
+      <button @click="$router.push('/nuevo-emprendimiento')" class="text-[#1e3a8a] hover:text-[#1E40AF] transition-colors"><svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></button>
+      <button class="text-[#6B7280] hover:text-[#1e3a8a] transition-colors relative"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"></path></svg></button>
+      <button class="text-[#6B7280] hover:text-[#1e3a8a] transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"></path></svg></button>
+    </nav>
+
+    <div class="hidden md:block">
+      <AppFooter />
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Emprendimientos',
-
-    data() {
-    return {
-      }
+  data() {
+    return {}
   }
 }
 </script>

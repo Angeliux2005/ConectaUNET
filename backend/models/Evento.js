@@ -3,17 +3,17 @@ import mongoose from 'mongoose';
 const eventoSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: [true, 'Please add a title mapping the event'],
+    required: [true, 'Please add a title for the event'],
     trim: true,
     maxlength: [120, 'Title can not exceed 120 characters']
   },
   category: {
     type: String,
-    required: [true, 'Please add an event type/category (e.g., STARTUPS, EDUCACION)']
+    required: [true, 'Please add an event category']
   },
   description: {
     type: String,
-    required: true
+    default: ''
   },
   date: {
     type: Date,
@@ -21,7 +21,7 @@ const eventoSchema = new mongoose.Schema({
   },
   timeRange: {
     type: String,
-    default: '8:00 AM - 12:00 PM'
+    default: ''
   },
   location: {
     type: String,
@@ -29,15 +29,14 @@ const eventoSchema = new mongoose.Schema({
   },
   coverImage: {
     type: String,
-    default: 'no-event-image.jpg'
+    default: ''
   },
-  attendeesCount: {
-    type: Number,
-    default: 0
-  },
-  organizerName: {
-    type: String
-  },
+  attendees: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
+    }
+  ],
   organizer: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
@@ -48,6 +47,13 @@ const eventoSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+eventoSchema.virtual('attendeesCount').get(function () {
+  return this.attendees.length;
+});
+
+eventoSchema.set('toJSON', { virtuals: true });
+eventoSchema.set('toObject', { virtuals: true });
 
 const Evento = mongoose.model('Evento', eventoSchema);
 export default Evento;
