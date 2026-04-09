@@ -12,12 +12,15 @@ import DetallesEmprendimientoInformacion from './views/detalles-emprendimiento-i
 import Emprendimientos from './views/emprendimientos.vue'
 import Publicacion from './views/publicacion.vue'
 import Buscar from './views/Buscar.vue'
+import NuevoEvento from './views/nuevo-evento.vue'
 import Privacidad from './views/privacidad.vue'
 import Terminos from './views/terminos.vue'
 import Contacto from './views/contacto.vue'
 import Acerca from './views/acerca.vue'
 import NotFound from './views/not-found.vue'
 import Notificaciones from './views/notificaciones.vue'
+import MuroEvento from './views/muro-evento.vue'
+import EditarEmprendimiento from './views/editar-emprendimiento.vue'
 
 const routes = [
   { name: 'Login', path: '/', component: Login },
@@ -34,8 +37,11 @@ const routes = [
   { name: 'DetallesEvento', path: '/eventos/:id', component: DetallesEvento },
   { name: 'DetallesEmprendimientoInformacion', path: '/emprendimientos/:id', component: DetallesEmprendimientoInformacion },
   { name: 'Emprendimientos', path: '/emprendimientos', component: Emprendimientos },
+  { name: 'EditarEmprendimiento', path: '/editar-emprendimiento', component: EditarEmprendimiento },
   { name: 'Publicacion', path: '/publicacion', component: Publicacion },
+  { name: 'Muro', path: '/muro-evento', component: MuroEvento },
   { name: 'Buscar', path: '/buscar', component: Buscar },
+  { name: 'NuevoEvento', path: '/nuevo-evento', component: NuevoEvento },
   { name: 'Notificaciones', path: '/notificaciones', component: Notificaciones },
   { name: '404 - Not Found', path: '/:pathMatch(.*)*', component: NotFound }
 ]
