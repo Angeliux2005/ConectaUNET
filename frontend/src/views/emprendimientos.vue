@@ -49,7 +49,7 @@
           <article
             v-for="emp in emprendimientos"
             :key="emp._id"
-            @click="$router.push('/detalles-emprendimiento-informacion')"
+            @click="$router.push(`/emprendimientos/${emp._id}`)"
             class="cursor-pointer bg-white rounded-[24px] overflow-hidden shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100/50 transition-transform duration-300 hover:-translate-y-1 flex flex-col"
           >
             <div class="relative h-[220px] w-full bg-slate-100">

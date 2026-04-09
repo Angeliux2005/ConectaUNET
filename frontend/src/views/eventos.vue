@@ -57,6 +57,7 @@
             :hora="evento.timeRange"
             :autor="evento.organizer?.name || 'Sin organizador'"
             :avatar="evento.organizer?.avatar || `https://ui-avatars.com/api/?name=${evento.organizer?.name || 'U'}&background=EBF5FF&color=1E3A8A`"
+            :enlaceDetalle="`/eventos/${evento._id}`"
           />
         </div>
       </div>
