@@ -157,15 +157,16 @@
 
     </main>
 
-    <AppFooter />
+    <BottomNav />
+
+    <div class="hidden md:block">
+      <AppFooter />
+    </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Publicacion',
-}
+<script setup>
+import AppHeader from '../components/AppHeader.vue'
+import AppFooter from '../components/AppFooter.vue'
+import BottomNav from '../components/BottomNav.vue'
 </script>
-
-<style scoped>
-</style>

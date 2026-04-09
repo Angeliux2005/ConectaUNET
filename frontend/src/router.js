@@ -21,6 +21,7 @@ import Acerca from './views/acerca.vue'
 import NotFound from './views/not-found.vue'
 import Notificaciones from './views/notificaciones.vue'
 import MuroEvento from './views/muro-evento.vue'
+import EditarEmprendimiento from './views/editar-emprendimiento.vue'
 
 const routes = [
   { name: 'Login', path: '/', component: Login },
@@ -31,12 +32,14 @@ const routes = [
   { name: 'Contacto', path: '/contacto', component: Contacto },
   { name: 'Acerca', path: '/acerca', component: Acerca },
   { name: 'DetallesEmprendimientoDueo', path: '/detalles-emprendimiento-dueo', component: DetallesEmprendimientoDueo },
-  { name: 'DetallesEmprendimientoPublicaciones', path: '/detalles-emprendimiento-publicaciones', component: DetallesEmprendimientoPublicaciones },
+  { name: 'DetallesEmprendimientoPublicaciones', path: '/emprendimientos/:id/publicaciones', component: DetallesEmprendimientoPublicaciones },
+  { name: 'DetallesEmprendimientoInformacion', path: '/emprendimientos/:id/informacion', component: DetallesEmprendimientoInformacion },
+  { path: '/emprendimientos/:id', redirect: to => `/emprendimientos/${to.params.id}/publicaciones` },
   { name: 'Eventos', path: '/eventos', component: Eventos },
   { name: 'PerfilMisEmprendimientos', path: '/perfil-mis-emprendimientos', component: PerfilMisEmprendimientos },
-  { name: 'DetallesEvento', path: '/detalles-evento', component: DetallesEvento },
-  { name: 'DetallesEmprendimientoInformacion', path: '/detalles-emprendimiento-informacion', component: DetallesEmprendimientoInformacion },
+  { name: 'DetallesEvento', path: '/eventos/:id', component: DetallesEvento },
   { name: 'Emprendimientos', path: '/emprendimientos', component: Emprendimientos },
+  { name: 'EditarEmprendimiento', path: '/editar-emprendimiento', component: EditarEmprendimiento },
   { name: 'Publicacion', path: '/publicacion', component: Publicacion },
   { name: 'Muro', path: '/muro-evento', component: MuroEvento },
   { name: 'Buscar', path: '/buscar', component: Buscar },
@@ -49,6 +52,9 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior() {
+    return { top: 0 }
+  }
 })
 
 export default router

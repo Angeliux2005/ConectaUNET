@@ -55,8 +55,9 @@
             :ubicacion="evento.location"
             :fecha="formatearFecha(evento.date)"
             :hora="evento.timeRange"
-            :autor="evento.organizer.name"
-            :avatar="evento.organizer.avatar || `https://ui-avatars.com/api/?name=${evento.organizer.name}&background=EBF5FF&color=1E3A8A`"
+            :autor="evento.organizer?.name || 'Sin organizador'"
+            :avatar="evento.organizer?.avatar || `https://ui-avatars.com/api/?name=${evento.organizer?.name || 'U'}&background=EBF5FF&color=1E3A8A`"
+            :enlaceDetalle="`/eventos/${evento._id}`"
           />
         </div>
       </div>
