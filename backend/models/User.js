@@ -51,10 +51,13 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function () {
+  // Si la contrasena no ha cambiado, simplemente salimos de la funcion
   if (!this.isModified('password')) {
-    next();
+    return;
   }
+
+  // Solo si cambio la contrasena, generamos el hash
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });

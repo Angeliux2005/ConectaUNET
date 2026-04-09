@@ -71,6 +71,22 @@
                 class="mt-2 w-full rounded-[24px] border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all" />
             </label>
 
+            <label class="block">
+              <span class="text-sm font-semibold text-gray-700">Categoría</span>
+              <div class="relative">
+                <select v-model="form.categoria"
+                  class="mt-2 w-full rounded-[24px] border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all appearance-none pr-10">
+                  <option value="Taller / Académico">Taller / Académico</option>
+                  <option value="Concierto">Concierto</option>
+                  <option value="Feria">Feria</option>
+                  <option value="Otro">Otro</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+              </div>
+            </label>
+
             <div class="grid grid-cols-2 gap-4">
               <label class="block">
                 <span class="text-sm font-semibold text-gray-700">Fecha</span>
@@ -123,11 +139,11 @@ const router = useRouter()
 
 const form = reactive({
   nombre: '',
+  categoria: 'Taller / Académico',
   fecha: '',
   hora: '',
   ubicacion: '',
-  descripcion: '',
-  categoria: 'General'
+  descripcion: ''
 })
 
 const files = reactive({ cover: null })

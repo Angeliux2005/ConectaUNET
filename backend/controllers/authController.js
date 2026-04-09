@@ -109,16 +109,21 @@ export const updateUserProfile = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
     }
 
-    const { name, career, identityCard, avatar } = req.body;
+    const { name, username, career, identityCard, avatar } = req.body;
+
+    // Validación para actualizar el nombre de usuario (sin que choque con otro existente)
+    if (username && username !== user.username) {
+      const usernameExists = await User.findOne({ username });
+      if (usernameExists) {
+        return res.status(400).json({ success: false, message: 'El nombre de usuario ya está en uso' });
+      }
+      user.username = username;
+    }
 
     if (name) user.name = name;
     if (career) user.career = career;
     if (identityCard) user.identityCard = identityCard;
     if (avatar !== undefined) user.avatar = avatar;
-
-    if (req.body.password) {
-      user.password = req.body.password;
-    }
 
     const updated = await user.save();
 
@@ -134,6 +139,43 @@ export const updateUserProfile = async (req, res) => {
         identityCard: updated.identityCard,
         role: updated.role
       }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// ==========================================
+// NUEVA FUNCIÓN: CAMBIAR CONTRASEÑA
+// ==========================================
+export const updatePassword = async (req, res) => {
+  try {
+    // Buscamos al usuario e incluimos la contraseña (porque por defecto está oculta)
+    const user = await User.findById(req.user._id).select('+password');
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+    }
+
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ success: false, message: 'Por favor ingresa la contraseña actual y la nueva' });
+    }
+
+    // Verificar si la contraseña actual que ingresó es correcta
+    const isMatch = await user.matchPassword(currentPassword);
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: 'La contraseña actual es incorrecta' });
+    }
+
+    // Actualizamos y guardamos (el modelo User.js ya se encarga de encriptarla sola)
+    user.password = newPassword;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Contraseña actualizada con éxito'
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

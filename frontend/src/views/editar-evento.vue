@@ -2,13 +2,13 @@
   <div class="min-h-screen bg-[#F8F9FB] flex flex-col font-sans w-full overflow-hidden">
     
     <header
-      class="w-full h-[72px] bg-white border-b border-gray-100 flex items-center justify-between px-6 lg:px-12 shadow-sm shrink-0 z-50 fixed top-0 left-0">
+      class="w-full h-[72px] bg-white border-b border-gray-100 flex items-center justify-center md:justify-between px-6 lg:px-12 shadow-sm shrink-0 z-50 fixed top-0 left-0">
       <router-link to="/eventos"
         class="text-[#002177] font-bold text-[22px] tracking-tight truncate hover:opacity-80 transition-opacity">
         ConectaUNET
       </router-link>
 
-      <div class="flex items-center space-x-4">
+      <div class="hidden md:flex items-center space-x-4">
         <button @click="isNotificationsOpen = true"
           class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-50 text-gray-600 transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -39,19 +39,37 @@
               </svg>
             </button>
             <h1 class="text-[18px] font-black text-[#0A1128] tracking-tight">Editar Evento</h1>
-            <button @click.prevent="saveEvent" class="bg-[#1e3a8a] text-white text-[13px] font-bold px-5 py-2 rounded-xl shadow-sm hover:bg-[#152a6b] transition-colors">
-              Save
+            <button @click.prevent="saveEvent" :disabled="saving" class="bg-[#1e3a8a] text-white text-[13px] font-bold px-5 py-2 rounded-xl shadow-sm hover:bg-[#152a6b] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+              <svg v-if="saving" class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+              </svg>
+              {{ saving ? 'Guardando...' : 'Guardar cambios' }}
             </button>
           </div>
 
           <div class="bg-[#1e3aa8] py-14 flex flex-col items-center justify-center shrink-0">
-            <button class="bg-white text-[#1e3a8a] text-[13px] font-bold px-7 py-3.5 rounded-2xl flex items-center gap-2.5 shadow-md hover:bg-gray-50 transition-colors">
-              <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
-              </svg>
-              Cambiar Portada
-            </button>
+            <div v-if="currentCover" class="w-full h-full relative">
+              <img :src="currentCover" alt="Portada evento" class="w-full h-full object-cover" />
+              <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                <button @click="$refs.coverInput.click()" class="bg-white text-[#1e3a8a] text-[13px] font-bold px-7 py-3.5 rounded-2xl flex items-center gap-2.5 shadow-md hover:bg-gray-50 transition-colors">
+                  <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  Cambiar Portada
+                </button>
+              </div>
+            </div>
+            <div v-else>
+              <button @click="$refs.coverInput.click()" class="bg-white text-[#1e3a8a] text-[13px] font-bold px-7 py-3.5 rounded-2xl flex items-center gap-2.5 shadow-md hover:bg-gray-50 transition-colors">
+                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Cambiar Portada
+              </button>
+            </div>
+            <input ref="coverInput" type="file" accept="image/*" @change="handleCoverChange" class="hidden" />
           </div>
 
           <div class="bg-white rounded-t-[28px] -mt-5 z-10 px-6 pt-8 pb-32 flex-grow flex flex-col shadow-[0_-8px_20px_rgba(0,0,0,0.05)]">
@@ -108,9 +126,17 @@
                 <textarea v-model="form.descripcion" rows="5" class="w-full rounded-2xl border border-gray-200 bg-white px-5 py-4 text-[14px] text-gray-800 font-medium leading-relaxed focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/10 outline-none transition-all resize-none"></textarea>
               </label>
 
+              <div v-if="error" class="bg-red-50 border border-red-200 rounded-xl p-4">
+                <p class="text-red-700 text-[13px] font-medium">{{ error }}</p>
+              </div>
+
+              <div v-if="success" class="bg-green-50 border border-green-200 rounded-xl p-4">
+                <p class="text-green-700 text-[13px] font-medium">{{ success }}</p>
+              </div>
+
               <div class="pt-4 border-t border-gray-100 mt-2">
                 <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-3">OPCIONES AVANZADAS</p>
-                <button class="w-full flex items-center justify-center gap-3 rounded-2xl border border-red-100 bg-white px-4 py-4 text-[14px] font-bold text-[#001D6B] hover:bg-red-50 transition-colors shadow-sm">
+                <button @click.prevent="deleteEvent" class="w-full flex items-center justify-center gap-3 rounded-2xl border border-red-100 bg-white px-4 py-4 text-[14px] font-bold text-[#001D6B] hover:bg-red-50 transition-colors shadow-sm">
                   <div class="bg-red-500 rounded-full p-1 text-white flex items-center justify-center shrink-0">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg>
                   </div>
@@ -118,6 +144,11 @@
                 </button>
               </div>
 
+              <div class="flex justify-end mt-4">
+                <button @click.prevent="saveEvent" :disabled="saving" class="bg-[#1e3a8a] text-white text-[13px] font-bold px-5 py-3 rounded-2xl shadow-sm hover:bg-[#152a6b] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                  {{ saving ? 'Guardando...' : 'Guardar cambios' }}
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -134,12 +165,21 @@
           </div>
 
           <div class="relative h-[280px] w-full bg-[#050B14] rounded-2xl overflow-hidden mb-8 shadow-sm">
-            <img src="https://images.unsplash.com/photo-1497493292307-31c376b6e479?q=80&w=2000&auto=format&fit=crop" alt="Portada evento" class="w-full h-full object-cover mix-blend-overlay opacity-60" />
+            <img v-if="currentCover" :src="currentCover" alt="Portada evento" class="w-full h-full object-cover" />
+            <div v-else class="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+              <div class="text-white text-center">
+                <svg class="w-12 h-12 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <p class="text-sm opacity-75">Sin imagen de portada</p>
+              </div>
+            </div>
             
-            <button class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-[#1e3a8a] text-[13px] font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-lg hover:bg-gray-50 transition-colors">
+            <button @click="$refs.coverInputDesktop.click()" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-[#1e3a8a] text-[13px] font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-lg hover:bg-gray-50 transition-colors">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
               Editar Portada
             </button>
+            <input ref="coverInputDesktop" type="file" accept="image/*" @change="handleCoverChange" class="hidden" />
           </div>
 
           <div class="flex flex-col lg:flex-row gap-6 mb-8">
@@ -202,12 +242,23 @@
           </div>
 
           <div class="flex justify-end items-center gap-4 mt-2">
+            <div v-if="error" class="bg-red-50 border border-red-200 rounded-lg px-4 py-2 mr-4">
+              <p class="text-red-700 text-[13px] font-medium">{{ error }}</p>
+            </div>
+            <div v-if="success" class="bg-green-50 border border-green-200 rounded-lg px-4 py-2 mr-4">
+              <p class="text-green-700 text-[13px] font-medium">{{ success }}</p>
+            </div>
+            <button @click.prevent="deleteEvent" class="text-[13px] font-bold text-red-600 border border-red-100 rounded-xl px-4 py-2.5 hover:bg-red-50 transition-colors">
+              Eliminar evento
+            </button>
             <button @click="$router.back()" class="text-[13px] font-bold text-gray-400 hover:text-gray-700 transition-colors px-4 py-2.5">
               Cancelar
             </button>
-            <button @click.prevent="saveEvent" class="bg-[#1e3a8a] text-white text-[13px] font-bold px-6 py-2.5 rounded-xl shadow-sm hover:bg-[#152a6b] transition-colors flex items-center gap-2">
-              <svg class="w-4 h-4 transform rotate-45 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
-              Publicar Evento
+            <button @click.prevent="saveEvent" :disabled="saving" class="bg-[#1e3a8a] text-white text-[13px] font-bold px-6 py-2.5 rounded-xl shadow-sm hover:bg-[#152a6b] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+              <svg v-if="saving" class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+              </svg>
+              {{ saving ? 'Guardando...' : 'Publicar Evento' }}
             </button>
           </div>
 
@@ -222,31 +273,143 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import AppHeader from '../components/AppHeader.vue'
+import { reactive, ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { fetchApi } from '../utils/api.js'
 import BottomNav from '../components/BottomNav.vue'
 
 const route = useRoute()
+const router = useRouter()
 const eventoId = route.params.id || null
 
+const currentCover = ref('')
+const files = reactive({ cover: null })
+const saving = ref(false)
+const error = ref('')
+const success = ref('')
+const isNotificationsOpen = ref(false)
+
 const form = reactive({
-  nombre: 'Taller de Vue.js y Tailwind',
-  categoria: 'Taller / Académico',
-  fecha: '05/04/2026',
-  hora: '10:00 AM',
-  ubicacion: 'Lab. Computación UNET',
-  descripcion: 'Únete a este taller práctico donde aprenderemos las bases de Vue.js y cómo estilizar componentes rápidamente usando Tailwind CSS.'
+  nombre: '',
+  categoria: '',
+  fecha: '',
+  hora: '',
+  ubicacion: '',
+  descripcion: ''
 })
 
-onMounted(() => {
-  if (eventoId) {
-    console.log('Editando evento', eventoId)
+function formatDate(dateString) {
+  const date = new Date(dateString)
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const year = date.getFullYear()
+  return `${day}/${month}/${year}`
+}
+
+function parseDate(dateString) {
+  if (!dateString) return null
+  const [day, month, year] = dateString.split('/')
+  return new Date(year, month - 1, day).toISOString()
+}
+
+onMounted(async () => {
+  if (!eventoId) return
+  try {
+    const res = await fetchApi(`/api/eventos/${eventoId}`)
+    const data = await res.json()
+    if (data.success) {
+      const evento = data.data
+      form.nombre = evento.title || ''
+      form.categoria = evento.category || ''
+      form.fecha = evento.date ? formatDate(evento.date) : ''
+      form.hora = evento.timeRange || ''
+      form.ubicacion = evento.location || ''
+      form.descripcion = evento.description || ''
+      currentCover.value = evento.coverImage || ''
+    }
+  } catch (err) {
+    console.error('Error cargando evento', err)
+    error.value = 'Error al cargar el evento'
   }
 })
 
-function saveEvent() {
-  console.log('Guardar evento', { id: eventoId, ...form })
+function handleCoverChange(event) {
+  const file = event.target.files[0]
+  if (file) {
+    files.cover = file
+    // Preview the image
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      currentCover.value = e.target.result
+    }
+    reader.readAsDataURL(file)
+  }
+}
+
+async function deleteEvent() {
+  if (!confirm('¿Estás seguro de eliminar este evento? Esta acción no se puede deshacer.')) return
+
+  error.value = ''
+  success.value = ''
+  try {
+    saving.value = true
+    const res = await fetchApi(`/api/eventos/${eventoId}`, {
+      method: 'DELETE'
+    })
+    const data = await res.json()
+    if (!data.success) throw new Error(data.message)
+
+    success.value = 'Evento eliminado correctamente'
+    setTimeout(() => router.push('/eventos'), 800)
+  } catch (err) {
+    error.value = err.message || 'Error al eliminar evento'
+  } finally {
+    saving.value = false
+  }
+}
+
+async function saveEvent() {
+  error.value = ''
+  success.value = ''
+  try {
+    saving.value = true
+
+    // Convert date format from DD/MM/YYYY to ISO
+    const isoDate = parseDate(form.fecha)
+
+    // 1. Update text fields
+    const res = await fetchApi(`/api/eventos/${eventoId}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        title: form.nombre,
+        category: form.categoria,
+        date: isoDate,
+        timeRange: form.hora,
+        location: form.ubicacion,
+        description: form.descripcion
+      })
+    })
+    const data = await res.json()
+    if (!data.success) throw new Error(data.message)
+
+    // 2. Upload image if any
+    if (files.cover) {
+      const fd = new FormData()
+      fd.append('coverImage', files.cover)
+      const imgRes = await fetchApi(`/api/uploads/evento/${eventoId}`, {
+        method: 'POST',
+        body: fd
+      })
+      if (!imgRes.ok) throw new Error('Error al subir imagen')
+    }
+
+    success.value = 'Evento actualizado correctamente'
+    setTimeout(() => router.back(), 1200)
+  } catch (err) {
+    error.value = err.message || 'Error al guardar'
+  } finally {
+    saving.value = false
+  }
 }
 </script>
 
