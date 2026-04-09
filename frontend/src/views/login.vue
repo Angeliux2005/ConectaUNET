@@ -56,7 +56,7 @@ const handleLogin = async () => {
     
     <header class="flex items-center justify-center lg:justify-between w-full px-6 lg:px-10 py-5 lg:py-6 border-b border-[#E5E7EB] bg-white">
       <h1 class="text-2xl lg:text-3xl font-bold" :style="{ color: brandBlue }">ConectaUNET</h1>
-      <button class="hidden lg:block px-6 py-2.5 text-white rounded-md font-medium text-sm transition-colors hover:opacity-90 shadow-sm" :style="{ backgroundColor: brandBlue }">
+      <button class="hidden lg:block px-6 py-2.5 text-white rounded-md font-medium text-sm transition-colors hover:opacity-90 shadow-sm" :style="{ backgroundColor: brandBlue }" @click="router.push('/registro')">
         Regístrate
       </button>
     </header>
@@ -141,7 +141,7 @@ const handleLogin = async () => {
 
       <p class="mt-8 text-center text-xs lg:text-sm text-[#6B7280]">
         Si no tienes una cuenta,
-        <a href="#" :style="{ color: brandBlue }" class="font-bold hover:underline">
+        <a href="#" :style="{ color: brandBlue }" class="font-bold hover:underline" @click="router.push('/registro')">
           Regístrate
         </a>
       </p>

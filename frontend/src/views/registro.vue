@@ -39,7 +39,7 @@ const handleRegister = async () => {
     
     <header class="hidden lg:flex items-center justify-between px-10 py-6 border-b border-[#E5E7EB] bg-white">
       <h1 class="text-3xl font-bold" :style="{ color: brandBlue }">ConectaUNET</h1>
-      <button class="px-6 py-3 text-white rounded-md font-medium text-sm transition-colors hover:opacity-90 shadow-sm" :style="{ backgroundColor: brandBlue }">
+      <button @click="router.push('/')" class="px-6 py-3 text-white rounded-md font-medium text-sm transition-colors hover:opacity-90 shadow-sm" :style="{ backgroundColor: brandBlue }">
         Inicia Sesión
       </button>
     </header>
@@ -125,7 +125,7 @@ const handleRegister = async () => {
 
       <p class="mt-6 text-center text-sm text-[#6B7280]">
         Si ya tienes una cuenta,
-        <a href="#" :style="{ color: brandBlue }" class="font-bold hover:underline">
+        <a href="#" :style="{ color: brandBlue }" class="font-bold hover:underline" @click="router.push('/')">
           inicia sesión
         </a>
       </p>
