@@ -16,6 +16,17 @@ const brandBlue = '#213A8F';
 // Estados en la vista
 const isLoading = ref(false);
 const errorMessage = ref('');
+const emailError = ref('');
+
+const validateEmail = () => {
+  if (!email.value) {
+    emailError.value = '';
+    return;
+  }
+  emailError.value = /^[^\s@]+@unet\.edu\.ve$/.test(email.value)
+    ? ''
+    : 'Debe ser un correo @unet.edu.ve válido.';
+};
 
 // Funcion para enviar información al back (tiene autenticación)
 const handleRegister = async () => {
@@ -23,6 +34,11 @@ const handleRegister = async () => {
 
   if (!username.value.trim() || !email.value.trim() || !password.value.trim()) {
     errorMessage.value = 'Por favor, completa todos los campos.';
+    return;
+  }
+
+  if (!/^[^\s@]+@unet\.edu\.ve$/.test(email.value)) {
+    errorMessage.value = 'El correo debe ser una dirección @unet.edu.ve válida.';
     return;
   }
 
@@ -109,14 +125,17 @@ const handleRegister = async () => {
             <label for="email" class="block text-sm font-semibold text-[#6B7280]">
               Correo electrónico
             </label>
-            <input 
+            <input
               id="email"
               v-model="email"
               type="email"
               placeholder="juan.perez@unet.edu.ve"
-              class="w-full px-4 py-3 border border-[#D1D5DB] rounded-md focus:ring-2 focus:ring-opacity-50 transition-colors text-sm"
-              :style="{ '--tw-ring-color': brandBlue, 'border-color': '#D1D5DB' }"
+              class="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-opacity-50 transition-colors text-sm"
+              :class="emailError ? 'border-red-400' : 'border-[#D1D5DB]'"
+              :style="{ '--tw-ring-color': brandBlue }"
+              @blur="validateEmail"
             />
+            <p v-if="emailError" class="text-xs text-red-500">{{ emailError }}</p>
           </div>
 
           <div class="space-y-1.5">
