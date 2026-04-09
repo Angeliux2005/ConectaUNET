@@ -2,8 +2,7 @@
   <footer class="w-full bg-[#F8F9FB] border-t border-gray-200 mt-auto shrink-0 relative z-10">
     <div class="max-w-[1240px] mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
       <div class="text-center md:text-left">
-        <h4 class="text-[#001D6B] font-bold text-lg mb-1">ConectaUNET</h4>
-        <p class="text-gray-500 text-sm">© 2025 ConectaUNET</p>
+        <p class="text-gray-500 text-sm">© ConectaUNET 2026</p>
       </div>
 
             <div class="flex flex-wrap justify-center gap-6 text-sm font-medium text-gray-500">
