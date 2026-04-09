@@ -11,6 +11,7 @@ export const getEventos = async (req, res) => {
 
     const eventos = await Evento.find(filter)
       .populate('organizer', 'name username avatar')
+      .select('title description coverImage category date timeRange location organizer attendees')
       .sort({ date: 1 });
 
     res.json({ success: true, count: eventos.length, data: eventos });
@@ -170,5 +171,43 @@ export const addMuroComentario = async (req, res) => {
     res.status(201).json({ success: true, data: comentario });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const updateMuroComentario = async (req, res) => {
+  try {
+    const comentario = await Comentario.findById(req.params.comentarioId);
+    if (!comentario) return res.status(404).json({ success: false, message: 'Comentario no encontrado' });
+
+    if (comentario.author.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, message: 'Solo puedes editar tus propios comentarios' });
+    }
+
+    comentario.content = req.body.content;
+    await comentario.save();
+    await comentario.populate('author', 'name username avatar');
+    res.json({ success: true, data: comentario });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const deleteMuroComentario = async (req, res) => {
+  try {
+    const comentario = await Comentario.findById(req.params.comentarioId);
+    if (!comentario) return res.status(404).json({ success: false, message: 'Comentario no encontrado' });
+
+    const evento = await Evento.findById(req.params.id);
+    const isOrganizer = evento && evento.organizer.toString() === req.user._id.toString();
+    const isAuthor = comentario.author.toString() === req.user._id.toString();
+
+    if (!isAuthor && !isOrganizer) {
+      return res.status(403).json({ success: false, message: 'No tienes permiso para eliminar este comentario' });
+    }
+
+    await comentario.deleteOne();
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

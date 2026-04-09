@@ -20,18 +20,13 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
           </div>
-          <input type="text" class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm text-[15px] focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]/20 focus:border-[#1e3a8a] transition-all" placeholder="Buscar eventos o comunidades...">
+          <input v-model="busqueda" type="text" class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm text-[15px] focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]/20 focus:border-[#1e3a8a] transition-all" placeholder="Buscar eventos o comunidades...">
         </div>
       </div>
 
       <div class="hidden md:flex mt-8 items-center gap-3 overflow-x-auto pb-4 scrollbar-hide">
-        <button class="shrink-0 bg-[#254291] text-white text-sm font-semibold px-6 py-2 rounded-lg hover:bg-[#1a337a] transition-colors shadow-sm">Misa</button>
-        <button class="shrink-0 bg-[#254291] text-white text-sm font-semibold px-6 py-2 rounded-lg hover:bg-[#1a337a] transition-colors shadow-sm">Exposición</button>
-        <button class="shrink-0 bg-[#254291] text-white text-sm font-semibold px-6 py-2 rounded-lg hover:bg-[#1a337a] transition-colors shadow-sm">Taller</button>
-        <button class="shrink-0 bg-[#254291] text-white text-sm font-semibold px-6 py-2 rounded-lg hover:bg-[#1a337a] transition-colors shadow-sm">Bazar</button>
-        <button class="shrink-0 bg-[#254291] text-white text-sm font-semibold px-6 py-2 rounded-lg hover:bg-[#1a337a] transition-colors shadow-sm">Laboratorio</button>
-        <button class="shrink-0 bg-[#254291] text-white text-sm font-semibold px-6 py-2 rounded-lg hover:bg-[#1a337a] transition-colors shadow-sm">Cultural</button>
-        <button class="shrink-0 bg-[#254291] text-white text-sm font-semibold px-6 py-2 rounded-lg hover:bg-[#1a337a] transition-colors shadow-sm">Concierto</button>
+        <button @click="toggleCategoria('')" :class="categoriaActiva === '' ? 'bg-[#254291] text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'" class="shrink-0 text-sm font-semibold px-6 py-2 rounded-lg transition-colors">Todos</button>
+        <button v-for="cat in categorias" :key="cat" @click="toggleCategoria(cat)" :class="categoriaActiva === cat ? 'bg-[#254291] text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'" class="shrink-0 text-sm font-semibold px-6 py-2 rounded-lg transition-colors">{{ cat }}</button>
       </div>
 
       <div class="mt-8">
@@ -73,25 +68,29 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue' // Importamos reactividad
+import { ref, watch, onMounted } from 'vue'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
 import BottomNav from '../components/BottomNav.vue'
 import MainCard from '../components/MainCard.vue'
 
-// --- LÓGICA DE CONEXIÓN AL BACKEND ---
 const eventos = ref([])
 const cargando = ref(true)
+const busqueda = ref('')
+const categoriaActiva = ref('')
 
-// Función para llamar a la API
+const categorias = ['Misa', 'Exposición', 'Taller', 'Bazar', 'Laboratorio', 'Cultural', 'Concierto']
+
 const cargarEventos = async () => {
+  cargando.value = true
   try {
-    const respuesta = await fetch('/api/eventos')
+    const params = new URLSearchParams()
+    if (busqueda.value.trim()) params.set('search', busqueda.value.trim())
+    if (categoriaActiva.value) params.set('category', categoriaActiva.value)
+    const query = params.toString() ? `?${params}` : ''
+    const respuesta = await fetch(`/api/eventos${query}`)
     const json = await respuesta.json()
-    
-    if (json.success) {
-      eventos.value = json.data
-    }
+    if (json.success) eventos.value = json.data
   } catch (error) {
     console.error("Error al cargar los eventos desde el servidor:", error)
   } finally {
@@ -99,20 +98,25 @@ const cargarEventos = async () => {
   }
 }
 
-// Formateador de fechas para que se vea como "02 de Marzo del 2026"
+const toggleCategoria = (cat) => {
+  categoriaActiva.value = categoriaActiva.value === cat ? '' : cat
+  cargarEventos()
+}
+
+let debounceTimer = null
+watch(busqueda, () => {
+  clearTimeout(debounceTimer)
+  debounceTimer = setTimeout(cargarEventos, 400)
+})
+
 const formatearFecha = (fechaISO) => {
   if (!fechaISO) return ''
   const fecha = new Date(fechaISO)
-  const opciones = { day: '2-digit', month: 'long', year: 'numeric' }
-  // Usamos 'es-VE' o 'es-ES' para el formato en español
-  const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones)
-  return fechaFormateada.replace(' de ', ' de ').replace(' 20', ' del 20') // Pequeño ajuste visual
+  return fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })
+    .replace(' de ', ' de ').replace(' 20', ' del 20')
 }
 
-// Ejecutar cuando la pantalla cargue
-onMounted(() => {
-  cargarEventos()
-})
+onMounted(cargarEventos)
 </script>
 
 <style scoped>

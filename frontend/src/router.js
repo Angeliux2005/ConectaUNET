@@ -45,7 +45,7 @@ const routes = [
   { name: 'EditarEmprendimiento', path: '/editar-emprendimiento', component: EditarEmprendimiento },
   { name: 'EditarPerfil', path: '/editar-perfil', component: EditarPerfil },
   { name: 'Publicacion', path: '/publicaciones/:id', component: Publicacion },
-  { name: 'Muro', path: '/muro-evento', component: MuroEvento },
+  { name: 'Muro', path: '/muro-evento/:id', component: MuroEvento },
   { name: 'Buscar', path: '/buscar', component: Buscar },
   { name: 'NuevoEvento', path: '/nuevo-evento', component: NuevoEvento },
   { name: 'NuevoEmprendimiento', path: '/nuevo-emprendimiento', component: NuevoEmprendimiento },

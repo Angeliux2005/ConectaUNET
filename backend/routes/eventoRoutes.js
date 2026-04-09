@@ -7,7 +7,9 @@ import {
   deleteEvento,
   toggleAttend,
   getMuroComentarios,
-  addMuroComentario
+  addMuroComentario,
+  updateMuroComentario,
+  deleteMuroComentario
 } from '../controllers/eventoController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -27,5 +29,9 @@ router.post('/:id/attend', protect, toggleAttend);
 router.route('/:id/muro')
   .get(getMuroComentarios)
   .post(protect, addMuroComentario);
+
+router.route('/:id/muro/:comentarioId')
+  .put(protect, updateMuroComentario)
+  .delete(protect, deleteMuroComentario);
 
 export default router;
