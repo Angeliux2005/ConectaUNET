@@ -36,9 +36,9 @@
           <div class="p-6">
 
             <div class="flex items-center gap-5 mb-4 text-[#001D6B]">
-              <button class="flex items-center gap-1.5 hover:opacity-70 transition-opacity">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                <span class="font-bold text-[15px]">{{ pub.likesCount }}</span>
+              <button @click="toggleLike" :disabled="toggling" class="flex items-center gap-1.5 hover:opacity-70 transition-opacity disabled:opacity-50">
+                <svg class="w-7 h-7 transition-colors" :fill="liked ? 'currentColor' : 'none'" :class="liked ? 'text-red-500' : ''" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                <span class="font-bold text-[15px]">{{ likesCount }}</span>
               </button>
               <button class="flex items-center gap-1.5 hover:opacity-70 transition-opacity">
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
@@ -123,6 +123,9 @@ const comentarios = ref([])
 const loading = ref(true)
 const nuevoComentario = ref('')
 const enviando = ref(false)
+const toggling = ref(false)
+const liked = ref(false)
+const likesCount = ref(0)
 const currentUser = JSON.parse(localStorage.getItem('user') || 'null')
 
 const cargar = async (id) => {
@@ -135,12 +138,36 @@ const cargar = async (id) => {
     const jsonPub = await resPub.json()
     const jsonComs = await resComs.json()
 
-    if (jsonPub.success) pub.value = jsonPub.data
+    if (jsonPub.success) {
+      pub.value = jsonPub.data
+      likesCount.value = jsonPub.data.likesCount
+      liked.value = currentUser ? jsonPub.data.likes.some(id => id === currentUser._id) : false
+    }
     if (jsonComs.success) comentarios.value = jsonComs.data
   } catch (error) {
     console.error('Error al cargar la publicación:', error)
   } finally {
     loading.value = false
+  }
+}
+
+const toggleLike = async () => {
+  if (toggling.value) return
+  toggling.value = true
+  try {
+    const res = await fetch(`/api/publicaciones/${route.params.id}/like`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    })
+    const json = await res.json()
+    if (json.success) {
+      liked.value = json.liked
+      likesCount.value = json.likesCount
+    }
+  } catch (error) {
+    console.error('Error al dar like:', error)
+  } finally {
+    toggling.value = false
   }
 }
 
