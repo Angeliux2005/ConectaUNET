@@ -1,179 +1,195 @@
 <template>
   <div class="min-h-screen bg-[#F8F9FB] flex flex-col font-sans w-full overflow-hidden">
-    <AppHeader />
+    
+    <div class="hidden md:block w-full">
+      <AppHeader />
+    </div>
 
-    <main class="flex-grow w-full max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 mt-[72px] pb-24 pt-8">
+    <main class="flex-grow w-full max-w-[1100px] mx-auto md:px-8 lg:px-12 md:mt-[72px] pb-24 md:pb-32 md:pt-8 relative">
       <div class="space-y-6">
 
-        <!-- Mobile -->
-        <section class="md:hidden">
-          <div class="relative rounded-[32px] overflow-hidden border border-gray-100 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)]">
-            <div class="bg-white px-5 py-4 border-b border-gray-200 flex items-center justify-between">
-              <button @click="$router.back()" class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-[#1e3a8a] hover:bg-gray-200 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <section class="md:hidden bg-[#F8F9FB] min-h-screen">
+          <div class="bg-white px-4 py-4 flex items-center justify-between sticky top-0 z-20 shadow-sm">
+            <button @click="$router.back()" class="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <h1 class="text-[17px] font-bold text-[#001D6B] tracking-tight">Nuevo Emprendimiento</h1>
+            <div class="w-10"></div> 
+          </div>
+
+          <div class="relative bg-[#1e3aa8] h-[160px] flex flex-col items-center justify-center text-white">
+            <button class="mb-2 hover:opacity-80 transition-opacity">
+              <svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h3l2-3h6l2 3h3v12H4V7z"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 14h8"/></svg>
+            </button>
+            <p class="text-[10px] uppercase font-bold tracking-widest text-white/90">SUBIR FOTO DE PORTADA</p>
+            
+            <div class="absolute -bottom-10 left-6">
+              <button class="w-[84px] h-[84px] rounded-full bg-[#F3F4F6] border-4 border-white shadow-md flex items-center justify-center text-gray-300 hover:bg-gray-200 transition-colors">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h3l2-3h6l2 3h3v12H4V7z"/><circle cx="12" cy="14" r="3"/></svg>
               </button>
-              <h1 class="text-lg font-bold text-[#1E3A8A]">Nuevo Emprendimiento</h1>
-              <div class="w-10" />
             </div>
-
-            <div class="bg-[#1E3A8A] pb-28 pt-5 text-center text-white overflow-hidden">
-              <div class="mx-auto mt-3 flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-white shadow-xl">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h3l2-3h6l2 3h3v12H4V7z"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 14h8"/></svg>
-              </div>
-              <p class="mt-4 text-xs uppercase tracking-[0.35em] text-[#E9EEFF]">Subir foto de portada</p>
-            </div>
-
-            <button class="absolute left-5 top-[270px] flex h-16 w-16 items-center justify-center rounded-full bg-white border border-gray-200 shadow-xl z-10">
-              <div class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 border border-gray-200 text-gray-400">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-              </div>
-            </button>
           </div>
 
-          <div class="bg-white rounded-[32px] border border-gray-100 px-5 pb-6 pt-14 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] -mt-10">
-            <div class="space-y-4">
-              <label class="block">
-                <span class="text-[11px] font-bold uppercase tracking-[0.35em] text-gray-500">Nombre</span>
-                <input v-model="form.nombre" type="text" placeholder="Ejemplo: Mi Negocio" class="mt-2 w-full rounded-[24px] border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all" />
-              </label>
+          <div class="px-5 pt-16 pb-32 space-y-5">
+            <label class="block">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">NOMBRE</span>
+              <input v-model="form.nombre" type="text" placeholder="Ejemplo: Mi Negocio" class="w-full rounded-xl border border-red-300 bg-white px-4 py-3 text-[14px] text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all placeholder-gray-300" />
+              <span class="text-[10px] text-red-500 mt-1 block">Este campo es obligatorio</span>
+            </label>
 
-              <label class="block">
-                <span class="text-[11px] font-bold uppercase tracking-[0.35em] text-gray-500">Categoría</span>
-                <select v-model="form.categoria" class="mt-2 w-full rounded-[24px] border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all">
-                  <option value="">Seleccionar categoría</option>
+            <label class="block">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">CATEGORÍA</span>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                  <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </div>
+                <select v-model="form.categoria" class="w-full rounded-xl border border-gray-200 bg-white pl-11 pr-4 py-3 text-[14px] text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all appearance-none">
+                  <option value="" disabled selected hidden>Ejemplo: Comida</option>
                   <option value="Comida">Comida</option>
-                  <option value="Tecnología">Tecnología</option>
-                  <option value="Arte">Arte</option>
+                  <option value="Ropa">Ropa</option>
+                  <option value="Accesorios">Accesorios</option>
                   <option value="Servicios">Servicios</option>
-                  <option value="Otro">Otro</option>
                 </select>
-              </label>
+              </div>
+            </label>
 
-              <label class="block">
-                <span class="text-[11px] font-bold uppercase tracking-[0.35em] text-gray-500">Punto de entrega / Ubicación</span>
-                <div class="relative mt-2">
-                  <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-gray-400">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-6-4.35-6-10a6 6 0 1112 0c0 5.65-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></svg>
-                  </span>
-                  <input v-model="form.ubicacion" type="text" placeholder="Ejemplo: Cochineras" class="mt-0 w-full rounded-[24px] border border-gray-200 bg-white px-12 py-3 text-sm text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all" />
+            <label class="block">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">PUNTO DE ENTREGA / UBICACIÓN</span>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                  <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 </div>
-              </label>
+                <input v-model="form.ubicacion" type="text" placeholder="Ejemplo: Cochineras" class="w-full rounded-xl border border-gray-200 bg-white pl-11 pr-4 py-3 text-[14px] text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all placeholder-gray-300" />
+              </div>
+            </label>
 
-              <label class="block">
-                <span class="text-[11px] font-bold uppercase tracking-[0.35em] text-gray-500">Instagram o contacto</span>
-                <div class="relative mt-2">
-                  <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-gray-400">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                  </span>
-                  <input v-model="form.contacto" type="text" placeholder="@unetense123" class="mt-0 w-full rounded-[24px] border border-gray-200 bg-white px-12 py-3 text-sm text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all" />
+            <label class="block">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">INSTAGRAM O CONTACTO</span>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                  <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                 </div>
-              </label>
+                <input v-model="form.contacto" type="text" placeholder="@unetense123" class="w-full rounded-xl border border-gray-200 bg-white pl-11 pr-4 py-3 text-[14px] text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all placeholder-gray-300" />
+              </div>
+            </label>
 
-              <label class="block">
-                <span class="text-[11px] font-bold uppercase tracking-[0.35em] text-gray-500">Descripción</span>
-                <textarea v-model="form.descripcion" rows="5" placeholder="Describe brevemente tu emprendimiento" class="mt-2 w-full rounded-[24px] border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all"></textarea>
-              </label>
+            <label class="block">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">DESCRIPCIÓN</span>
+              <textarea v-model="form.descripcion" rows="4" class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-[14px] text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all"></textarea>
+            </label>
+          </div>
 
-              <button @click.prevent="createEmprendimiento" class="w-full bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-bold py-4 rounded-[24px] shadow-md transition-colors text-base">Crear</button>
-            </div>
+          <div class="fixed bottom-0 left-0 right-0 bg-white p-4 border-t border-gray-100 z-30">
+            <button @click.prevent="createEmprendimiento" class="w-full bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-bold py-3.5 rounded-xl shadow-md transition-colors text-[15px]">Crear</button>
           </div>
         </section>
 
-        <!-- Desktop -->
-        <section class="hidden md:block bg-white rounded-[32px] border border-gray-100 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] overflow-hidden">
-          <div class="px-8 py-6 border-b border-gray-200">
-            <button @click="$router.back()" class="inline-flex items-center gap-2 text-[#1e3a8a] font-semibold hover:text-[#152a6b] transition-colors">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-              Volver a detalles
+        <section class="hidden md:flex flex-col">
+          
+          <div class="mb-5">
+            <button @click="$router.back()" class="inline-flex items-center gap-1.5 text-[#001D6B] font-bold text-[13px] hover:text-[#1e3a8a] transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+              Volver a Detalles
             </button>
           </div>
 
-          <div class="p-8 space-y-10">
-            <div class="space-y-4">
-              <div>
-                <p class="text-sm uppercase tracking-[0.35em] text-[#1e3a8a] font-black">Configurar Emprendimiento</p>
-                <h1 class="text-[32px] font-bold text-[#001D6B]">Personaliza tu identidad y los detalles operativos</h1>
-                <p class="max-w-2xl text-sm text-gray-500">Personaliza la identidad visual y los detalles operativos de tu proyecto académico.</p>
-              </div>
+          <div class="mb-8 space-y-1">
+            <h1 class="text-[28px] font-black text-[#0A1128] tracking-tight">Configurar Emprendimiento</h1>
+            <p class="text-[14.5px] text-gray-500 font-medium">Personaliza la identidad visual y los detalles operativos de tu proyecto académico.</p>
+          </div>
 
-              <div class="rounded-[32px] border border-gray-100 shadow-[0_12px_40px_-24px_rgba(0,0,0,0.25)] overflow-hidden">
-                <div class="relative h-[300px] bg-gray-100">
-                  <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2000&auto=format&fit=crop" alt="Portada emprendimiento" class="w-full h-full object-cover" />
-                  <button class="absolute right-6 top-6 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-[#1e3a8a] shadow-sm hover:bg-white transition-colors">Cambiar Portada</button>
-                </div>
-                <div class="relative bg-white px-6 py-5">
-                  <div class="absolute -top-12 left-8 flex items-center gap-4 rounded-full bg-white px-4 py-3 shadow-xl border border-gray-200">
-                    <div class="h-20 w-20 rounded-full bg-[#0F172A] flex items-center justify-center text-white text-2xl font-black">LP</div>
-                    <div>
-                      <p class="text-[18px] font-bold text-[#001D6B]">Logotipo del Proyecto</p>
-                      <p class="text-sm text-gray-500">Recomendado: PNG circular 512×512px</p>
-                    </div>
-                  </div>
-                  <div class="h-24"></div>
-                </div>
-              </div>
+          <div class="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] overflow-hidden mb-10 border border-gray-100">
+            <div class="relative h-[220px] w-full bg-gray-200">
+              <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2000&auto=format&fit=crop" alt="Portada" class="w-full h-full object-cover" />
+              
+              <button class="absolute right-4 bottom-4 bg-white text-[#1e3a8a] text-[13px] font-bold px-4 py-2 rounded-lg flex items-center gap-2 shadow-sm hover:bg-gray-50 transition-colors border border-gray-200">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                Cambiar Portada
+              </button>
             </div>
-
-            <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-              <div class="space-y-6">
-                <label class="block">
-                  <span class="text-sm font-semibold text-gray-600">Nombre</span>
-                  <input v-model="form.nombre" type="text" placeholder="Ejemplo: Arquipasteles" class="mt-2 w-full rounded-[24px] border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all" />
-                </label>
-
-                <label class="block">
-                  <span class="text-sm font-semibold text-gray-600">Categoría</span>
-                  <select v-model="form.categoria" class="mt-2 w-full rounded-[24px] border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all">
-                    <option value="">Seleccionar categoría</option>
-                    <option value="Comida">Comida</option>
-                    <option value="Tecnología">Tecnología</option>
-                    <option value="Arte">Arte</option>
-                    <option value="Servicios">Servicios</option>
-                    <option value="Otro">Otro</option>
-                  </select>
-                </label>
-
-                <label class="block">
-                  <span class="text-sm font-semibold text-gray-600">Descripción</span>
-                  <textarea v-model="form.descripcion" rows="5" placeholder="Describe brevemente tu emprendimiento" class="mt-2 w-full rounded-[24px] border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all"></textarea>
-                </label>
+            
+            <div class="relative h-[80px] w-full bg-white">
+              <div class="absolute -top-12 left-8 w-[96px] h-[96px] rounded-full border-4 border-white bg-[#0A1128] shadow-md flex flex-col items-center justify-center text-white">
+                <svg class="w-6 h-6 mb-1 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                <span class="text-[8px] font-bold tracking-widest text-gray-300">STARTUP</span>
               </div>
-
-              <div class="space-y-6">
-                <label class="block">
-                  <span class="text-sm font-semibold text-gray-600">Punto de entrega / Ubicación</span>
-                  <input v-model="form.ubicacion" type="text" placeholder="Ejemplo: Cochineras" class="mt-2 w-full rounded-[24px] border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all" />
-                </label>
-
-                <label class="block">
-                  <span class="text-sm font-semibold text-gray-600">Instagram o contacto</span>
-                  <input v-model="form.contacto" type="text" placeholder="@unetense123" class="mt-2 w-full rounded-[24px] border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all" />
-                </label>
-
-                <div class="rounded-[24px] border border-gray-200 bg-[#F8F9FB] p-6">
-                  <p class="text-xs uppercase tracking-[0.35em] text-gray-500 font-bold mb-2">Portada actual</p>
-                  <div class="rounded-[24px] h-48 bg-gray-100 flex items-center justify-center text-gray-400">No hay imagen seleccionada</div>
-                </div>
+              <div class="pl-[144px] pt-4">
+                 <h2 class="text-[16px] font-bold text-[#001D6B] leading-tight">Logotipo del Proyecto</h2>
+                 <p class="text-[12px] text-gray-500 font-medium mt-0.5">Recomendado: PNG circular 512×512px</p>
               </div>
-            </div>
-
-            <div class="flex items-center justify-between pt-4">
-              <button @click="$router.back()" class="text-gray-500 hover:text-gray-800 font-semibold transition-colors">Cancelar</button>
-              <button @click.prevent="createEmprendimiento" class="inline-flex items-center gap-2 bg-[#001D6B] hover:bg-[#001242] text-white font-bold py-3.5 px-8 rounded-[24px] shadow-md transition-colors">Publicar Emprendimiento</button>
             </div>
           </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+            
+            <label class="block">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2 block">NOMBRE</span>
+              <input v-model="form.nombre" type="text" placeholder="Ejemplo: Arquipasteles" class="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-[14px] text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all placeholder-gray-300" />
+            </label>
+
+            <label class="block">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2 block">PUNTO DE ENTREGA / UBICACIÓN</span>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-300">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                </div>
+                <input v-model="form.ubicacion" type="text" placeholder="Ejemplo: Cochineras" class="w-full rounded-lg border border-gray-200 bg-white pl-11 pr-4 py-3 text-[14px] text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all placeholder-gray-300" />
+              </div>
+            </label>
+
+            <label class="block">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2 block">CATEGORÍA</span>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-300">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </div>
+                <select v-model="form.categoria" class="w-full rounded-lg border border-gray-200 bg-white pl-11 pr-4 py-3 text-[14px] text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all appearance-none">
+                  <option value="" disabled selected hidden>Ejemplo: Comida</option>
+                  <option value="Comida">Comida</option>
+                  <option value="Ropa">Ropa</option>
+                  <option value="Accesorios">Accesorios</option>
+                  <option value="Servicios">Servicios</option>
+                </select>
+              </div>
+            </label>
+
+            <label class="block">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2 block">INSTAGRAM O CONTACTO</span>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-300">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                </div>
+                <input v-model="form.contacto" type="text" placeholder="@unetense123" class="w-full rounded-lg border border-gray-200 bg-white pl-11 pr-4 py-3 text-[14px] text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all placeholder-gray-300" />
+              </div>
+            </label>
+
+            <label class="block md:col-span-2">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2 block">DESCRIPCIÓN</span>
+              <textarea v-model="form.descripcion" rows="5" class="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-[14px] text-gray-700 focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 outline-none transition-all resize-none"></textarea>
+            </label>
+            
+          </div>
         </section>
+
       </div>
     </main>
 
-    <BottomNav />
+    <div class="hidden md:flex fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-3.5 px-8 lg:px-12 justify-end items-center gap-4 z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)]">
+      <button @click="$router.back()" class="text-gray-500 hover:text-[#1e3a8a] font-bold text-[13.5px] transition-colors px-3 py-2">
+        Cancelar
+      </button>
+      <button @click.prevent="createEmprendimiento" class="inline-flex items-center gap-2 bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-bold py-2.5 px-6 rounded-lg shadow-md transition-colors text-[13.5px]">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+        Publicar Emprendimiento
+      </button>
+    </div>
+
   </div>
 </template>
 
 <script setup>
 import { reactive } from 'vue'
 import AppHeader from '../components/AppHeader.vue'
-import BottomNav from '../components/BottomNav.vue'
 
 const form = reactive({
   nombre: '',
@@ -189,4 +205,9 @@ function createEmprendimiento() {
 </script>
 
 <style scoped>
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
 </style>
