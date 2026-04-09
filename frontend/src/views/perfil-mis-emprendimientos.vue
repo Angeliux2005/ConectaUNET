@@ -248,7 +248,7 @@
                       class="flex-1 bg-white border border-gray-200 text-gray-700 font-bold text-[12px] md:text-[14px] py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-gray-50 transition-colors">
                       Editar Evento
                     </button>
-                    <button @click="$router.push(`/detalles-evento/${evento._id}`)"
+                    <button @click="$router.push(`/eventos/${evento._id}`)"
                       class="flex-1 bg-[#1e3a8a] text-white font-bold text-[12px] md:text-[14px] py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-[#152a6b] shadow-sm transition-colors">
                       Ver Evento
                     </button>
@@ -295,7 +295,7 @@
                         class="flex-1 sm:flex-none flex items-center justify-center bg-white border border-gray-200 md:border-2 md:border-[#1e3a8a] text-gray-700 md:text-[#1e3a8a] hover:bg-gray-50 font-bold py-2 md:py-2.5 px-2 sm:px-6 rounded-lg md:rounded-xl transition-colors text-[11px] md:text-[14px]">
                         Editar Info
                       </button>
-                      <button @click="$router.push(`/detalles-emprendimiento-dueo/${emp._id}`)"
+                      <button @click="$router.push(`/emprendimientos/${emp._id}`)"
                         class="flex-1 sm:flex-none flex items-center justify-center bg-[#1e3a8a] md:bg-[#001D6B] hover:bg-[#152a6b] md:hover:bg-[#001242] text-white font-bold py-2 md:py-2.5 px-2 sm:px-6 rounded-lg md:rounded-xl shadow-md transition-colors text-[11px] md:text-[14px]">
                         Ver Emprendimiento
                       </button>
@@ -323,7 +323,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
 import BottomNav from '../components/BottomNav.vue'
 
@@ -399,7 +398,7 @@ const cargarDatosPerfil = async () => {
       ...(token && { 'Authorization': `Bearer ${token}` })
     }
 
-    // Pedimos todo en paralelo usando fetch nativo
+    // Pedimos ambas colecciones en paralelo usando fetch nativo
     const [resEventos, resEmprend] = await Promise.all([
       fetch('/api/eventos', { headers }),
       fetch('/api/emprendimientos', { headers })
