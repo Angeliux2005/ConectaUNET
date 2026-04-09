@@ -35,19 +35,15 @@
 
           <div class="p-6">
 
-            <div class="flex items-center justify-between mb-4 text-[#001D6B]">
-              <div class="flex items-center gap-4">
-                <button class="hover:opacity-70 transition-opacity">
-                  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                </button>
-                <button class="hover:opacity-70 transition-opacity">
-                  <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="font-bold text-[15px] text-gray-900 mb-2.5">
-              {{ pub.likesCount }} Me gusta
+            <div class="flex items-center gap-5 mb-4 text-[#001D6B]">
+              <button class="flex items-center gap-1.5 hover:opacity-70 transition-opacity">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                <span class="font-bold text-[15px]">{{ pub.likesCount }}</span>
+              </button>
+              <button class="flex items-center gap-1.5 hover:opacity-70 transition-opacity">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                <span class="font-bold text-[15px]">{{ comentarios.length }}</span>
+              </button>
             </div>
 
             <div class="text-[15px] text-gray-800 leading-[1.6]">
@@ -61,6 +57,30 @@
 
         <section class="bg-white rounded-[24px] border border-gray-100 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] p-6 md:p-8 mb-12">
           <h3 class="text-[#001D6B] font-bold text-[20px] mb-6">Comentarios</h3>
+
+          <div class="flex items-center gap-4 mb-8">
+            <div class="w-10 h-10 rounded-full bg-[#EBF5FF] text-[#1e3a8a] flex items-center justify-center font-bold text-[14px] shrink-0 overflow-hidden">
+              <img v-if="currentUser?.avatar" :src="currentUser.avatar" class="w-full h-full object-cover" />
+              <span v-else>{{ iniciales(currentUser?.name) }}</span>
+            </div>
+            <div class="flex-grow flex items-center bg-[#F8F9FB] rounded-full px-5 py-2.5 border border-gray-100 focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+              <input
+                v-model="nuevoComentario"
+                @keydown.enter="enviarComentario"
+                type="text"
+                placeholder="Añadir un comentario..."
+                class="bg-transparent w-full outline-none text-[14px] text-gray-700 placeholder-gray-400"
+                :disabled="enviando"
+              />
+              <button
+                @click="enviarComentario"
+                :disabled="!nuevoComentario.trim() || enviando"
+                class="text-[#1e3a8a] font-bold text-[14px] ml-3 hover:text-blue-800 transition-colors shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Publicar
+              </button>
+            </div>
+          </div>
 
           <div v-if="comentarios.length === 0" class="text-gray-400 text-[14px] text-center py-6">
             Sé el primero en comentar
@@ -101,6 +121,9 @@ const router = useRouter()
 const pub = ref(null)
 const comentarios = ref([])
 const loading = ref(true)
+const nuevoComentario = ref('')
+const enviando = ref(false)
+const currentUser = JSON.parse(localStorage.getItem('user') || 'null')
 
 const cargar = async (id) => {
   loading.value = true
@@ -118,6 +141,30 @@ const cargar = async (id) => {
     console.error('Error al cargar la publicación:', error)
   } finally {
     loading.value = false
+  }
+}
+
+const enviarComentario = async () => {
+  if (!nuevoComentario.value.trim() || enviando.value) return
+  enviando.value = true
+  try {
+    const res = await fetch(`/api/publicaciones/${route.params.id}/comentarios`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({ content: nuevoComentario.value.trim() })
+    })
+    const json = await res.json()
+    if (json.success) {
+      comentarios.value.unshift(json.data)
+      nuevoComentario.value = ''
+    }
+  } catch (error) {
+    console.error('Error al comentar:', error)
+  } finally {
+    enviando.value = false
   }
 }
 

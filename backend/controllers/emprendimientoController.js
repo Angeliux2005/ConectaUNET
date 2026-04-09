@@ -147,6 +147,7 @@ export const getPublicacionesByEmprendimiento = async (req, res) => {
 
     const publicaciones = await Publicacion.find({ emprendimiento: req.params.id })
       .populate('author', 'name username avatar')
+      .populate('commentsCount')
       .sort({ createdAt: -1 });
 
     res.json({ success: true, count: publicaciones.length, data: publicaciones });
