@@ -57,6 +57,8 @@ typings/
 # Optional eslint cache
 .eslintcache
 
+docker-compose.yml
+
 # Microbundle cache
 .rpt2_cache/
 .rts2_cache_cjs/
