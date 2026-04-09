@@ -15,15 +15,20 @@ const brandBlue = '#213A8F';
 
 // Funcion para enviar información al back (tiene autenticación)
 const handleRegister = () => {
-  console.log({
-    username: username.value,
-    email: email.value,
-    password: password.value,
-    confirmPassword: confirmPassword.value,
-  });
+  if (password === confirmPassword) {
+    fetch('/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: username,
+        email: email,
+        password: password,
+      })
+    })
+  }
 
-
-  // Lógica de registro pendiente por hacer (cuando Sebas monte el back)
 };
 </script>
 

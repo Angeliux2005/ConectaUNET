@@ -36,7 +36,7 @@ const handleLogin = async () => {
       password: password.value,
     });
 
-    // Guarda la informacion y nos redirige al home
+
     //localStorage.setItem('token', 'tu_token_generado');
     router.push('/eventos'); 
     
