@@ -3,17 +3,31 @@
     
     <div class="w-full max-w-[600px] bg-white md:rounded-xl md:shadow-lg overflow-hidden flex flex-col pb-8">
       
-      <header class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-        <button @click="$router.back()" class="p-1 text-gray-600 hover:text-gray-900 transition-colors">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      <header
+      class="w-full h-[72px] bg-white border-b border-gray-100 flex items-center justify-between px-6 lg:px-12 shadow-sm shrink-0 z-50 fixed top-0 left-0">
+      <router-link to="/eventos"
+        class="text-[#002177] font-bold text-[22px] tracking-tight truncate hover:opacity-80 transition-opacity">
+        ConectaUNET
+      </router-link>
+
+      <div class="flex items-center space-x-4">
+        <button @click="isNotificationsOpen = true"
+          class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-50 text-gray-600 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+            </path>
           </svg>
         </button>
-        <h1 class="text-lg font-bold text-[#1A202C]">Editar Negocio</h1>
-        <button @click="saveChanges" :disabled="saving" class="bg-[#213A8F] hover:bg-blue-900 disabled:opacity-60 text-white px-5 py-2 rounded font-semibold text-sm transition-colors shadow-sm">
-          {{ saving ? '...' : 'Guardar' }}
+        <button @click="$router.push('/perfil-mis-emprendimientos')"
+          class="w-10 h-10 rounded-full bg-[#1e3a8a] text-white flex items-center justify-center shadow-sm cursor-pointer hover:bg-blue-800 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+          </svg>
         </button>
-      </header>
+      </div>
+    </header>
 
       <div class="relative h-32 md:h-40 w-full overflow-hidden bg-gray-800">
         <img 
