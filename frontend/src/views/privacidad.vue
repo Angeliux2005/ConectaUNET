@@ -17,21 +17,18 @@ const goBack = () => {
 
 <template>
 
-  <div class="min-h-screen flex flex-col bg-[#F5F6F8] font-sans">
+  <div class="min-h-screen flex flex-col bg-[#F5F6F8] font-sans pt-[72px]">
     
-    <header class="flex items-center justify-between w-full px-6 lg:px-10 py-5 lg:py-6 border-b border-[#E5E7EB] bg-white sticky top-0 z-10">
-      <h1 class="text-xl lg:text-3xl font-bold" :style="{ color: brandBlue }">ConectaUNET</h1>
-      
-      <button 
-        @click="goBack"
-        class="px-4 py-2 lg:px-6 lg:py-2.5 text-white rounded-md font-medium text-xs lg:text-sm transition-colors hover:opacity-90 shadow-sm" 
-        :style="{ backgroundColor: brandBlue }"
+    <header class="w-full h-[72px] bg-white border-b border-gray-100 flex items-center px-6 lg:px-12 shadow-sm shrink-0 z-50 fixed top-0 left-0">
+      <router-link 
+        to="/eventos" 
+        class="text-[#002177] font-bold text-[22px] tracking-tight truncate hover:opacity-80 transition-opacity"
       >
-        Volver al Inicio
-      </button>
+        ConectaUNET
+      </router-link>
     </header>
 
-    <main class="flex-1 flex flex-col items-center p-6 lg:py-12">
+    <main class="flex-1 flex flex-col items-center p-6 lg:py-16 w-full">
       
       <div class="w-full max-w-3xl p-8 lg:p-12 bg-white rounded-xl shadow-lg border border-[#E5E7EB]">
         
