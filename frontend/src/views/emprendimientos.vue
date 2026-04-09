@@ -35,101 +35,55 @@
         <button class="shrink-0 bg-[#254291] text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-[#1a337a] transition-colors shadow-sm tracking-wide">Artesania</button>
       </div>
 
-      <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="mt-8">
+        <div v-if="cargando" class="flex justify-center items-center py-20">
+          <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#1e3a8a]"></div>
+        </div>
 
-        <article @click="$router.push('/detalles-emprendimiento-informacion')" class="cursor-pointer bg-white rounded-[24px] overflow-hidden shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100/50 transition-transform duration-300 hover:-translate-y-1 flex flex-col">
-          <div class="relative h-[220px] w-full">
-            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop" alt="Food Layout" class="w-full h-full object-cover" />
-            <div class="absolute top-5 left-5 bg-[#1e3a8a] text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
-              COMIDA
-            </div>
-            <button class="absolute top-5 right-5 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#1e3a8a] shadow-sm hover:bg-white transition-colors">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
-            </button>
-          </div>
-          <div class="p-6 md:p-8 flex-grow flex flex-col">
-            <h3 class="text-[22px] font-bold text-gray-900 mb-2 tracking-tight">Arquipasteles</h3>
-            <p class="text-[15px] text-gray-600 leading-relaxed mb-6">Pasteles</p>
-            <div class="space-y-4 mt-auto mb-8">
-              <div class="flex items-center gap-3 text-sm font-semibold text-gray-700">
-                <svg class="w-5 h-5 text-[#1e3a8a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                Cochineras
-              </div>
-            </div>
-            <div class="border-t border-gray-100 pt-5 flex items-center justify-between mt-auto">
-              <div class="flex items-center gap-3">
-                <img src="https://i.pravatar.cc/100?img=9" alt="Kimberly" class="w-10 h-10 rounded-full object-cover shadow-sm bg-gray-100" />
-                <span class="text-[15px] font-bold text-gray-900">Kimberly Gonzales</span>
-              </div>
-              <button class="text-gray-400 hover:text-gray-600 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-              </button>
-            </div>
-          </div>
-        </article>
+        <div v-else-if="emprendimientos.length === 0" class="text-center py-20 text-gray-500 font-medium">
+          <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+          No hay emprendimientos registrados en este momento.
+        </div>
 
-        <article @click="$router.push('/detalles-emprendimiento-informacion')" class="cursor-pointer bg-white rounded-[24px] overflow-hidden shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100/50 transition-transform duration-300 hover:-translate-y-1 flex flex-col">
-          <div class="relative h-[220px] w-full bg-slate-100">
-            <img src="https://images.unsplash.com/photo-1523450001312-faa4e2e37f0f?q=80&w=2000&auto=format&fit=crop" alt="Accessories" class="w-full h-full object-cover" />
-            <div class="absolute top-5 left-5 bg-[#1e3a8a] text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
-              ACCESORIOS
-            </div>
-            <button class="absolute top-5 right-5 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#1e3a8a] shadow-sm hover:bg-white transition-colors">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
-            </button>
-          </div>
-          <div class="p-6 md:p-8 flex-grow flex flex-col">
-            <h3 class="text-[22px] font-bold text-gray-900 mb-2 tracking-tight">Accesorios</h3>
-            <p class="text-[15px] text-gray-600 leading-relaxed mb-6">Accesorios varios</p>
-            <div class="space-y-4 mt-auto mb-8">
-              <div class="flex items-center gap-3 text-sm font-semibold text-gray-700">
-                <svg class="w-5 h-5 text-[#1e3a8a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                Hall del B
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <article
+            v-for="emp in emprendimientos"
+            :key="emp._id"
+            @click="$router.push('/detalles-emprendimiento-informacion')"
+            class="cursor-pointer bg-white rounded-[24px] overflow-hidden shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100/50 transition-transform duration-300 hover:-translate-y-1 flex flex-col"
+          >
+            <div class="relative h-[220px] w-full bg-slate-100">
+              <img
+                :src="emp.coverImage || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop'"
+                :alt="emp.title"
+                class="w-full h-full object-cover"
+              />
+              <div class="absolute top-5 left-5 bg-[#1e3a8a] text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
+                {{ emp.category }}
               </div>
             </div>
-            <div class="border-t border-gray-100 pt-5 flex items-center justify-between mt-auto">
-              <div class="flex items-center gap-3">
-                <img src="https://i.pravatar.cc/100?img=9" alt="Kimberly" class="w-10 h-10 rounded-full object-cover shadow-sm bg-gray-100" />
-                <span class="text-[15px] font-bold text-gray-900">Kimberly Gonzales</span>
+            <div class="p-6 md:p-8 flex-grow flex flex-col">
+              <h3 class="text-[22px] font-bold text-gray-900 mb-2 tracking-tight">{{ emp.title }}</h3>
+              <p class="text-[15px] text-gray-600 leading-relaxed mb-6">{{ emp.description }}</p>
+              <div class="space-y-4 mt-auto mb-8">
+                <div class="flex items-center gap-3 text-sm font-semibold text-gray-700">
+                  <svg class="w-5 h-5 text-[#1e3a8a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                  {{ emp.location }}
+                </div>
               </div>
-              <button class="text-gray-400 hover:text-gray-600 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-              </button>
-            </div>
-          </div>
-        </article>
-
-        <article @click="$router.push('/detalles-emprendimiento-informacion')" class="cursor-pointer bg-white rounded-[24px] overflow-hidden shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100/50 transition-transform duration-300 hover:-translate-y-1 flex flex-col">
-          <div class="relative h-[220px] w-full">
-            <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=2071&auto=format&fit=crop" alt="Art palette" class="w-full h-full object-cover" />
-            <div class="absolute top-5 left-5 bg-[#1e3a8a] text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
-              ARTESANIA
-            </div>
-            <button class="absolute top-5 right-5 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#1e3a8a] shadow-sm hover:bg-white transition-colors">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
-            </button>
-          </div>
-          <div class="p-6 md:p-8 flex-grow flex flex-col">
-            <h3 class="text-[22px] font-bold text-gray-900 mb-2 tracking-tight">Artesania</h3>
-            <p class="text-[15px] text-gray-600 leading-relaxed mb-6">Artesanias hechas a mano</p>
-            <div class="space-y-4 mt-auto mb-8">
-              <div class="flex items-center gap-3 text-sm font-semibold text-gray-700">
-                <svg class="w-5 h-5 text-[#1e3a8a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                Sotano del C
+              <div class="border-t border-gray-100 pt-5 flex items-center justify-between mt-auto">
+                <div class="flex items-center gap-3">
+                  <img
+                    :src="emp.owner.avatar || `https://ui-avatars.com/api/?name=${emp.owner.name}&background=EBF5FF&color=1E3A8A`"
+                    :alt="emp.owner.name"
+                    class="w-10 h-10 rounded-full object-cover shadow-sm bg-gray-100"
+                  />
+                  <span class="text-[15px] font-bold text-gray-900">{{ emp.owner.name }}</span>
+                </div>
               </div>
             </div>
-            <div class="border-t border-gray-100 pt-5 flex items-center justify-between mt-auto">
-              <div class="flex items-center gap-3">
-                <img src="https://i.pravatar.cc/100?img=9" alt="Kimberly" class="w-10 h-10 rounded-full object-cover shadow-sm bg-gray-100" />
-                <span class="text-[15px] font-bold text-gray-900">Kimberly Gonzales</span>
-              </div>
-              <button class="text-gray-400 hover:text-gray-600 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-              </button>
-            </div>
-          </div>
-        </article>
-
+          </article>
+        </div>
       </div>
     </main>
 
@@ -147,13 +101,31 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Emprendimientos',
-  data() {
-    return {}
+<script setup>
+import { ref, onMounted } from 'vue'
+import AppHeader from '../components/AppHeader.vue'
+import AppFooter from '../components/AppFooter.vue'
+
+const emprendimientos = ref([])
+const cargando = ref(true)
+
+const cargarEmprendimientos = async () => {
+  try {
+    const respuesta = await fetch('/api/emprendimientos')
+    const json = await respuesta.json()
+    if (json.success) {
+      emprendimientos.value = json.data
+    }
+  } catch (error) {
+    console.error('Error al cargar los emprendimientos:', error)
+  } finally {
+    cargando.value = false
   }
 }
+
+onMounted(() => {
+  cargarEmprendimientos()
+})
 </script>
 
 <style scoped>
