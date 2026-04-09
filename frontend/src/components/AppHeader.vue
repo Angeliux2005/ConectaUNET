@@ -1,5 +1,5 @@
 <template>
-  <header v-if="!minimal" class="w-full h-[72px] bg-white border-b border-gray-100 flex items-center justify-between px-6 lg:px-12 shadow-sm shrink-0 z-50 fixed top-0 left-0">
+  <header v-if="!minimal" class="w-full h-[72px] bg-white border-b border-gray-100 flex items-center justify-center sm:justify-between px-6 lg:px-12 shadow-sm shrink-0 z-50 fixed top-0 left-0">
     <router-link to="/eventos" class="text-[#002177] font-bold text-[22px] tracking-tight truncate hover:opacity-80 transition-opacity">
       ConectaUNET
     </router-link>

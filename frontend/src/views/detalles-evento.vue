@@ -24,17 +24,17 @@
           </div>
         </div>
 
-        <div class="bg-white relative z-10 -mt-10 lg:mt-0 rounded-t-[32px] lg:rounded-none px-6 py-8 lg:px-2 lg:py-0 w-full flex flex-col">
+        <div class="bg-white relative z-10 -mt-10 lg:mt-8 rounded-t-[32px] lg:rounded-none px-6 py-8 lg:px-0 lg:py-0 w-full flex flex-col">
 
           <div class="lg:hidden bg-[#F3F4F6] text-gray-600 text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider self-start mb-4">
             {{ evento.category }}
           </div>
 
-          <h1 class="text-[26px] lg:text-[44px] font-black text-[#001D6B] leading-[1.1] tracking-tight">
+          <h1 class="text-[26px] lg:text-[44px] font-black text-[#001D6B] leading-[1.1] tracking-tight lg:text-center">
             {{ evento.title }}
           </h1>
 
-          <p class="hidden lg:block text-[18px] lg:text-[22px] text-gray-600 leading-relaxed mt-5 font-normal">
+          <p class="hidden lg:block text-[17px] text-gray-500 leading-relaxed mt-4 font-normal lg:text-center lg:max-w-3xl lg:mx-auto">
             {{ evento.description }}
           </p>
 
@@ -58,9 +58,13 @@
             </div>
           </div>
 
-          <div class="mt-8 lg:mt-12 lg:bg-white lg:rounded-3xl lg:p-10 lg:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] lg:border lg:border-gray-100/50">
-            <h3 class="text-[11px] lg:text-[20px] font-bold text-gray-500 lg:text-[#001D6B] uppercase lg:capitalize tracking-widest lg:tracking-normal mb-3 lg:mb-5">Acerca del evento</h3>
-            <p class="text-[14px] lg:text-[15.5px] text-gray-700 leading-[1.7]">{{ evento.description }}</p>
+          <div class="mt-8 lg:mt-12 lg:bg-white lg:rounded-3xl lg:p-10 lg:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] lg:border lg:border-gray-200">
+            <div class="hidden lg:flex items-center gap-3 mb-6">
+              <div class="w-1 h-6 bg-[#1e3a8a] rounded-full"></div>
+              <h3 class="text-[17px] font-black text-[#001D6B] tracking-tight">Acerca del Evento</h3>
+            </div>
+            <h3 class="lg:hidden text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-3">Acerca del evento</h3>
+            <p class="text-[14px] lg:text-[15.5px] text-gray-600 leading-[1.85]">{{ evento.description }}</p>
           </div>
 
           <div v-if="evento.organizer" class="lg:hidden mt-6 bg-white rounded-[20px] p-4 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] border border-gray-100 flex items-center justify-between">
