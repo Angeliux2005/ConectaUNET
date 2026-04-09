@@ -32,6 +32,18 @@ export const createPublicacion = async (req, res) => {
   }
 };
 
+export const getLikedPublicaciones = async (req, res) => {
+  try {
+    const publicaciones = await Publicacion.find({ likes: req.user._id })
+      .populate('author', 'name username avatar')
+      .populate('emprendimiento', 'title profileImage')
+      .sort({ createdAt: -1 });
+    res.json({ success: true, data: publicaciones });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 export const getPublicacionById = async (req, res) => {
   try {
     const publicacion = await Publicacion.findById(req.params.id)
@@ -45,6 +57,28 @@ export const getPublicacionById = async (req, res) => {
     res.json({ success: true, data: publicacion });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const updatePublicacion = async (req, res) => {
+  try {
+    const publicacion = await Publicacion.findById(req.params.id);
+    if (!publicacion) return res.status(404).json({ success: false, message: 'Publicacion no encontrada' });
+
+    if (publicacion.author.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, message: 'No tienes permiso para editar esta publicacion' });
+    }
+
+    const { title, content } = req.body;
+    if (title !== undefined) publicacion.title = title;
+    if (content !== undefined) publicacion.content = content;
+    await publicacion.save();
+    await publicacion.populate('author', 'name username avatar');
+    await publicacion.populate('emprendimiento', 'title profileImage');
+
+    res.json({ success: true, data: publicacion });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 

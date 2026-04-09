@@ -61,6 +61,9 @@
           <MainCard
             v-for="evento in eventos"
             :key="evento._id"
+            :eventoId="evento._id"
+            :savedInicial="currentUser ? (evento.savedBy || []).some(id => (id?._id || id)?.toString() === currentUser._id) : false"
+            :esPropio="currentUser ? (evento.organizer?._id || evento.organizer)?.toString() === currentUser._id : false"
             :imagen="evento.coverImage"
             :etiqueta="evento.category.toUpperCase()"
             :titulo="evento.title"
@@ -96,6 +99,7 @@ const eventos = ref([])
 const cargando = ref(true)
 const busqueda = ref('')
 const categoriaActiva = ref('')
+const currentUser = JSON.parse(localStorage.getItem('user') || 'null')
 
 // Estados Nuevos para los botones
 const mostrarCategorias = ref(true)

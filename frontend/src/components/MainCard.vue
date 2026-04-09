@@ -5,8 +5,16 @@
       <div class="absolute top-5 left-5 bg-[#1e3a8a] text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
         {{ etiqueta }}
       </div>
-      <button class="absolute top-5 right-5 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#1e3a8a] shadow-sm hover:bg-white transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+      <button
+        v-if="eventoId && !esPropio"
+        @click.stop="toggleSave"
+        :disabled="togglingSave"
+        :class="isSaved ? 'bg-[#1e3a8a] text-white' : 'bg-white/90 text-[#1e3a8a] hover:bg-white'"
+        class="absolute top-5 right-5 w-9 h-9 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm transition-colors"
+      >
+        <svg class="w-4 h-4" :fill="isSaved ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+        </svg>
       </button>
     </div>
 
@@ -43,7 +51,9 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { fetchApi } from '../utils/api.js'
 
 const router = useRouter()
 
@@ -60,8 +70,36 @@ const props = defineProps({
   enlaceDetalle: {
     type: String,
     default: '/eventos'
+  },
+  eventoId: {
+    type: String,
+    default: null
+  },
+  savedInicial: {
+    type: Boolean,
+    default: false
+  },
+  esPropio: {
+    type: Boolean,
+    default: false
   }
 })
+
+const isSaved = ref(props.savedInicial)
+const togglingSave = ref(false)
+
+const toggleSave = async () => {
+  togglingSave.value = true
+  try {
+    const res = await fetchApi(`/api/eventos/${props.eventoId}/save`, { method: 'POST' })
+    const json = await res.json()
+    if (json.success) isSaved.value = json.saved
+  } catch (error) {
+    console.error('Error al guardar evento:', error)
+  } finally {
+    togglingSave.value = false
+  }
+}
 
 const navegar = () => router.push(props.enlaceDetalle)
 </script>

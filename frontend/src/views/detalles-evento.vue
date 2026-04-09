@@ -90,6 +90,10 @@
                 <div v-else class="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
                 {{ isAttending ? 'Cancelar asistencia' : 'Asistiré' }}
               </button>
+              <button @click="toggleSave" :disabled="togglingSave" :class="isSaved ? 'bg-amber-50 border border-amber-300 text-amber-700' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'" class="w-full font-bold py-4 rounded-[16px] flex items-center justify-center gap-2 transition-colors active:scale-[0.98]">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                {{ isSaved ? 'Guardado' : 'Guardar evento' }}
+              </button>
               <button @click="$router.push(`/muro-evento/${evento._id}`)" class="w-full bg-white border border-gray-200 text-[#1E3A8A] font-bold py-4 rounded-[16px] flex items-center justify-center gap-2 shadow-sm hover:bg-gray-50 transition-colors active:scale-[0.98]">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
                 Ver Muro del Evento
@@ -143,6 +147,10 @@
                 <div v-else class="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
                 {{ isAttending ? 'Cancelar asistencia' : 'Asistiré al Evento' }}
               </button>
+              <button @click="toggleSave" :disabled="togglingSave" :class="isSaved ? 'bg-amber-50 border border-amber-300 text-amber-700' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'" class="w-full font-bold py-3.5 rounded-xl transition-colors text-[15px] flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                {{ isSaved ? 'Guardado' : 'Guardar evento' }}
+              </button>
               <button @click="$router.push(`/muro-evento/${evento._id}`)" class="w-full bg-white border border-gray-200 text-[#1E3A8A] font-bold py-3.5 rounded-xl shadow-sm hover:bg-gray-50 transition-colors text-[15px] flex items-center justify-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
                 Ver Muro del Evento
@@ -171,6 +179,9 @@
         <MainCard
           v-for="item in eventosRelacionados"
           :key="item._id"
+          :eventoId="item._id"
+          :savedInicial="currentUser ? (item.savedBy || []).some(id => (id?._id || id)?.toString() === currentUser._id) : false"
+          :esPropio="currentUser ? (item.organizer?._id || item.organizer)?.toString() === currentUser._id : false"
           :imagen="item.coverImage"
           :etiqueta="item.category"
           :titulo="item.title"
@@ -207,6 +218,8 @@ const cargando = ref(true)
 const eventosRelacionados = ref([])
 const isAttending = ref(false)
 const togglingAttend = ref(false)
+const isSaved = ref(false)
+const togglingSave = ref(false)
 
 const currentUser = JSON.parse(localStorage.getItem('user') || 'null')
 
@@ -229,13 +242,25 @@ const toggleAttend = async () => {
   try {
     const res = await fetchApi(`/api/eventos/${evento.value._id}/attend`, { method: 'POST' })
     const json = await res.json()
-    if (json.success) {
-      isAttending.value = json.attending
-    }
+    if (json.success) isAttending.value = json.attending
   } catch (error) {
     console.error('Error al cambiar asistencia:', error)
   } finally {
     togglingAttend.value = false
+  }
+}
+
+const toggleSave = async () => {
+  if (!currentUser) return
+  togglingSave.value = true
+  try {
+    const res = await fetchApi(`/api/eventos/${evento.value._id}/save`, { method: 'POST' })
+    const json = await res.json()
+    if (json.success) isSaved.value = json.saved
+  } catch (error) {
+    console.error('Error al guardar evento:', error)
+  } finally {
+    togglingSave.value = false
   }
 }
 
@@ -255,6 +280,9 @@ const cargar = async (id) => {
       evento.value = jsonEvento.data
       if (currentUser && jsonEvento.data.attendees) {
         isAttending.value = jsonEvento.data.attendees.some(
+          a => (a?._id || a)?.toString() === currentUser._id
+        )
+        isSaved.value = (jsonEvento.data.savedBy || []).some(
           a => (a?._id || a)?.toString() === currentUser._id
         )
       }

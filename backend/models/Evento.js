@@ -37,6 +37,12 @@ const eventoSchema = new mongoose.Schema({
       ref: 'User'
     }
   ],
+  savedBy: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
+    }
+  ],
   organizer: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',

@@ -42,6 +42,12 @@ const emprendimientoSchema = new mongoose.Schema({
       ref: 'User'
     }
   ],
+  likes: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
+    }
+  ],
   status: {
     type: String,
     enum: ['active', 'inactive'],

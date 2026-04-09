@@ -155,3 +155,24 @@ export const getPublicacionesByEmprendimiento = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const toggleLike = async (req, res) => {
+  try {
+    const emprendimiento = await Emprendimiento.findById(req.params.id);
+    if (!emprendimiento) return res.status(404).json({ success: false, message: 'Emprendimiento no encontrado' });
+
+    const userId = req.user._id;
+    const alreadyLiked = emprendimiento.likes.some(id => id.toString() === userId.toString());
+
+    if (alreadyLiked) {
+      emprendimiento.likes = emprendimiento.likes.filter(id => id.toString() !== userId.toString());
+    } else {
+      emprendimiento.likes.push(userId);
+    }
+
+    await emprendimiento.save();
+    res.json({ success: true, liked: !alreadyLiked, likesCount: emprendimiento.likes.length });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

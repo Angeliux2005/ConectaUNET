@@ -27,6 +27,35 @@
                 <div class="text-gray-500 text-[13px] mt-0.5">{{ fechaRelativa(pub.createdAt) }}</div>
               </div>
             </button>
+
+            <!-- Menú dueño -->
+            <div v-if="esMio" class="relative">
+              <button @click="menuAbierto = !menuAbierto" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+              </button>
+              <div v-if="menuAbierto" class="absolute right-0 top-10 bg-white border border-gray-100 rounded-xl shadow-lg z-10 w-44 overflow-hidden">
+                <button @click="iniciarEdicion" class="w-full text-left px-4 py-3 text-[14px] font-semibold text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                  Editar
+                </button>
+                <button @click="confirmarEliminar" class="w-full text-left px-4 py-3 text-[14px] font-semibold text-red-600 hover:bg-red-50 flex items-center gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal edición -->
+          <div v-if="editando" class="px-6 pb-4 flex flex-col gap-3">
+            <input v-model="editTitulo" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-[15px] font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]/30" placeholder="Título" />
+            <textarea v-model="editContenido" rows="3" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-[14px] text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]/30 resize-none" placeholder="Descripción"></textarea>
+            <div class="flex gap-2 justify-end">
+              <button @click="editando = false" class="px-4 py-2 text-[13px] font-bold text-gray-500 hover:bg-gray-100 rounded-lg transition-colors">Cancelar</button>
+              <button @click="guardarEdicion" :disabled="guardando" class="px-5 py-2 text-[13px] font-bold bg-[#1e3a8a] text-white rounded-lg hover:bg-[#152a6b] transition-colors disabled:opacity-50">
+                {{ guardando ? 'Guardando...' : 'Guardar' }}
+              </button>
+            </div>
           </div>
 
           <div class="w-full bg-gray-100">
@@ -115,7 +144,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { fetchApi } from '../utils/api.js'
 import AppHeader from '../components/AppHeader.vue'
@@ -133,6 +162,19 @@ const toggling = ref(false)
 const liked = ref(false)
 const likesCount = ref(0)
 const currentUser = JSON.parse(localStorage.getItem('user') || 'null')
+
+// Editar / eliminar
+const menuAbierto = ref(false)
+const editando = ref(false)
+const editTitulo = ref('')
+const editContenido = ref('')
+const guardando = ref(false)
+
+const esMio = computed(() => {
+  if (!pub.value || !currentUser) return false
+  const authorId = pub.value.author?._id || pub.value.author
+  return authorId?.toString() === currentUser._id
+})
 
 const cargar = async (id) => {
   loading.value = true
@@ -193,6 +235,45 @@ const enviarComentario = async () => {
     console.error('Error al comentar:', error)
   } finally {
     enviando.value = false
+  }
+}
+
+const iniciarEdicion = () => {
+  editTitulo.value = pub.value.title
+  editContenido.value = pub.value.content
+  editando.value = true
+  menuAbierto.value = false
+}
+
+const guardarEdicion = async () => {
+  guardando.value = true
+  try {
+    const res = await fetchApi(`/api/publicaciones/${route.params.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ title: editTitulo.value, content: editContenido.value })
+    })
+    const json = await res.json()
+    if (json.success) {
+      pub.value.title = json.data.title
+      pub.value.content = json.data.content
+      editando.value = false
+    }
+  } catch (error) {
+    console.error('Error al editar:', error)
+  } finally {
+    guardando.value = false
+  }
+}
+
+const confirmarEliminar = async () => {
+  menuAbierto.value = false
+  if (!confirm('¿Eliminar esta publicación?')) return
+  try {
+    const res = await fetchApi(`/api/publicaciones/${route.params.id}`, { method: 'DELETE' })
+    const json = await res.json()
+    if (json.success) router.go(-1)
+  } catch (error) {
+    console.error('Error al eliminar:', error)
   }
 }
 

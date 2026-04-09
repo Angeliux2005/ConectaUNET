@@ -226,6 +226,8 @@ const masEmprendimientos = ref([])
 const currentUser = JSON.parse(localStorage.getItem('user') || 'null')
 const isFollowing = ref(false)
 const togglingFollow = ref(false)
+const isLiked = ref(false)
+const togglingLike = ref(false)
 
 const esMio = computed(() => {
   if (!emp.value || !currentUser) return false
@@ -247,7 +249,10 @@ const cargar = async (id) => {
 
     if (jsonEmp.success) {
       emp.value = jsonEmp.data
-      isFollowing.value = currentUser && jsonEmp.data.followers ? jsonEmp.data.followers.some(id => id === currentUser._id || id.toString() === currentUser._id) : false
+      if (currentUser) {
+        isFollowing.value = (jsonEmp.data.followers || []).some(id => (id?._id || id)?.toString() === currentUser._id)
+        isLiked.value = (jsonEmp.data.likes || []).some(id => (id?._id || id)?.toString() === currentUser._id)
+      }
     }
     if (jsonTodos.success) {
       const otros = jsonTodos.data.filter(e => e._id !== id)
@@ -283,6 +288,20 @@ const toggleFollow = async () => {
     console.error('Error al alternar seguir:', error)
   } finally {
     togglingFollow.value = false
+  }
+}
+
+const toggleLike = async () => {
+  if (!currentUser) return
+  togglingLike.value = true
+  try {
+    const res = await fetchApi(`/api/emprendimientos/${route.params.id}/like`, { method: 'POST' })
+    const json = await res.json()
+    if (json.success) isLiked.value = json.liked
+  } catch (error) {
+    console.error('Error al dar like:', error)
+  } finally {
+    togglingLike.value = false
   }
 }
 

@@ -11,7 +11,7 @@ export const getEventos = async (req, res) => {
 
     const eventos = await Evento.find(filter)
       .populate('organizer', 'name username avatar')
-      .select('title description coverImage category date timeRange location organizer attendees')
+      .select('title description coverImage category date timeRange location organizer attendees savedBy')
       .sort({ date: 1 });
 
     res.json({ success: true, count: eventos.length, data: eventos });
@@ -207,6 +207,27 @@ export const deleteMuroComentario = async (req, res) => {
 
     await comentario.deleteOne();
     res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const toggleSave = async (req, res) => {
+  try {
+    const evento = await Evento.findById(req.params.id);
+    if (!evento) return res.status(404).json({ success: false, message: 'Evento no encontrado' });
+
+    const userId = req.user._id;
+    const alreadySaved = evento.savedBy.some(id => id.toString() === userId.toString());
+
+    if (alreadySaved) {
+      evento.savedBy = evento.savedBy.filter(id => id.toString() !== userId.toString());
+    } else {
+      evento.savedBy.push(userId);
+    }
+
+    await evento.save();
+    res.json({ success: true, saved: !alreadySaved });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

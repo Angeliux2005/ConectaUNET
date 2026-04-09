@@ -185,7 +185,7 @@
             </div>
 
             <div
-              v-else-if="(vistaActiva === 'eventos' && eventosFiltrados.length === 0) || (vistaActiva === 'emprendimientos' && emprendimientosFiltrados.length === 0)"
+              v-else-if="(vistaActiva === 'eventos' && eventosFiltrados.length === 0) || (vistaActiva === 'emprendimientos' && tabEmprendimientos !== 'likes' && emprendimientosFiltrados.length === 0) || (vistaActiva === 'emprendimientos' && tabEmprendimientos === 'likes' && publicacionesLikeadas.length === 0)"
               class="text-center py-20 text-gray-500 font-medium bg-white md:bg-transparent rounded-2xl md:rounded-none shadow-inner md:shadow-none p-6">
               <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -254,6 +254,25 @@
                     </button>
                   </div>
                 </article>
+              </template>
+
+              <template v-else-if="tabEmprendimientos === 'likes'">
+                <div class="grid grid-cols-3 gap-2 md:gap-4">
+                  <article
+                    v-for="pub in publicacionesLikeadas"
+                    :key="pub._id"
+                    @click="$router.push(`/publicaciones/${pub._id}`)"
+                    class="cursor-pointer aspect-square overflow-hidden rounded-xl bg-gray-100 relative group"
+                  >
+                    <img :src="pub.image" :alt="pub.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                      <div class="opacity-0 group-hover:opacity-100 flex items-center gap-2 text-white font-bold text-sm transition-opacity">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                        {{ pub.likesCount }}
+                      </div>
+                    </div>
+                  </article>
+                </div>
               </template>
 
               <template v-else>
@@ -337,6 +356,7 @@ const filtroGuardados = ref('posts')
 // Datos de la BD
 const eventos = ref([])
 const emprendimientos = ref([])
+const publicacionesLikeadas = ref([])
 const cargando = ref(true)
 const currentUser = ref(null)
 
@@ -357,11 +377,17 @@ const eventosFiltrados = computed(() => {
 
   if (tabEventos.value === 'asistire') {
     return eventos.value.filter(e =>
-      e.attendees && e.attendees.some(id => (id?._id || id) === userId)
+      e.attendees && e.attendees.some(id => (id?._id || id)?.toString() === userId)
     )
   }
 
-  return [] // "Guardados" no tiene array nativo en tu backend actual
+  if (tabEventos.value === 'guardados') {
+    return eventos.value.filter(e =>
+      e.savedBy && e.savedBy.some(id => (id?._id || id)?.toString() === userId)
+    )
+  }
+
+  return []
 })
 
 const emprendimientosFiltrados = computed(() => {
@@ -378,11 +404,17 @@ const emprendimientosFiltrados = computed(() => {
 
   if (tabEmprendimientos.value === 'seguidos') {
     return emprendimientos.value.filter(e =>
-      e.followers && e.followers.some(id => (id?._id || id) === userId)
+      e.followers && e.followers.some(id => (id?._id || id)?.toString() === userId)
     )
   }
 
-  return [] // "Likes" y "Guardados"
+  if (tabEmprendimientos.value === 'likes') {
+    return emprendimientos.value.filter(e =>
+      e.likes && e.likes.some(id => (id?._id || id)?.toString() === userId)
+    )
+  }
+
+  return []
 })
 
 // --- LLAMADAS A LA API (Con Seguridad JWT) ---
@@ -399,18 +431,21 @@ const cargarDatosPerfil = async () => {
     }
 
     // Pedimos ambas colecciones en paralelo usando fetch nativo
-    const [resEventos, resEmprend] = await Promise.all([
+    const [resEventos, resEmprend, resPubsLiked] = await Promise.all([
       fetch('/api/eventos', { headers }),
-      fetch('/api/emprendimientos', { headers })
+      fetch('/api/emprendimientos', { headers }),
+      fetch('/api/publicaciones/liked', { headers })
     ])
 
-    const [jsonEventos, jsonEmprend] = await Promise.all([
+    const [jsonEventos, jsonEmprend, jsonPubsLiked] = await Promise.all([
       resEventos.json(),
-      resEmprend.json()
+      resEmprend.json(),
+      resPubsLiked.json()
     ])
 
     if (jsonEventos.success) eventos.value = jsonEventos.data
     if (jsonEmprend.success) emprendimientos.value = jsonEmprend.data
+    if (jsonPubsLiked.success) publicacionesLikeadas.value = jsonPubsLiked.data
 
   } catch (error) {
     console.error("Error conectando con el backend:", error)

@@ -1,6 +1,8 @@
 import express from 'express';
 import {
+  getLikedPublicaciones,
   getPublicacionById,
+  updatePublicacion,
   deletePublicacion,
   toggleLike,
   getComentarios,
@@ -10,8 +12,11 @@ import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
+router.get('/liked', protect, getLikedPublicaciones);
+
 router.route('/:id')
   .get(getPublicacionById)
+  .put(protect, updatePublicacion)
   .delete(protect, deletePublicacion);
 
 router.post('/:id/like', protect, toggleLike);

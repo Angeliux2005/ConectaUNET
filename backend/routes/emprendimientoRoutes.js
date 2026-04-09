@@ -7,6 +7,7 @@ import {
   updateEmprendimiento,
   deleteEmprendimiento,
   toggleFollow,
+  toggleLike,
   getPublicacionesByEmprendimiento
 } from '../controllers/emprendimientoController.js';
 import {
@@ -28,6 +29,7 @@ router.route('/:id')
   .delete(protect, deleteEmprendimiento);
 
 router.post('/:id/follow', protect, toggleFollow);
+router.post('/:id/like', protect, toggleLike);
 
 router.route('/:id/publicaciones')
   .get(getPublicacionesByEmprendimiento)

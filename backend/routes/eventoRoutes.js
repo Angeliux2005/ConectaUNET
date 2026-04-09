@@ -6,6 +6,7 @@ import {
   updateEvento,
   deleteEvento,
   toggleAttend,
+  toggleSave,
   getMuroComentarios,
   addMuroComentario,
   updateMuroComentario,
@@ -25,6 +26,7 @@ router.route('/:id')
   .delete(protect, deleteEvento);
 
 router.post('/:id/attend', protect, toggleAttend);
+router.post('/:id/save', protect, toggleSave);
 
 router.route('/:id/muro')
   .get(getMuroComentarios)
