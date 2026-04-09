@@ -76,21 +76,10 @@ const goHome = () => {
 
     </main>
 
-    <footer class="w-full px-6 lg:px-10 py-6 border-t border-[#E5E7EB] bg-white flex flex-col md:flex-row items-center justify-between gap-4 mt-auto">
-      
-      <div class="text-xs text-[#6B7280] text-center md:text-left">
-        <span class="font-bold" :style="{ color: brandBlue }">ConectaUNET</span><br class="md:hidden" />
-        <span class="md:ml-2">© 2025 Todos los derechos reservados.</span>
-      </div>
+    <div class="hidden md:block">
+      <AppFooter />
+    </div>
 
-      <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-[#6B7280]">
-        <a href="#" class="hover:text-gray-900 hover:underline transition-colors" @click="router.push('/privacidad')">Privacidad</a>
-        <a href="#" class="hover:text-gray-900 hover:underline transition-colors" @click="router.push('/terminos')">Términos</a>
-        <a href="#" class="hover:text-gray-900 hover:underline transition-colors" @click="router.push('/contacto')">Contáctanos</a>
-        <a href="#" class="font-medium hover:underline transition-colors" :style="{ color: brandBlue }" @click="router.push('/acerca')">Acerca de ConectaUNET</a>
-      </div>
-
-    </footer>
   </div>
   
 </template>
