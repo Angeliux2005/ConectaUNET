@@ -20,6 +20,7 @@ import Acerca from './views/acerca.vue'
 import NotFound from './views/not-found.vue'
 import Notificaciones from './views/notificaciones.vue'
 import MuroEvento from './views/muro-evento.vue'
+import EditarEmprendimiento from './views/editar-emprendimiento.vue'
 
 const routes = [
   { name: 'Login', path: '/', component: Login },
@@ -36,6 +37,7 @@ const routes = [
   { name: 'DetallesEvento', path: '/detalles-evento', component: DetallesEvento },
   { name: 'DetallesEmprendimientoInformacion', path: '/detalles-emprendimiento-informacion', component: DetallesEmprendimientoInformacion },
   { name: 'Emprendimientos', path: '/emprendimientos', component: Emprendimientos },
+  { name: 'EditarEmprendimiento', path: '/editar-emprendimiento', component: EditarEmprendimiento },
   { name: 'Publicacion', path: '/publicacion', component: Publicacion },
   { name: 'Muro', path: '/muro-evento', component: MuroEvento },
   { name: 'Buscar', path: '/buscar', component: Buscar },
