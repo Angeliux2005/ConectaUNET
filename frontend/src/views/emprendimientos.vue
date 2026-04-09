@@ -4,7 +4,8 @@
 
     <main class="flex-grow w-full max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 mt-[72px] pb-28 md:pb-16 pt-4 md:pt-8">
 
-      <div class="md:hidden mb-6 bg-gray-100/80 p-1.5 rounded-[16px] flex items-center shadow-inner">
+      <!-- Tab switcher móvil -->
+      <div class="md:hidden mb-4 bg-gray-100/80 p-1.5 rounded-[16px] flex items-center shadow-inner">
         <button @click="$router.push('/eventos')" class="flex-1 text-gray-500 hover:text-gray-800 text-[13px] font-bold py-2.5 px-2 rounded-xl transition-colors text-center leading-tight">
           Eventos<br>Culturales
         </button>
@@ -13,36 +14,36 @@
         </button>
       </div>
 
-      <div class="hidden md:flex flex-col md:flex-row items-center justify-between gap-4">
-        
-        <div class="relative w-full md:max-w-md">
-          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-          </div>
-          <input v-model="busqueda" type="text" class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm text-[15px] focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]/20 focus:border-[#1e3a8a] transition-all" placeholder="Buscar emprendimientos...">
+      <!-- Búsqueda (móvil + desktop) -->
+      <div class="relative w-full mb-3">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         </div>
-
-        <div class="flex items-center gap-3 overflow-x-auto pb-2 md:pb-0">
-          <button @click="mostrarCategorias = !mostrarCategorias" :class="mostrarCategorias ? 'bg-[#d5dbe9]' : 'bg-[#E1E5EF]'" class="shrink-0 flex items-center gap-2 hover:bg-[#d5dbe9] text-[#1e3a8a] font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
-            Filtrar
-          </button>
-          
-          <button @click="toggleOrdenFecha" class="shrink-0 flex items-center gap-2 bg-[#E1E5EF] hover:bg-[#d5dbe9] text-[#1e3a8a] font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm w-[100px] justify-center">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            Fecha <span class="font-bold ml-1">{{ ordenFecha === 'desc' ? '↓' : '↑' }}</span>
-          </button>
-
-          <button @click="$router.push('/nuevo-emprendimiento')" class="shrink-0 flex items-center gap-2 bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-semibold px-6 py-2.5 rounded-xl shadow transition-colors text-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            Publicar Emprendimiento
-          </button>
-        </div>
+        <input v-model="busqueda" type="text" class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm text-[15px] focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]/20 focus:border-[#1e3a8a] transition-all" placeholder="Buscar emprendimientos...">
       </div>
 
-      <div v-show="mostrarCategorias" class="hidden md:flex mt-6 items-center gap-3 overflow-x-auto pb-4 scrollbar-hide animate-fade-in">
-        <button @click="toggleCategoria('')" :class="categoriaActiva === '' ? 'bg-[#254291] text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'" class="shrink-0 text-sm font-semibold px-6 py-2.5 rounded-xl transition-colors tracking-wide">Todos</button>
-        <button v-for="cat in categorias" :key="cat" @click="toggleCategoria(cat)" :class="categoriaActiva === cat ? 'bg-[#254291] text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'" class="shrink-0 text-sm font-semibold px-6 py-2.5 rounded-xl transition-colors tracking-wide">{{ cat }}</button>
+      <!-- Acciones -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        <button @click="mostrarCategorias = !mostrarCategorias" :class="mostrarCategorias ? 'bg-[#d5dbe9]' : 'bg-[#E1E5EF]'" class="shrink-0 flex items-center gap-2 hover:bg-[#d5dbe9] text-[#1e3a8a] font-semibold px-4 py-2.5 rounded-xl transition-colors text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          Filtrar
+        </button>
+
+        <button @click="toggleOrdenFecha" class="shrink-0 flex items-center gap-1.5 bg-[#E1E5EF] hover:bg-[#d5dbe9] text-[#1e3a8a] font-semibold px-4 py-2.5 rounded-xl transition-colors text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          Fecha <span class="font-bold">{{ ordenFecha === 'desc' ? '↓' : '↑' }}</span>
+        </button>
+
+        <button @click="$router.push('/nuevo-emprendimiento')" class="shrink-0 ml-auto flex items-center gap-2 bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-semibold px-5 py-2.5 rounded-xl shadow transition-colors text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          Publicar Emprendimiento
+        </button>
+      </div>
+
+      <!-- Categorías -->
+      <div v-show="mostrarCategorias" class="flex mt-4 items-center gap-2 overflow-x-auto pb-2 scrollbar-hide animate-fade-in">
+        <button @click="toggleCategoria('')" :class="categoriaActiva === '' ? 'bg-[#254291] text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'" class="shrink-0 text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">Todos</button>
+        <button v-for="cat in categorias" :key="cat" @click="toggleCategoria(cat)" :class="categoriaActiva === cat ? 'bg-[#254291] text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'" class="shrink-0 text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">{{ cat }}</button>
       </div>
 
       <div class="mt-8">
