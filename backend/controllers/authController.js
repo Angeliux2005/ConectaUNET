@@ -181,3 +181,29 @@ export const updatePassword = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { emailOrUser } = req.body;
+    if (!emailOrUser) {
+      return res.status(400).json({ success: false, message: 'Ingresa tu correo o usuario.' });
+    }
+
+    const user = await User.findOne({
+      $or: [{ email: emailOrUser }, { username: emailOrUser }]
+    });
+
+    // Siempre respondemos igual para no revelar si el usuario existe
+    res.json({
+      success: true,
+      message: 'Si tu correo está registrado, recibirás instrucciones pronto.'
+    });
+
+    if (user) {
+      // Aquí iría el envío de email cuando se configure el servicio de correo
+      console.log(`[Recuperación] Usuario ${user.email} solicitó recuperación de contraseña.`);
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

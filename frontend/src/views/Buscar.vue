@@ -81,7 +81,7 @@
               :autor="evento.organizer?.name"
               :avatar="evento.organizer?.avatar || generarAvatarGenerico(evento.organizer?.name)"
               :tagColor="getColorEtiqueta(evento.category)"
-              @click="$router.push(`/detalles-evento/${evento._id}`)"
+              @click="$router.push(`/eventos/${evento._id}`)"
               class="cursor-pointer hover:shadow-md transition-shadow"
             />
             
@@ -102,7 +102,7 @@
               :autor="emp.owner?.name"
               :avatar="emp.owner?.avatar || generarAvatarGenerico(emp.owner?.name)"
               :tagColor="getColorEtiqueta(emp.category)"
-              @click="$router.push(`/detalles-emprendimiento-dueo/${emp._id}`)"
+              @click="$router.push(`/emprendimientos/${emp._id}`)"
               class="cursor-pointer hover:shadow-md transition-shadow"
             />
             
@@ -123,6 +123,7 @@
 import { computed, ref, onMounted } from 'vue'
 import SearchCard from '../components/SearchCard.vue'
 import BottomNav from '../components/BottomNav.vue'
+import { fetchApi } from '../utils/api.js'
 
 // --- ESTADOS DE LA VISTA ---
 const tabActiva = ref('eventos')
@@ -145,8 +146,8 @@ const cargarDatos = async () => {
   cargando.value = true
   try {
     const [resEventos, resEmprend] = await Promise.all([
-      fetch('/api/eventos'),
-      fetch('/api/emprendimientos')
+      fetchApi('/api/eventos'),
+      fetchApi('/api/emprendimientos')
     ])
     
     const [jsonEventos, jsonEmprend] = await Promise.all([

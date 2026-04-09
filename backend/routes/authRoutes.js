@@ -4,7 +4,8 @@ import {
   loginUser,
   getUserProfile,
   updateUserProfile,
-  updatePassword // <-- 1. IMPORTAMOS LA NUEVA FUNCIÓN AQUÍ
+  updatePassword,
+  forgotPassword
 } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -17,7 +18,7 @@ router.route('/profile')
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
 
-// <-- 2. CREAMOS LA RUTA PARA CAMBIAR CONTRASEÑA AQUÍ
-router.put('/updatepassword', protect, updatePassword); 
+router.put('/updatepassword', protect, updatePassword);
+router.post('/forgotpassword', forgotPassword);
 
 export default router;
