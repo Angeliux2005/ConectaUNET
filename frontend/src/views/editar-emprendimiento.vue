@@ -95,6 +95,11 @@
         <div v-if="error" class="text-red-600 text-sm font-semibold text-center my-2">{{ error }}</div>
         <div v-if="success" class="text-green-600 text-sm font-semibold text-center my-2">{{ success }}</div>
 
+        <button @click="saveChanges" :disabled="saving" class="w-full mt-6 bg-[#1e3a8a] hover:bg-[#152a6b] disabled:opacity-50 text-white font-bold py-3.5 rounded-xl transition-colors text-[15px] flex items-center justify-center gap-2">
+          <div v-if="saving" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          {{ saving ? 'Guardando...' : 'Guardar Cambios' }}
+        </button>
+
         <hr class="my-6 border-gray-100">
 
         <button @click="deleteEmprendimiento" class="w-full border border-gray-200 rounded-xl py-3.5 flex items-center justify-center gap-2 hover:bg-red-50 transition-colors">
@@ -220,7 +225,7 @@ async function deleteEmprendimiento() {
     const res = await fetchApi(`/api/emprendimientos/${empId}`, { method: 'DELETE' })
     const data = await res.json()
     if (!data.success) throw new Error(data.message)
-    router.push('/perfil')
+    router.push('/perfil-mis-emprendimientos')
   } catch (err) {
     error.value = err.message || 'Error al eliminar'
   }
