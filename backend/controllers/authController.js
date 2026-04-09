@@ -1,9 +1,17 @@
 import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
 
+const nameFromEmail = (email) => {
+  const local = email.split('@')[0]; // e.g. "nombre.apellido"
+  return local
+    .split('.')
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join(' ');
+};
+
 export const registerUser = async (req, res) => {
   try {
-    const { name, username, email, password } = req.body;
+    const { username, email, password } = req.body;
 
     const userExists = await User.findOne({ $or: [{ email }, { username }] });
 
@@ -11,6 +19,8 @@ export const registerUser = async (req, res) => {
       const field = userExists.email === email ? 'correo' : 'nombre de usuario';
       return res.status(400).json({ success: false, message: `El ${field} ya está en uso` });
     }
+
+    const name = nameFromEmail(email);
 
     const user = await User.create({ name, username, email, password });
 
