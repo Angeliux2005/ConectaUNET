@@ -31,11 +31,11 @@
 
             <div class="w-[100px] h-[100px] md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white md:border-gray-50 shadow-sm md:bg-[#EBF5FF] flex items-center justify-center relative text-[#1e3a8a] font-bold text-4xl">
               <img v-if="currentUser?.avatar" :src="currentUser.avatar" alt="Perfil" class="w-full h-full object-cover" />
-              <span v-else>{{ currentUser?.name?.charAt(0) || 'U' }}</span>
+              <span v-else>{{ currentUser?.username?.charAt(0).toUpperCase() || 'U' }}</span>
             </div>
 
             <h2 class="mt-3 md:mt-6 text-[22px] md:text-[26px] font-black text-[#001D6B] tracking-tight text-center">
-              {{ currentUser?.name || 'Cargando...' }}
+              {{ currentUser?.name || currentUser?.username || 'Cargando...' }}
             </h2>
 
             <p class="mt-0.5 md:mt-4 text-gray-500 font-medium text-[12px] md:text-[15px]">{{ currentUser ? '@' + currentUser.username : '' }}</p>
@@ -46,7 +46,7 @@
 
             <div class="w-full h-px bg-gray-200/60 my-5 md:my-8 hidden md:block"></div>
 
-            <button class="mt-4 md:mt-0 w-[140px] md:w-full bg-white border border-gray-200 md:border-2 md:border-[#1e3a8a] text-gray-700 md:text-[#1e3a8a] hover:bg-gray-50 md:hover:bg-[#1e3a8a] md:hover:text-white font-bold py-2 md:py-3.5 rounded-lg md:rounded-xl transition-all duration-300 text-[12px] md:text-[15px] flex items-center justify-center gap-2 shadow-sm md:shadow-none">
+            <button @click="$router.push('/editar-perfil')" class="mt-4 md:mt-0 w-[140px] md:w-full bg-white border border-gray-200 md:border-2 md:border-[#1e3a8a] text-gray-700 md:text-[#1e3a8a] hover:bg-gray-50 md:hover:bg-[#1e3a8a] md:hover:text-white font-bold py-2 md:py-3.5 rounded-lg md:rounded-xl transition-all duration-300 text-[12px] md:text-[15px] flex items-center justify-center gap-2 shadow-sm md:shadow-none">
               <svg class="w-3.5 h-3.5 md:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
               Editar Info
             </button>
@@ -59,11 +59,9 @@
             <button @click="cambiarVistaPrincipal" class="p-1 text-[#1e3a8a] hover:bg-gray-100 rounded-full transition-colors">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
             </button>
-            
             <span class="text-[#1e3a8a] font-black text-[12px] tracking-widest uppercase">
               VISTA {{ vistaActiva === 'eventos' ? 'EVENTOS' : 'EMPRENDIMIENTOS' }}
             </span>
-            
             <button @click="cambiarVistaPrincipal" class="p-1 text-[#1e3a8a] hover:bg-gray-100 rounded-full transition-colors">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
             </button>
@@ -91,9 +89,6 @@
             <button @click="tabEmprendimientos = 'likes'" :class="tabEmprendimientos === 'likes' ? 'border-[#1e3a8a] text-[#1e3a8a] font-bold' : 'border-transparent text-gray-500 font-semibold'" class="shrink-0 px-4 py-3 text-[13px] border-b-[3px] text-center transition-colors">
               Likes
             </button>
-            <button @click="tabEmprendimientos = 'guardados'" :class="tabEmprendimientos === 'guardados' ? 'border-[#1e3a8a] text-[#1e3a8a] font-bold' : 'border-transparent text-gray-500 font-semibold'" class="shrink-0 px-4 py-3 text-[13px] border-b-[3px] text-center transition-colors">
-              Guardados
-            </button>
           </nav>
 
           <div class="hidden md:flex flex-col border-b border-gray-200">
@@ -108,7 +103,7 @@
               </nav>
 
               <div class="pb-4">
-                <button class="bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-bold px-6 py-3 rounded-xl shadow-sm transition-colors text-[14.5px] shrink-0">
+                <button @click="irAPublicar" class="bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-bold px-6 py-3 rounded-xl shadow-sm transition-colors text-[14.5px] shrink-0">
                   Publicar {{ vistaActiva === 'eventos' ? 'Evento' : 'Emprendimiento' }}
                 </button>
               </div>
@@ -127,34 +122,10 @@
               <button @click="tabEmprendimientos = 'mis_emprendimientos'" :class="tabEmprendimientos === 'mis_emprendimientos' ? 'bg-[#1e3a8a] text-white border-[#1e3a8a]' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'" class="border px-5 py-2 rounded-full font-bold text-[13.5px] shadow-sm transition-all">Mis Emprendimientos</button>
               <button @click="tabEmprendimientos = 'seguidos'" :class="tabEmprendimientos === 'seguidos' ? 'bg-[#1e3a8a] text-white border-[#1e3a8a]' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'" class="border px-5 py-2 rounded-full font-bold text-[13.5px] shadow-sm transition-all">Seguidos</button>
               <button @click="tabEmprendimientos = 'likes'" :class="tabEmprendimientos === 'likes' ? 'bg-[#1e3a8a] text-white border-[#1e3a8a]' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'" class="border px-5 py-2 rounded-full font-bold text-[13.5px] shadow-sm transition-all">Likes</button>
-              <button @click="tabEmprendimientos = 'guardados'" :class="tabEmprendimientos === 'guardados' ? 'bg-[#1e3a8a] text-white border-[#1e3a8a]' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'" class="border px-5 py-2 rounded-full font-bold text-[13.5px] shadow-sm transition-all">Guardados</button>
-              
-              <div v-if="tabEmprendimientos === 'guardados'" class="ml-2 pl-5 border-l border-gray-300 flex items-center gap-3">
-                 <span class="text-gray-400 text-[11px] font-black uppercase tracking-wider">Ver:</span>
-                 <div class="bg-gray-200/70 p-1 rounded-xl flex w-[260px]">
-                  <button @click="filtroGuardados = 'posts'" :class="filtroGuardados === 'posts' ? 'bg-white shadow-sm text-[#1e3a8a] font-bold' : 'text-gray-500 font-medium hover:text-gray-700'" class="flex-1 py-1.5 text-[12px] rounded-lg transition-all">
-                    Publicaciones
-                  </button>
-                  <button @click="filtroGuardados = 'emprendimientos'" :class="filtroGuardados === 'emprendimientos' ? 'bg-white shadow-sm text-[#1e3a8a] font-bold' : 'text-gray-500 font-medium hover:text-gray-700'" class="flex-1 py-1.5 text-[12px] rounded-lg transition-all">
-                    Emprendimientos
-                  </button>
-                </div>
-              </div>
             </template>
           </div>
 
           <div class="p-4 md:p-0 md:mt-8">
-            
-            <div v-if="vistaActiva === 'emprendimientos' && tabEmprendimientos === 'guardados'" class="flex justify-center mb-4 md:hidden">
-              <div class="bg-gray-200/70 p-1 rounded-xl flex w-full max-w-[300px]">
-                <button @click="filtroGuardados = 'posts'" :class="filtroGuardados === 'posts' ? 'bg-white shadow-sm text-[#1e3a8a] font-bold' : 'text-gray-500 font-medium'" class="flex-1 py-1.5 text-[12px] rounded-lg transition-all">
-                  Publicaciones
-                </button>
-                <button @click="filtroGuardados = 'emprendimientos'" :class="filtroGuardados === 'emprendimientos' ? 'bg-white shadow-sm text-[#1e3a8a] font-bold' : 'text-gray-500 font-medium'" class="flex-1 py-1.5 text-[12px] rounded-lg transition-all">
-                  Emprendimientos
-                </button>
-              </div>
-            </div>
 
             <div v-if="cargando" class="flex justify-center items-center py-20">
               <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#1e3a8a]"></div>
@@ -171,7 +142,7 @@
                 <article v-for="evento in eventosFiltrados" :key="evento._id" class="bg-white rounded-2xl md:rounded-[28px] p-4 md:p-6 shadow-sm md:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100 flex flex-col">
                   <div class="flex gap-4">
                     <div class="w-[72px] h-[72px] md:w-[160px] md:h-[160px] shrink-0 rounded-lg md:rounded-2xl bg-gray-200 overflow-hidden">
-                      <img :src="evento.coverImage" class="w-full h-full object-cover" :alt="evento.title" />
+                      <img :src="evento.coverImage || 'https://images.unsplash.com/photo-1497493292307-31c376b6e479?q=80&w=2000'" class="w-full h-full object-cover" :alt="evento.title" />
                     </div>
                     
                     <div class="flex flex-col flex-grow justify-center">
@@ -179,7 +150,7 @@
                         {{ evento.title }}
                       </h3>
                       <p class="text-[10px] md:text-[14px] text-gray-400 md:text-gray-500 font-medium mb-2 md:mb-4">
-                        {{ evento.organizer.name }} - {{ formatearFecha(evento.date) }}
+                        {{ evento.organizer?.name || 'Organizador' }} - {{ formatearFecha(evento.date) }}
                       </p>
                       
                       <div class="space-y-1 md:space-y-2">
@@ -189,14 +160,14 @@
                         </div>
                         <div class="flex items-center gap-1.5 md:gap-2 text-[10px] md:text-[14px] text-gray-500 font-medium">
                           <svg class="w-3.5 h-3.5 md:w-5 md:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                          {{ evento.timeRange }}
+                          {{ evento.timeRange || '10:00 AM' }}
                         </div>
                       </div>
                     </div>
                   </div>
 
                   <div class="mt-4 md:mt-6 flex gap-2 md:gap-4 w-full">
-                    <button @click="$router.push(`/editar-evento/${evento._id}`)" class="flex-1 bg-white border border-gray-200 text-gray-700 font-bold text-[12px] md:text-[14px] py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-gray-50 transition-colors">
+                    <button v-if="tabEventos === 'mis_eventos'" @click="$router.push(`/editar-evento/${evento._id}`)" class="flex-1 bg-white border border-gray-200 text-gray-700 font-bold text-[12px] md:text-[14px] py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-gray-50 transition-colors">
                       Editar Evento
                     </button>
                     <button @click="$router.push(`/detalles-evento/${evento._id}`)" class="flex-1 bg-[#1e3a8a] text-white font-bold text-[12px] md:text-[14px] py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-[#152a6b] shadow-sm transition-colors">
@@ -209,7 +180,7 @@
               <template v-else>
                 <article v-for="emp in emprendimientosFiltrados" :key="emp._id" class="bg-white rounded-2xl md:rounded-[28px] overflow-hidden shadow-sm md:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100 flex flex-col sm:flex-row h-auto sm:h-[280px]">
                   <div class="w-full sm:w-[320px] h-[140px] sm:h-full shrink-0 bg-slate-900 relative">
-                    <img :src="emp.coverImage" class="w-full h-full object-cover opacity-80" :alt="emp.title"/>
+                    <img :src="emp.coverImage || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070'" class="w-full h-full object-cover opacity-80" :alt="emp.title"/>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>
                   </div>
 
@@ -226,7 +197,7 @@
                     </div>
 
                     <div class="mt-auto flex gap-2 w-full">
-                      <button class="flex-1 sm:flex-none flex items-center justify-center bg-white border border-gray-200 md:border-2 md:border-[#1e3a8a] text-gray-700 md:text-[#1e3a8a] hover:bg-gray-50 font-bold py-2 md:py-2.5 px-2 sm:px-6 rounded-lg md:rounded-xl transition-colors text-[11px] md:text-[14px]">
+                      <button v-if="tabEmprendimientos === 'mis_emprendimientos'" @click="$router.push(`/editar-emprendimiento/${emp._id}`)" class="flex-1 sm:flex-none flex items-center justify-center bg-white border border-gray-200 md:border-2 md:border-[#1e3a8a] text-gray-700 md:text-[#1e3a8a] hover:bg-gray-50 font-bold py-2 md:py-2.5 px-2 sm:px-6 rounded-lg md:rounded-xl transition-colors text-[11px] md:text-[14px]">
                         Editar Info
                       </button>
                       <button @click="$router.push(`/detalles-emprendimiento-dueo/${emp._id}`)" class="flex-1 sm:flex-none flex items-center justify-center bg-[#1e3a8a] md:bg-[#001D6B] hover:bg-[#152a6b] md:hover:bg-[#001242] text-white font-bold py-2 md:py-2.5 px-2 sm:px-6 rounded-lg md:rounded-xl shadow-md transition-colors text-[11px] md:text-[14px]">
@@ -244,7 +215,7 @@
       </div>
     </main>
 
-    <BottomNav />
+    <BottomNav class="md:hidden" />
 
     <div class="hidden md:block">
       <AppFooter />
@@ -255,50 +226,87 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { fetchApi } from '../utils/api.js'
+import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
 import BottomNav from '../components/BottomNav.vue'
 
+const router = useRouter()
+
+// Estados de la Interfaz
 const vistaActiva = ref('eventos') 
 const tabEventos = ref('mis_eventos') 
 const tabEmprendimientos = ref('mis_emprendimientos') 
 const filtroGuardados = ref('posts')
 
+// Datos de la BD
 const eventos = ref([])
 const emprendimientos = ref([])
 const cargando = ref(true)
-
 const currentUser = ref(null)
+
+// --- FILTROS INTELIGENTES ---
 
 const eventosFiltrados = computed(() => {
   if (!eventos.value || !currentUser.value) return []
+  
+  // Extraemos el ID real, no importa si viene poblado o como string plano
+  const userId = currentUser.value._id || currentUser.value.id
+
   if (tabEventos.value === 'mis_eventos') {
-    return eventos.value.filter(e => e.organizer?._id === currentUser.value._id || e.organizer === currentUser.value._id)
+    return eventos.value.filter(e => {
+      const orgId = e.organizer?._id || e.organizer
+      return orgId === userId
+    })
   }
+  
   if (tabEventos.value === 'asistire') {
-    return eventos.value.filter(e => e.attendees && e.attendees.some(id => id === currentUser.value._id || id.toString() === currentUser.value._id))
+    return eventos.value.filter(e => 
+      e.attendees && e.attendees.some(id => (id?._id || id) === userId)
+    )
   }
-  return []
+  
+  return [] // "Guardados" no tiene array nativo en tu backend actual
 })
 
 const emprendimientosFiltrados = computed(() => {
   if (!emprendimientos.value || !currentUser.value) return []
+  
+  const userId = currentUser.value._id || currentUser.value.id
+
   if (tabEmprendimientos.value === 'mis_emprendimientos') {
-    return emprendimientos.value.filter(e => e.owner?._id === currentUser.value._id || e.owner === currentUser.value._id)
+    return emprendimientos.value.filter(e => {
+      const ownerId = e.owner?._id || e.owner
+      return ownerId === userId
+    })
   }
+  
   if (tabEmprendimientos.value === 'seguidos') {
-    return emprendimientos.value.filter(e => e.followers && e.followers.some(id => id === currentUser.value._id || id.toString() === currentUser.value._id))
+    return emprendimientos.value.filter(e => 
+      e.followers && e.followers.some(id => (id?._id || id) === userId)
+    )
   }
-  return []
+  
+  return [] // "Likes" y "Guardados"
 })
+
+// --- LLAMADAS A LA API (Con Seguridad JWT) ---
 
 const cargarDatosPerfil = async () => {
   try {
     cargando.value = true
+    const token = localStorage.getItem('token')
+    
+    // Armamos la cabecera segura con el token de login
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(token && { 'Authorization': `Bearer ${token}` })
+    }
+
+    // Pedimos todo en paralelo usando fetch nativo
     const [resEventos, resEmprend] = await Promise.all([
-      fetchApi('/api/eventos'),
-      fetchApi('/api/emprendimientos')
+      fetch('/api/eventos', { headers }),
+      fetch('/api/emprendimientos', { headers })
     ])
     
     const [jsonEventos, jsonEmprend] = await Promise.all([
@@ -316,7 +324,10 @@ const cargarDatosPerfil = async () => {
   }
 }
 
+// --- HELPERS ---
+
 const formatearFecha = (fechaISO) => {
+  if (!fechaISO) return ''
   const opciones = { day: '2-digit', month: 'long', year: 'numeric' }
   return new Date(fechaISO).toLocaleDateString('es-ES', opciones)
 }
@@ -325,12 +336,24 @@ const cambiarVistaPrincipal = () => {
   vistaActiva.value = vistaActiva.value === 'eventos' ? 'emprendimientos' : 'eventos'
 }
 
+const irAPublicar = () => {
+  if (vistaActiva.value === 'eventos') {
+    router.push('/nuevo-evento')
+  } else {
+    router.push('/nuevo-emprendimiento')
+  }
+}
+
 onMounted(() => {
   const storedUser = localStorage.getItem('user')
   if (storedUser) {
     currentUser.value = JSON.parse(storedUser)
+    cargarDatosPerfil()
+  } else {
+    // Protección de ruta: Si no hay usuario, devolver al login
+    console.warn("No estás autenticado.")
+    router.push('/') 
   }
-  cargarDatosPerfil()
 })
 </script>
 
