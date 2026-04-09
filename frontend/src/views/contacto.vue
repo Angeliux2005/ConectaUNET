@@ -1,78 +1,167 @@
+<script setup>
+import { useRouter } from 'vue-router';
+
+//Router para movernos por las vistas
+const router = useRouter();
+
+// Color de marca principal
+const brandBlue = '#213A8F';
+
+// Función para volver al inicio
+const goHome = () => {
+  console.log('Redirigiendo al inicio...');
+  router.push('/');
+};
+</script>
+
+
 <template>
-  <div class="min-h-screen bg-[#F8F9FB] flex flex-col font-sans w-full overflow-hidden">
-    <AppHeader minimal />
 
+  <div class="min-h-screen flex flex-col bg-[#F5F6F8] font-sans">
+    
+    <header class="flex items-center justify-between w-full px-6 lg:px-10 py-5 lg:py-6 border-b border-[#E5E7EB] bg-white sticky top-0 z-10">
+      <h1 class="text-xl lg:text-3xl font-bold" :style="{ color: brandBlue }">ConectaUNET</h1>
+      
+      <button 
+        @click="goHome"
+        class="px-4 py-2 lg:px-6 lg:py-2.5 text-white rounded-md font-medium text-xs lg:text-sm transition-colors hover:opacity-90 shadow-sm" 
+        :style="{ backgroundColor: brandBlue }"
+      >
+        Volver al Inicio
+      </button>
+    </header>
 
-
-        <main class="flex-grow w-full max-w-[1000px] mx-auto px-4 sm:px-6 mt-[72px] pb-16 pt-12 flex flex-col md:flex-row gap-8">
-
-      <div class="md:w-1/3">
-        <h1 class="text-[32px] font-black text-[#001D6B] mb-2 tracking-tight">Contacto</h1>
-        <p class="text-gray-500 mb-8 text-[15px] font-medium leading-relaxed">
-          ¿Tienes algún problema con un registro mercantil o deseas promocionar tu evento de manera prioritaria? Escríbenos.
-        </p>
-
-        <div class="space-y-6">
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-full bg-blue-50 text-[#1e3a8a] flex items-center justify-center shrink-0">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-            </div>
-            <div>
-              <h4 class="font-bold text-gray-900 text-[15px]">Correo Electrónico</h4>
-              <p class="text-[14px] text-gray-500 mt-0.5">soporte@conecta.unet.edu.ve</p>
-            </div>
+    <main class="flex-1 flex flex-col items-center p-6 lg:py-12 w-full">
+      
+      <div class="w-full max-w-3xl flex flex-col gap-8">
+        
+        <div class="space-y-6 text-center md:text-left">
+          
+          <div class="space-y-2">
+            <h2 class="text-3xl lg:text-4xl font-extrabold text-[#1F2937]" :style="{ color: brandBlue }">
+              Contacto
+            </h2>
+            <p class="text-sm lg:text-base text-[#4B5563] max-w-xl">
+              ¿Tienes algún problema con un registro mercantil o deseas promocionar tu evento de manera prioritaria? Escríbenos.
+            </p>
           </div>
 
-                    <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-full bg-blue-50 text-[#1e3a8a] flex items-center justify-center shrink-0">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          <div class="flex flex-col md:flex-row gap-4 md:gap-8 pt-2">
+            
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-3 bg-white p-4 rounded-lg shadow-sm border border-[#E5E7EB] flex-1">
+              <div class="p-2 rounded-full bg-blue-50 text-blue-800" :style="{ color: brandBlue }">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              <div class="text-center md:text-left">
+                <h4 class="text-sm font-bold text-[#1F2937]">Correo Electrónico</h4>
+                <a href="mailto:soporte@conecta.unet.edu.ve" class="text-sm text-[#4B5563] hover:underline" :style="{ color: brandBlue }">
+                  soporte@conecta.unet.edu.ve
+                </a>
+              </div>
             </div>
-            <div>
-              <h4 class="font-bold text-gray-900 text-[15px]">Ubicación</h4>
-              <p class="text-[14px] text-gray-500 mt-0.5">Universidad Nacional Experimental del Táchira (UNET).<br>San Cristóbal, Venezuela.</p>
+
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-3 bg-white p-4 rounded-lg shadow-sm border border-[#E5E7EB] flex-1">
+              <div class="p-2 rounded-full bg-blue-50 text-blue-800" :style="{ color: brandBlue }">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+              </div>
+              <div class="text-center md:text-left">
+                <h4 class="text-sm font-bold text-[#1F2937]">Ubicación</h4>
+                <p class="text-sm text-[#4B5563]">
+                  Universidad Nacional Experimental del Táchira (UNET).<br/>San Cristóbal, Venezuela.
+                </p>
+              </div>
             </div>
+
           </div>
         </div>
+
+        <div class="bg-white rounded-xl shadow-lg border border-[#E5E7EB] p-6 md:p-8">
+          <form @submit.prevent class="space-y-5">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div class="space-y-1.5">
+                <label for="nombre" class="text-xs font-bold text-[#4B5563]">Nombre</label>
+                <input 
+                  type="text" 
+                  id="nombre" 
+                  placeholder="Ej. Ana Pérez"
+                  class="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-shadow"
+                  :style="{ focusRingColor: brandBlue }"
+                />
+              </div>
+              <div class="space-y-1.5">
+                <label for="correo" class="text-xs font-bold text-[#4B5563]">Correo</label>
+                <input 
+                  type="email" 
+                  id="correo" 
+                  placeholder="ana@unet.edu.ve"
+                  class="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-shadow"
+                  :style="{ focusRingColor: brandBlue }"
+                />
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <label for="asunto" class="text-xs font-bold text-[#4B5563]">Asunto</label>
+              <input 
+                type="text" 
+                id="asunto" 
+                placeholder="Publicidad de Emprendimiento"
+                class="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-shadow"
+              />
+            </div>
+
+            <div class="space-y-1.5">
+              <label for="mensaje" class="text-xs font-bold text-[#4B5563]">Mensaje</label>
+              <textarea 
+                id="mensaje" 
+                rows="4"
+                placeholder="Escribe tus dudas aquí..."
+                class="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-shadow resize-none"
+              ></textarea>
+            </div>
+
+            <button 
+              type="submit"
+              class="w-full py-3 text-white font-bold rounded-md text-sm transition-colors hover:opacity-90 shadow-md mt-2"
+              :style="{ backgroundColor: brandBlue }"
+            >
+              Enviar Mensaje
+            </button>
+
+          </form>
+        </div>
+
       </div>
-
-      <article class="bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8 md:w-2/3">
-        <form @submit.prevent class="space-y-5">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-             <div>
-                <label class="block text-[14px] font-bold text-gray-700 mb-2">Nombre</label>
-                <input type="text" class="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] focus:border-[#1e3a8a] outline-none transition-all text-[14px]" placeholder="Ej. Ana Pérez" />
-             </div>
-             <div>
-                <label class="block text-[14px] font-bold text-gray-700 mb-2">Correo</label>
-                <input type="email" class="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] focus:border-[#1e3a8a] outline-none transition-all text-[14px]" placeholder="ana@unet.edu.ve" />
-             </div>
-          </div>
-
-          <div>
-             <label class="block text-[14px] font-bold text-gray-700 mb-2">Asunto</label>
-             <input type="text" class="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] focus:border-[#1e3a8a] outline-none transition-all text-[14px]" placeholder="Publicidad de Emprendimiento" />
-          </div>
-
-          <div>
-             <label class="block text-[14px] font-bold text-gray-700 mb-2">Mensaje</label>
-             <textarea rows="5" class="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] focus:border-[#1e3a8a] outline-none transition-all text-[14px] resize-none" placeholder="Escribe tus dudas aquí..."></textarea>
-          </div>
-
-          <button class="w-full bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-bold py-3.5 rounded-xl shadow-md transition-colors text-[15px] mt-2">
-            Enviar Mensaje
-          </button>
-        </form>
-      </article>
-
     </main>
 
-
-        <AppFooter />
+    <footer class="w-full px-6 lg:px-10 py-6 border-t border-[#E5E7EB] bg-white flex flex-col md:flex-row items-center justify-between gap-4 mt-auto">
+      <div class="text-xs text-[#6B7280] text-center md:text-left">
+        <span class="font-bold" :style="{ color: brandBlue }">ConectaUNET</span><br class="md:hidden" />
+        <span class="md:ml-2">© 2025 Todos los derechos reservados.</span>
+      </div>
+      <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-[#6B7280]">
+        <a href="#" class="hover:text-gray-900 hover:underline">Privacidad</a>
+        <a href="#" class="hover:text-gray-900 hover:underline">Términos</a>
+        <a href="#" class="font-medium hover:underline" :style="{ color: brandBlue }">Contáctanos</a>
+        <a href="#" class="hover:text-gray-900 hover:underline">Acerca de ConectaUNET</a>
+      </div>
+    </footer>
+    
   </div>
+
 </template>
 
-<script>
-export default {
-  name: 'Contacto',
+
+<style scoped>
+input:focus, textarea:focus {
+  border-color: #213A8F;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(33, 58, 143, 0.2);
 }
-</script>
+</style>
