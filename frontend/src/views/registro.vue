@@ -13,22 +13,54 @@ const confirmPassword = ref('');
 // Color de marca definido por el usuario (usado en múltiples lugares)
 const brandBlue = '#213A8F';
 
+// Estados en la vista
+const isLoading = ref(false);
+const errorMessage = ref('');
+
 // Funcion para enviar información al back (tiene autenticación)
 const handleRegister = async () => {
-  if (password.value === confirmPassword.value) {
-    await fetch('/api/auth/register', {
+  errorMessage.value = '';
+
+  if (!username.value.trim() || !email.value.trim() || !password.value.trim()) {
+    errorMessage.value = 'Por favor, completa todos los campos.';
+    return;
+  }
+
+  if (password.value !== confirmPassword.value) {
+    errorMessage.value = 'Las contraseñas no coinciden.';
+    return;
+  }
+
+  isLoading.value = true;
+
+  try {
+    const res = await fetch('/api/auth/register', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         username: username.value,
         email: email.value,
         password: password.value,
       })
-    })
-  }
+    });
 
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      errorMessage.value = data.message || 'Error al crear la cuenta.';
+      return;
+    }
+
+    localStorage.setItem('token', data.data.token);
+    localStorage.setItem('user', JSON.stringify(data.data));
+    router.push('/eventos');
+
+  } catch (error) {
+    errorMessage.value = 'Error de conexión. Intenta de nuevo.';
+    console.error('Error en el registro:', error);
+  } finally {
+    isLoading.value = false;
+  }
 };
 </script>
 
@@ -54,7 +86,11 @@ const handleRegister = async () => {
         </h2>
 
         <form @submit.prevent="handleRegister" class="space-y-5">
-          
+
+          <div v-if="errorMessage" class="p-3 text-sm text-red-600 bg-red-50 rounded-md">
+            {{ errorMessage }}
+          </div>
+
           <div class="space-y-1.5">
             <label for="username" class="block text-sm font-semibold text-[#6B7280]">
               Nombre de usuario
@@ -112,12 +148,14 @@ const handleRegister = async () => {
           </div>
 
           <div class="pt-2">
-            <button 
+            <button
               type="submit"
-              class="w-full px-8 py-3.5 text-white rounded-md font-bold text-base transition-colors hover:opacity-95 shadow-md"
+              :disabled="isLoading"
+              class="w-full px-8 py-3.5 text-white rounded-md font-bold text-base transition-colors hover:opacity-95 shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
               :style="{ backgroundColor: brandBlue }"
             >
-              Crear cuenta
+              <span v-if="isLoading">Cargando...</span>
+              <span v-else>Crear cuenta</span>
             </button>
           </div>
         </form>

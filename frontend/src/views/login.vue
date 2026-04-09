@@ -18,41 +18,38 @@ const brandBlue = '#213A8F';
 
 // Funcion para enviar información al back (tiene autenticación)
 const handleLogin = async () => {
-  
+
   if (!emailOrUser.value.trim() || !password.value.trim()) {
     errorMessage.value = 'Por favor, completa todos los campos.';
     return;
   }
 
-  //Juega con los estados de la vista
   errorMessage.value = '';
   isLoading.value = true;
 
   try {
-
-    //Console.log de debug
-    console.log('Datos listos para enviar al backend:', {
-
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        login: emailOrUser.value,
+        password: password.value,
+      })
     });
 
-    if (password.value === confirmPassword.value) {
-      await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          login: emailOrUser.value,
-          password: password.value,
-        })
-      })
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      errorMessage.value = data.message || 'Credenciales incorrectas. Intenta de nuevo.';
+      return;
     }
 
-    //localStorage.setItem('token', 'tu_token_generado');
-    router.push('/eventos'); 
-    
+    localStorage.setItem('token', data.data.token);
+    localStorage.setItem('user', JSON.stringify(data.data));
+    router.push('/eventos');
+
   } catch (error) {
-    errorMessage.value = 'Credenciales incorrectas. Intenta de nuevo.';
+    errorMessage.value = 'Error de conexión. Intenta de nuevo.';
     console.error('Error en el login:', error);
   } finally {
     isLoading.value = false;
