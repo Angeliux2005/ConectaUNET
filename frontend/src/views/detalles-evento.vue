@@ -74,14 +74,18 @@
           </div>
 
           <div class="lg:hidden mt-8 mb-4 space-y-3">
-            <button @click="$router.push(`/editar-evento/${evento._id}`)" class="w-full bg-white border border-gray-200 text-[#1E3A8A] font-bold py-4 rounded-[16px] flex items-center justify-center gap-2 shadow-sm hover:bg-gray-50 transition-colors active:scale-[0.98]">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-              Editar Evento
-            </button>
-            <button class="w-full bg-[#1E3A8A] hover:bg-[#152a6b] text-white font-bold py-4 rounded-[16px] flex items-center justify-center gap-2 shadow-md transition-colors active:scale-[0.98]">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-              Asistiré
-            </button>
+            <template v-if="esMio">
+              <button @click="$router.push(`/editar-evento/${evento._id}`)" class="w-full bg-white border border-gray-200 text-[#1E3A8A] font-bold py-4 rounded-[16px] flex items-center justify-center gap-2 shadow-sm hover:bg-gray-50 transition-colors active:scale-[0.98]">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                Editar Evento
+              </button>
+            </template>
+            <template v-else>
+              <button class="w-full bg-[#1E3A8A] hover:bg-[#152a6b] text-white font-bold py-4 rounded-[16px] flex items-center justify-center gap-2 shadow-md transition-colors active:scale-[0.98]">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                Asistiré
+              </button>
+            </template>
           </div>
 
         </div>
@@ -114,14 +118,18 @@
           </div>
 
           <div class="flex flex-col gap-3 mt-8">
-            <button @click="$router.push(`/editar-evento/${evento._id}`)" class="w-full bg-white border border-gray-200 text-[#1E3A8A] font-bold py-3.5 rounded-xl shadow-sm hover:bg-gray-50 transition-colors text-[15px] flex items-center justify-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-              Editar Evento
-            </button>
-            <button class="w-full bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-bold py-3.5 rounded-xl shadow-md transition-colors text-[15px] flex items-center justify-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
-              Asistiré al Evento
-            </button>
+            <template v-if="esMio">
+              <button @click="$router.push(`/editar-evento/${evento._id}`)" class="w-full bg-white border border-gray-200 text-[#1E3A8A] font-bold py-3.5 rounded-xl shadow-sm hover:bg-gray-50 transition-colors text-[15px] flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                Editar Evento
+              </button>
+            </template>
+            <template v-else>
+              <button class="w-full bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-bold py-3.5 rounded-xl shadow-md transition-colors text-[15px] flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                Asistiré al Evento
+              </button>
+            </template>
           </div>
         </div>
 
@@ -167,8 +175,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { fetchApi } from '../utils/api.js'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
 import MainCard from '../components/MainCard.vue'
@@ -178,6 +187,14 @@ const router = useRouter()
 const evento = ref(null)
 const cargando = ref(true)
 const eventosRelacionados = ref([])
+
+const currentUser = JSON.parse(localStorage.getItem('user') || 'null')
+
+const esMio = computed(() => {
+  if (!evento.value || !currentUser) return false
+  const organizerId = evento.value.organizer?._id || evento.value.organizer
+  return organizerId === currentUser._id
+})
 
 const formatearFecha = (fechaISO) => {
   if (!fechaISO) return ''
@@ -192,8 +209,8 @@ const cargar = async (id) => {
   eventosRelacionados.value = []
   try {
     const [resEvento, resTodos] = await Promise.all([
-      fetch(`/api/eventos/${id}`),
-      fetch('/api/eventos')
+      fetchApi(`/api/eventos/${id}`),
+      fetchApi('/api/eventos')
     ])
     const jsonEvento = await resEvento.json()
     const jsonTodos = await resTodos.json()

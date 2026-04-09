@@ -58,12 +58,24 @@
         </div>
 
         <div class="mt-6 md:mt-8 flex w-full md:w-auto gap-3">
-          <button class="flex-1 md:flex-none bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-bold py-3 md:py-2.5 px-8 rounded-xl md:rounded-lg shadow transition-colors text-[14px]">
-            Seguir
-          </button>
-          <button class="flex-1 md:flex-none bg-white hover:bg-gray-50 border border-gray-200 md:border-gray-300 text-gray-700 font-bold py-3 md:py-2.5 px-6 rounded-xl md:rounded-lg shadow-sm transition-colors text-[14px] flex items-center justify-center gap-2">
-            Contactar
-          </button>
+          <template v-if="esMio">
+            <button @click="$router.push(`/editar-emprendimiento/${emp._id}`)" class="flex-1 md:flex-none justify-center font-bold py-3 md:py-2.5 px-8 rounded-xl md:rounded-lg shadow transition-colors text-[14px] flex items-center gap-2 bg-[#1e3a8a] text-white hover:bg-[#152a6b]">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+              Editar Información
+            </button>
+          </template>
+          <template v-else>
+            <button @click="toggleFollow" :disabled="togglingFollow" class="flex-1 md:flex-none justify-center font-bold py-3 md:py-2.5 px-8 rounded-xl md:rounded-lg shadow transition-colors text-[14px] flex items-center gap-2 group disabled:opacity-50" :class="isFollowing ? 'bg-gray-100 text-gray-800 hover:bg-gray-200' : 'bg-[#1e3a8a] text-white hover:bg-[#152a6b]'">
+              <span v-if="togglingFollow" class="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></span>
+              <template v-else>
+                <svg v-if="isFollowing" class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                {{ isFollowing ? 'Siguiendo' : 'Seguir' }}
+              </template>
+            </button>
+            <button @click="contactar" class="flex-1 md:flex-none bg-white hover:bg-gray-50 border border-gray-200 md:border-gray-300 text-gray-700 font-bold py-3 md:py-2.5 px-6 rounded-xl md:rounded-lg shadow-sm transition-colors text-[14px] flex items-center justify-center gap-2">
+              Contactar
+            </button>
+          </template>
         </div>
       </div>
 
@@ -149,8 +161,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { fetchApi } from '../utils/api.js'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
 import BottomNav from '../components/BottomNav.vue'
@@ -163,19 +176,32 @@ const masEmprendimientos = ref([])
 const publicaciones = ref([])
 const loadingPubs = ref(true)
 
+const currentUser = JSON.parse(localStorage.getItem('user') || 'null')
+const isFollowing = ref(false)
+const togglingFollow = ref(false)
+
+const esMio = computed(() => {
+  if (!emp.value || !currentUser) return false
+  const ownerId = emp.value.owner?._id || emp.value.owner
+  return ownerId.toString() === currentUser._id
+})
+
 const cargar = async (id) => {
   loadingPubs.value = true
   try {
     const [resEmp, resTodos, resPubs] = await Promise.all([
-      fetch(`/api/emprendimientos/${id}`),
-      fetch('/api/emprendimientos'),
-      fetch(`/api/emprendimientos/${id}/publicaciones`)
+      fetchApi(`/api/emprendimientos/${id}`),
+      fetchApi('/api/emprendimientos'),
+      fetchApi(`/api/emprendimientos/${id}/publicaciones`)
     ])
     const jsonEmp = await resEmp.json()
     const jsonTodos = await resTodos.json()
     const jsonPubs = await resPubs.json()
 
-    if (jsonEmp.success) emp.value = jsonEmp.data
+    if (jsonEmp.success) {
+      emp.value = jsonEmp.data
+      isFollowing.value = currentUser && jsonEmp.data.followers ? jsonEmp.data.followers.some(id => id === currentUser._id || id.toString() === currentUser._id) : false
+    }
     if (jsonTodos.success) {
       const otros = jsonTodos.data.filter(e => e._id !== id)
       masEmprendimientos.value = otros.sort(() => Math.random() - 0.5).slice(0, 3)
@@ -185,6 +211,48 @@ const cargar = async (id) => {
     console.error('Error al cargar el emprendimiento:', error)
   } finally {
     loadingPubs.value = false
+  }
+}
+
+const toggleFollow = async () => {
+  if (!currentUser) {
+    alert("Debes iniciar sesión para seguir a este emprendimiento.")
+    return router.push('/login')
+  }
+  if (togglingFollow.value) return
+  
+  togglingFollow.value = true
+  try {
+    const res = await fetchApi(`/api/emprendimientos/${route.params.id}/follow`, {
+      method: 'POST'
+    })
+    const json = await res.json()
+    if (json.success) {
+      isFollowing.value = json.following
+      if (emp.value) {
+        emp.value.followersCount = json.followersCount
+      }
+    }
+  } catch (error) {
+    console.error('Error al alternar seguir:', error)
+  } finally {
+    togglingFollow.value = false
+  }
+}
+
+const contactar = () => {
+  if (!emp.value?.socialLinks) return
+  if (emp.value.socialLinks.whatsapp) {
+    let wp = emp.value.socialLinks.whatsapp.replace(/\D/g, '')
+    if (wp.startsWith('0')) wp = '58' + wp.substring(1)
+    window.open(`https://wa.me/${wp}`, '_blank')
+  } else if (emp.value.socialLinks.email) {
+    window.location.href = `mailto:${emp.value.socialLinks.email}`
+  } else if (emp.value.socialLinks.instagram) {
+    let ig = emp.value.socialLinks.instagram.replace('@', '')
+    window.open(`https://instagram.com/${ig}`, '_blank')
+  } else {
+    alert("Este emprendimiento no tiene datos de contacto disponibles.")
   }
 }
 

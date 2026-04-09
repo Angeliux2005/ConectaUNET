@@ -9,18 +9,19 @@
         <aside class="w-full lg:w-[320px] shrink-0">
           <div class="bg-transparent md:bg-white md:rounded-[32px] pt-6 pb-4 md:p-8 md:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] md:border md:border-gray-100 flex flex-col items-center">
 
-            <div class="w-[100px] h-[100px] md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white md:border-gray-50 shadow-sm md:bg-pink-100 relative">
-              <img src="https://i.pinimg.com/736x/8f/a7/67/8fa767228b34005cba22ba4f89d31197.jpg" alt="Juan Paredes" class="w-full h-full object-cover" />
+            <div class="w-[100px] h-[100px] md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white md:border-gray-50 shadow-sm md:bg-[#EBF5FF] flex items-center justify-center relative text-[#1e3a8a] font-bold text-4xl">
+              <img v-if="currentUser?.avatar" :src="currentUser.avatar" alt="Perfil" class="w-full h-full object-cover" />
+              <span v-else>{{ currentUser?.name?.charAt(0) || 'U' }}</span>
             </div>
 
             <h2 class="mt-3 md:mt-6 text-[22px] md:text-[26px] font-black text-[#001D6B] tracking-tight text-center">
-              Juan Paredes
+              {{ currentUser?.name || 'Cargando...' }}
             </h2>
 
-            <p class="mt-0.5 md:mt-4 text-gray-500 font-medium text-[12px] md:text-[15px]">C.I. 31.357.791</p>
+            <p class="mt-0.5 md:mt-4 text-gray-500 font-medium text-[12px] md:text-[15px]">{{ currentUser ? '@' + currentUser.username : '' }}</p>
 
             <div class="mt-2 md:mt-3 bg-gray-100 text-gray-600 font-bold text-[11px] md:text-[13px] px-4 md:px-5 py-1.5 md:py-2 rounded-full tracking-wide">
-              Ing. Informática
+              Universitario
             </div>
 
             <div class="w-full h-px bg-gray-200/60 my-5 md:my-8 hidden md:block"></div>
@@ -139,15 +140,15 @@
               <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#1e3a8a]"></div>
             </div>
 
-            <div v-else-if="(vistaActiva === 'eventos' && eventos.length === 0) || (vistaActiva === 'emprendimientos' && emprendimientos.length === 0)" class="text-center py-20 text-gray-500 font-medium bg-white md:bg-transparent rounded-2xl md:rounded-none shadow-inner md:shadow-none p-6">
+            <div v-else-if="(vistaActiva === 'eventos' && eventosFiltrados.length === 0) || (vistaActiva === 'emprendimientos' && emprendimientosFiltrados.length === 0)" class="text-center py-20 text-gray-500 font-medium bg-white md:bg-transparent rounded-2xl md:rounded-none shadow-inner md:shadow-none p-6">
               <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-              No tienes {{ vistaActiva === 'eventos' ? 'eventos creados' : 'emprendimientos registrados' }} aún.
+              No hay elementos para mostrar en esta categoría.
             </div>
 
             <div v-else class="flex flex-col gap-4 md:gap-8">
               
               <template v-if="vistaActiva === 'eventos'">
-                <article v-for="evento in eventos" :key="evento._id" class="bg-white rounded-2xl md:rounded-[28px] p-4 md:p-6 shadow-sm md:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100 flex flex-col">
+                <article v-for="evento in eventosFiltrados" :key="evento._id" class="bg-white rounded-2xl md:rounded-[28px] p-4 md:p-6 shadow-sm md:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100 flex flex-col">
                   <div class="flex gap-4">
                     <div class="w-[72px] h-[72px] md:w-[160px] md:h-[160px] shrink-0 rounded-lg md:rounded-2xl bg-gray-200 overflow-hidden">
                       <img :src="evento.coverImage" class="w-full h-full object-cover" :alt="evento.title" />
@@ -186,7 +187,7 @@
               </template>
 
               <template v-else>
-                <article v-for="emp in emprendimientos" :key="emp._id" class="bg-white rounded-2xl md:rounded-[28px] overflow-hidden shadow-sm md:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100 flex flex-col sm:flex-row h-auto sm:h-[280px]">
+                <article v-for="emp in emprendimientosFiltrados" :key="emp._id" class="bg-white rounded-2xl md:rounded-[28px] overflow-hidden shadow-sm md:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100 flex flex-col sm:flex-row h-auto sm:h-[280px]">
                   <div class="w-full sm:w-[320px] h-[140px] sm:h-full shrink-0 bg-slate-900 relative">
                     <img :src="emp.coverImage" class="w-full h-full object-cover opacity-80" :alt="emp.title"/>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>
@@ -233,7 +234,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { fetchApi } from '../utils/api.js'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
 import BottomNav from '../components/BottomNav.vue'
@@ -247,12 +249,36 @@ const eventos = ref([])
 const emprendimientos = ref([])
 const cargando = ref(true)
 
+const currentUser = ref(null)
+
+const eventosFiltrados = computed(() => {
+  if (!eventos.value || !currentUser.value) return []
+  if (tabEventos.value === 'mis_eventos') {
+    return eventos.value.filter(e => e.organizer?._id === currentUser.value._id || e.organizer === currentUser.value._id)
+  }
+  if (tabEventos.value === 'asistire') {
+    return eventos.value.filter(e => e.attendees && e.attendees.some(id => id === currentUser.value._id || id.toString() === currentUser.value._id))
+  }
+  return []
+})
+
+const emprendimientosFiltrados = computed(() => {
+  if (!emprendimientos.value || !currentUser.value) return []
+  if (tabEmprendimientos.value === 'mis_emprendimientos') {
+    return emprendimientos.value.filter(e => e.owner?._id === currentUser.value._id || e.owner === currentUser.value._id)
+  }
+  if (tabEmprendimientos.value === 'seguidos') {
+    return emprendimientos.value.filter(e => e.followers && e.followers.some(id => id === currentUser.value._id || id.toString() === currentUser.value._id))
+  }
+  return []
+})
+
 const cargarDatosPerfil = async () => {
   try {
     cargando.value = true
     const [resEventos, resEmprend] = await Promise.all([
-      fetch('/api/eventos'),
-      fetch('/api/emprendimientos')
+      fetchApi('/api/eventos'),
+      fetchApi('/api/emprendimientos')
     ])
     
     const [jsonEventos, jsonEmprend] = await Promise.all([
@@ -280,6 +306,10 @@ const cambiarVistaPrincipal = () => {
 }
 
 onMounted(() => {
+  const storedUser = localStorage.getItem('user')
+  if (storedUser) {
+    currentUser.value = JSON.parse(storedUser)
+  }
   cargarDatosPerfil()
 })
 </script>

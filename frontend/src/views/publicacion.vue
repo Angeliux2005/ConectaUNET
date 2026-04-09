@@ -117,6 +117,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { fetchApi } from '../utils/api.js'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
 import BottomNav from '../components/BottomNav.vue'
@@ -137,8 +138,8 @@ const cargar = async (id) => {
   loading.value = true
   try {
     const [resPub, resComs] = await Promise.all([
-      fetch(`/api/publicaciones/${id}`),
-      fetch(`/api/publicaciones/${id}/comentarios`)
+      fetchApi(`/api/publicaciones/${id}`),
+      fetchApi(`/api/publicaciones/${id}/comentarios`)
     ])
     const jsonPub = await resPub.json()
     const jsonComs = await resComs.json()
@@ -160,9 +161,8 @@ const toggleLike = async () => {
   if (toggling.value) return
   toggling.value = true
   try {
-    const res = await fetch(`/api/publicaciones/${route.params.id}/like`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    const res = await fetchApi(`/api/publicaciones/${route.params.id}/like`, {
+      method: 'POST'
     })
     const json = await res.json()
     if (json.success) {
@@ -180,12 +180,8 @@ const enviarComentario = async () => {
   if (!nuevoComentario.value.trim() || enviando.value) return
   enviando.value = true
   try {
-    const res = await fetch(`/api/publicaciones/${route.params.id}/comentarios`, {
+    const res = await fetchApi(`/api/publicaciones/${route.params.id}/comentarios`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
       body: JSON.stringify({ content: nuevoComentario.value.trim() })
     })
     const json = await res.json()
