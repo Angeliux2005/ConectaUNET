@@ -2,7 +2,16 @@
   <div class="min-h-screen bg-[#F8F9FB] flex flex-col font-sans w-full overflow-hidden relative">
     <AppHeader />
 
-    <main class="flex-grow w-full max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 mt-[72px] pb-28 md:pb-16 pt-8">
+    <main class="flex-grow w-full max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 mt-[72px] pb-28 md:pb-16 pt-4 md:pt-8">
+
+      <div class="md:hidden mb-6 bg-gray-100/80 p-1.5 rounded-[16px] flex items-center shadow-inner">
+        <button @click="$router.push('/eventos')" class="flex-1 text-gray-500 hover:text-gray-800 text-[13px] font-bold py-2.5 px-2 rounded-xl transition-colors text-center leading-tight">
+          Eventos<br>Culturales
+        </button>
+        <button class="flex-1 bg-[#1e3a8a] text-white text-[13px] font-bold py-2.5 px-2 rounded-xl shadow-md transition-colors text-center">
+          Emprendimientos
+        </button>
+      </div>
 
       <div class="hidden md:flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="relative w-full md:max-w-md">
@@ -74,11 +83,11 @@
               <div class="border-t border-gray-100 pt-5 flex items-center justify-between mt-auto">
                 <div class="flex items-center gap-3">
                   <img
-                    :src="emp.owner.avatar || `https://ui-avatars.com/api/?name=${emp.owner.name}&background=EBF5FF&color=1E3A8A`"
-                    :alt="emp.owner.name"
+                    :src="emp.owner?.avatar || `https://ui-avatars.com/api/?name=${emp.owner?.name || 'U'}&background=EBF5FF&color=1E3A8A`"
+                    :alt="emp.owner?.name"
                     class="w-10 h-10 rounded-full object-cover shadow-sm bg-gray-100"
                   />
-                  <span class="text-[15px] font-bold text-gray-900">{{ emp.owner.name }}</span>
+                  <span class="text-[15px] font-bold text-gray-900">{{ emp.owner?.name || 'Usuario' }}</span>
                 </div>
               </div>
             </div>
@@ -87,13 +96,7 @@
       </div>
     </main>
 
-    <nav class="md:hidden fixed bottom-0 w-full bg-white h-[70px] flex justify-around items-center px-2 border-t border-[#E5E7EB] shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)] z-50">
-      <button @click="$router.push('/eventos')" class="text-[#6B7280] hover:text-[#1e3a8a] transition-colors"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"></path><path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"></path></svg></button>
-      <button @click="$router.push('/buscar')" class="text-[#1e3a8a] transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path></svg></button>
-      <button @click="$router.push('/nuevo-emprendimiento')" class="text-[#1e3a8a] hover:text-[#1E40AF] transition-colors"><svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></button>
-      <button class="text-[#6B7280] hover:text-[#1e3a8a] transition-colors relative"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"></path></svg></button>
-      <button class="text-[#6B7280] hover:text-[#1e3a8a] transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"></path></svg></button>
-    </nav>
+    <BottomNav />
 
     <div class="hidden md:block">
       <AppFooter />
@@ -105,6 +108,7 @@
 import { ref, onMounted } from 'vue'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
+import BottomNav from '../components/BottomNav.vue' // Asegúrate de importar el componente
 
 const emprendimientos = ref([])
 const cargando = ref(true)
