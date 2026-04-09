@@ -116,7 +116,6 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import AppHeader from '../components/AppHeader.vue'
 import BottomNav from '../components/BottomNav.vue'
 import { fetchApi } from '../utils/api.js'
 
@@ -177,7 +176,7 @@ async function createEvent() {
       if (!imgRes.ok) throw new Error('Error al subir la imagen de portada')
     }
 
-    router.push(`/detalles-evento/${id}`)
+    router.push(`/eventos/${id}`)
   } catch (err) {
     error.value = err.message || 'Error al crear el evento'
   } finally {
@@ -186,4 +185,5 @@ async function createEvent() {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>
