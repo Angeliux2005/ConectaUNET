@@ -29,12 +29,13 @@ Verifica que el servidor esté corriendo.
 ### POST /auth/register
 Registra un nuevo usuario.
 
+> El campo `name` no se envía — se deriva automáticamente del correo institucional. Por ejemplo, `juan.paredes@unet.edu.ve` genera el nombre `"Juan Paredes"`.
+
 **Body:**
 ```json
 {
-  "name": "Juan Paredes",
   "username": "juanparedes",
-  "email": "juan@unet.edu.ve",
+  "email": "juan.paredes@unet.edu.ve",
   "password": "123456"
 }
 ```
@@ -47,7 +48,7 @@ Registra un nuevo usuario.
     "_id": "664f1a2b3c4d5e6f7a8b9c0d",
     "name": "Juan Paredes",
     "username": "juanparedes",
-    "email": "juan@unet.edu.ve",
+    "email": "juan.paredes@unet.edu.ve",
     "avatar": "",
     "role": "user",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
