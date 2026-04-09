@@ -14,6 +14,7 @@
       </div>
 
       <div class="hidden md:flex flex-col md:flex-row items-center justify-between gap-4">
+        
         <div class="relative w-full md:max-w-md">
           <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -22,22 +23,24 @@
         </div>
 
         <div class="flex items-center gap-3 overflow-x-auto pb-2 md:pb-0">
-          <button class="shrink-0 flex items-center gap-2 bg-[#E1E5EF] hover:bg-[#d5dbe9] text-[#1e3a8a] font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm">
+          <button @click="mostrarCategorias = !mostrarCategorias" :class="mostrarCategorias ? 'bg-[#d5dbe9]' : 'bg-[#E1E5EF]'" class="shrink-0 flex items-center gap-2 hover:bg-[#d5dbe9] text-[#1e3a8a] font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
             Filtrar
           </button>
-          <button class="shrink-0 flex items-center gap-2 bg-[#E1E5EF] hover:bg-[#d5dbe9] text-[#1e3a8a] font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm">
+          
+          <button @click="toggleOrdenFecha" class="shrink-0 flex items-center gap-2 bg-[#E1E5EF] hover:bg-[#d5dbe9] text-[#1e3a8a] font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm w-[100px] justify-center">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            Fecha
+            Fecha <span class="font-bold ml-1">{{ ordenFecha === 'desc' ? '↓' : '↑' }}</span>
           </button>
-          <button class="shrink-0 flex items-center gap-2 bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-semibold px-6 py-2.5 rounded-xl shadow transition-colors text-sm">
+
+          <button @click="$router.push('/nuevo-emprendimiento')" class="shrink-0 flex items-center gap-2 bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-semibold px-6 py-2.5 rounded-xl shadow transition-colors text-sm">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             Publicar Emprendimiento
           </button>
         </div>
       </div>
 
-      <div class="hidden md:flex mt-8 items-center gap-3 overflow-x-auto pb-4 scrollbar-hide">
+      <div v-show="mostrarCategorias" class="hidden md:flex mt-6 items-center gap-3 overflow-x-auto pb-4 scrollbar-hide animate-fade-in">
         <button @click="toggleCategoria('')" :class="categoriaActiva === '' ? 'bg-[#254291] text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'" class="shrink-0 text-sm font-semibold px-6 py-2.5 rounded-xl transition-colors tracking-wide">Todos</button>
         <button v-for="cat in categorias" :key="cat" @click="toggleCategoria(cat)" :class="categoriaActiva === cat ? 'bg-[#254291] text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'" class="shrink-0 text-sm font-semibold px-6 py-2.5 rounded-xl transition-colors tracking-wide">{{ cat }}</button>
       </div>
@@ -71,7 +74,7 @@
             </div>
             <div class="p-6 md:p-8 flex-grow flex flex-col">
               <h3 class="text-[22px] font-bold text-gray-900 mb-2 tracking-tight">{{ emp.title }}</h3>
-              <p class="text-[15px] text-gray-600 leading-relaxed mb-6">{{ emp.description }}</p>
+              <p class="text-[15px] text-gray-600 leading-relaxed mb-6 line-clamp-3">{{ emp.description }}</p>
               <div class="space-y-4 mt-auto mb-8">
                 <div class="flex items-center gap-3 text-sm font-semibold text-gray-700">
                   <svg class="w-5 h-5 text-[#1e3a8a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -113,7 +116,25 @@ const cargando = ref(true)
 const busqueda = ref('')
 const categoriaActiva = ref('')
 
+// Estados Nuevos para los botones
+const mostrarCategorias = ref(true)
+const ordenFecha = ref('desc')
+
 const categorias = ['Comida', 'Accesorios', 'Prepadurias', 'Artesania']
+
+const ordenarDatos = () => {
+  emprendimientos.value.sort((a, b) => {
+    // Ordenamos usando el campo createdAt de Mongoose
+    const fechaA = new Date(a.createdAt || 0)
+    const fechaB = new Date(b.createdAt || 0)
+    return ordenFecha.value === 'desc' ? fechaB - fechaA : fechaA - fechaB
+  })
+}
+
+const toggleOrdenFecha = () => {
+  ordenFecha.value = ordenFecha.value === 'desc' ? 'asc' : 'desc'
+  ordenarDatos()
+}
 
 const cargarEmprendimientos = async () => {
   cargando.value = true
@@ -121,10 +142,15 @@ const cargarEmprendimientos = async () => {
     const params = new URLSearchParams()
     if (busqueda.value.trim()) params.set('search', busqueda.value.trim())
     if (categoriaActiva.value) params.set('category', categoriaActiva.value)
+    
     const query = params.toString() ? `?${params}` : ''
     const respuesta = await fetch(`/api/emprendimientos${query}`)
     const json = await respuesta.json()
-    if (json.success) emprendimientos.value = json.data
+    
+    if (json.success) {
+      emprendimientos.value = json.data
+      ordenarDatos() // Ordenamos ni bien llegan los datos
+    }
   } catch (error) {
     console.error('Error al cargar los emprendimientos:', error)
   } finally {
@@ -153,5 +179,13 @@ onMounted(cargarEmprendimientos)
 .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
 }
 </style>
