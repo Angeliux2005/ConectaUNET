@@ -13,7 +13,7 @@
       <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path></svg>
     </button>
 
-    <button @click="$router.push('/nuevo-evento')" class="text-[#1E3A8A] hover:text-[#1E40AF] transition-colors">
+    <button @click="showCreateMenu = true" class="text-[#1E3A8A] hover:text-[#1E40AF] transition-colors">
       <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
     </button>
 
@@ -29,8 +29,29 @@
       <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"></path></svg>
     </button>
 
+    <div v-if="showCreateMenu" class="fixed inset-0 z-50 bg-black/40 text-black flex items-end">
+      <div class="w-full bg-white rounded-t-3xl p-5 space-y-4 shadow-xl">
+        <div class="flex items-center justify-between">
+          <p class="text-sm font-bold text-[#1e3a8a] uppercase tracking-[0.25em]">Crear</p>
+          <button @click="showCreateMenu = false" class="text-gray-500 hover:text-gray-700">Cerrar</button>
+        </div>
+        <button @click="navigateTo('/nuevo-evento')" class="w-full rounded-3xl bg-[#1e3a8a] text-white py-4 font-bold transition-colors hover:bg-[#152a6b]">Nuevo evento</button>
+        <button @click="navigateTo('/nuevo-emprendimiento')" class="w-full rounded-3xl border border-gray-200 bg-white text-[#1e3a8a] py-4 font-bold transition-colors hover:bg-gray-50">Nuevo emprendimiento</button>
+      </div>
+    </div>
+
   </nav>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const showCreateMenu = ref(false)
+const router = useRouter()
+
+function navigateTo(path) {
+  showCreateMenu.value = false
+  router.push(path)
+}
 </script>
