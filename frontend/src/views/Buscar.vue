@@ -1,11 +1,12 @@
 <template>
-  <div class="min-h-screen bg-[#F8F9FB] flex flex-col font-sans w-full md:max-w-[768px] mx-auto bg-white shadow-lg">
-    <div class="flex items-center gap-3 px-4 py-4 border-b border-gray-100 sticky top-0 bg-white z-10">
-      <button @click="$router.go(-1)" class="text-gray-500 hover:text-gray-800">
+  <div class="min-h-screen bg-[#F8F9FB] flex flex-col font-sans w-full overflow-hidden">
+    
+    <div class="flex items-center gap-3 px-4 py-4 border-b border-gray-100 sticky top-0 bg-white z-20 shadow-sm w-full">
+      <button @click="$router.go(-1)" class="text-gray-500 hover:text-gray-800 transition-colors">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
       </button>
 
-      <div class="relative flex-1">
+      <div class="relative flex-1 max-w-[768px] mx-auto">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         </div>
@@ -13,194 +14,214 @@
           v-model="query"
           type="text"
           autofocus
-          placeholder="Search"
-          class="w-full bg-[#F3F4F6] rounded-[10px] pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1E3A8A]"
+          placeholder="Buscar en ConectaUNET..."
+          class="w-full bg-[#F3F4F6] rounded-xl pl-10 pr-4 py-3 text-[15px] font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A]/20 focus:bg-white transition-all border border-transparent focus:border-[#1e3a8a]"
         />
       </div>
     </div>
 
-    <div class="flex px-4 py-4">
-      <button
-        @click="tabActiva = 'eventos'"
-        :class="tabActiva === 'eventos' ? 'bg-[#1E3A8A] text-white' : 'bg-[#F3F4F6] text-gray-600 hover:bg-gray-200'"
-        class="flex-1 font-bold text-sm py-2.5 rounded-l-[10px] transition-colors"
-      >
-        Eventos Culturales
-      </button>
+    <main class="flex-grow w-full max-w-[768px] mx-auto flex flex-col relative pb-20 md:pb-10">
+      
+      <div class="flex px-4 py-4 shrink-0">
+        <button
+          @click="tabActiva = 'eventos'"
+          :class="tabActiva === 'eventos' ? 'bg-[#1E3A8A] text-white shadow-md' : 'bg-white border border-gray-200 text-gray-500 hover:bg-gray-50'"
+          class="flex-1 font-bold text-[14px] py-3 rounded-l-xl transition-all"
+        >
+          Eventos Culturales
+        </button>
 
-      <button
-        @click="tabActiva = 'emprendimientos'"
-        :class="tabActiva === 'emprendimientos' ? 'bg-[#1E3A8A] text-white' : 'bg-[#F3F4F6] text-gray-600 hover:bg-gray-200'"
-        class="flex-1 font-bold text-sm py-2.5 rounded-r-[10px] transition-colors"
-      >
-        Emprendimientos
-      </button>
-    </div>
-
-    <div v-if="tabActiva === 'eventos'" class="flex gap-2 px-4 overflow-x-auto pb-4 scrollbar-hide">
-      <button class="shrink-0 bg-[#1E3A8A] text-white text-xs font-bold px-4 py-1.5 rounded-full">Todo</button>
-      <button class="shrink-0 bg-white border border-gray-200 text-gray-600 text-xs font-bold px-4 py-1.5 rounded-full">Música</button>
-      <button class="shrink-0 bg-white border border-gray-200 text-gray-600 text-xs font-bold px-4 py-1.5 rounded-full">Comida</button>
-      <button class="shrink-0 bg-white border border-gray-200 text-gray-600 text-xs font-bold px-4 py-1.5 rounded-full">Misa</button>
-    </div>
-
-    <div v-else class="flex gap-2 px-4 overflow-x-auto pb-4 scrollbar-hide">
-      <button class="shrink-0 bg-[#1E3A8A] text-white text-xs font-bold px-4 py-1.5 rounded-full">Todo</button>
-      <button class="shrink-0 bg-white border border-gray-200 text-gray-600 text-xs font-bold px-4 py-1.5 rounded-full">Ropa</button>
-      <button class="shrink-0 bg-white border border-gray-200 text-gray-600 text-xs font-bold px-4 py-1.5 rounded-full">Accesorios</button>
-      <button class="shrink-0 bg-white border border-gray-200 text-gray-600 text-xs font-bold px-4 py-1.5 rounded-full">Servicios</button>
-    </div>
-
-    <div class="flex-1 px-4 overflow-y-auto pb-24 mt-4">
-      <p class="text-xs text-gray-500 mb-4">
-        {{ tabActiva === 'eventos' ? eventosFiltrados.length : emprendimientosFiltrados.length }} resultados
-      </p>
-
-      <div v-if="tabActiva === 'eventos'" class="space-y-4">
-        <SearchCard
-          v-for="evento in eventosFiltrados"
-          :key="evento.id"
-          :imagen="evento.imagen"
-          :titulo="evento.titulo"
-          :etiqueta="evento.etiqueta"
-          :descripcion="evento.descripcion"
-          :ubicacion="evento.ubicacion"
-          :autor="evento.autor"
-          :avatar="evento.avatar"
-          :tagColor="evento.tagColor"
-        />
+        <button
+          @click="tabActiva = 'emprendimientos'"
+          :class="tabActiva === 'emprendimientos' ? 'bg-[#1E3A8A] text-white shadow-md border-l-[#1E3A8A]' : 'bg-white border border-gray-200 border-l-0 text-gray-500 hover:bg-gray-50'"
+          class="flex-1 font-bold text-[14px] py-3 rounded-r-xl transition-all"
+        >
+          Emprendimientos
+        </button>
       </div>
 
-      <div v-else class="space-y-4">
-        <SearchCard
-          v-for="emp in emprendimientosFiltrados"
-          :key="emp.id"
-          :imagen="emp.imagen"
-          :titulo="emp.titulo"
-          :etiqueta="emp.etiqueta"
-          :descripcion="emp.descripcion"
-          :ubicacion="emp.ubicacion"
-          :autor="emp.autor"
-          :avatar="emp.avatar"
-          :tagColor="emp.tagColor"
-        />
+      <div v-if="tabActiva === 'eventos'" class="flex gap-2 px-4 overflow-x-auto pb-4 scrollbar-hide shrink-0">
+        <button v-for="filtro in filtrosEventos" :key="filtro" 
+          @click="filtroCatEventos = filtro"
+          :class="filtroCatEventos === filtro ? 'bg-[#1E3A8A] text-white border-[#1e3a8a]' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'"
+          class="shrink-0 border text-[13px] font-bold px-5 py-2 rounded-full transition-colors shadow-sm">
+          {{ filtro }}
+        </button>
       </div>
-    </div>
+
+      <div v-else class="flex gap-2 px-4 overflow-x-auto pb-4 scrollbar-hide shrink-0">
+        <button v-for="filtro in filtrosEmprendimientos" :key="filtro"
+          @click="filtroCatEmprend = filtro"
+          :class="filtroCatEmprend === filtro ? 'bg-[#1E3A8A] text-white border-[#1e3a8a]' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'"
+          class="shrink-0 border text-[13px] font-bold px-5 py-2 rounded-full transition-colors shadow-sm">
+          {{ filtro }}
+        </button>
+      </div>
+
+      <div class="flex-1 px-4 overflow-y-auto">
+        
+        <div v-if="cargando" class="flex justify-center py-20">
+          <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#1e3a8a]"></div>
+        </div>
+
+        <template v-else>
+          <p class="text-[13px] font-bold text-gray-400 mb-4 px-1 uppercase tracking-wider">
+            {{ tabActiva === 'eventos' ? eventosFiltrados.length : emprendimientosFiltrados.length }} resultados encontrados
+          </p>
+
+          <div v-if="tabActiva === 'eventos'" class="space-y-4">
+            <SearchCard
+              v-for="evento in eventosFiltrados"
+              :key="evento._id"
+              :imagen="evento.coverImage"
+              :titulo="evento.title"
+              :etiqueta="evento.category"
+              :descripcion="evento.description"
+              :ubicacion="evento.location"
+              :autor="evento.organizer?.name"
+              :avatar="evento.organizer?.avatar || generarAvatarGenerico(evento.organizer?.name)"
+              :tagColor="getColorEtiqueta(evento.category)"
+              @click="$router.push(`/detalles-evento/${evento._id}`)"
+              class="cursor-pointer hover:shadow-md transition-shadow"
+            />
+            
+            <div v-if="eventosFiltrados.length === 0" class="text-center py-10 text-gray-500">
+              No se encontraron eventos con esa búsqueda.
+            </div>
+          </div>
+
+          <div v-else class="space-y-4">
+            <SearchCard
+              v-for="emp in emprendimientosFiltrados"
+              :key="emp._id"
+              :imagen="emp.coverImage"
+              :titulo="emp.title"
+              :etiqueta="emp.category"
+              :descripcion="emp.description"
+              :ubicacion="emp.location"
+              :autor="emp.owner?.name"
+              :avatar="emp.owner?.avatar || generarAvatarGenerico(emp.owner?.name)"
+              :tagColor="getColorEtiqueta(emp.category)"
+              @click="$router.push(`/detalles-emprendimiento-dueo/${emp._id}`)"
+              class="cursor-pointer hover:shadow-md transition-shadow"
+            />
+            
+            <div v-if="emprendimientosFiltrados.length === 0" class="text-center py-10 text-gray-500">
+              No se encontraron emprendimientos con esa búsqueda.
+            </div>
+          </div>
+        </template>
+        
+      </div>
+    </main>
+
+    <BottomNav />
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import SearchCard from '../components/SearchCard.vue'
+import BottomNav from '../components/BottomNav.vue'
 
+// --- ESTADOS DE LA VISTA ---
 const tabActiva = ref('eventos')
 const query = ref('')
+const cargando = ref(true)
 
-const eventos = [
-  {
-    id: 1,
-    titulo: 'Festival de Musica Andina',
-    categoria: 'Musica',
-    etiqueta: 'Musica',
-    tagColor: 'bg-purple-100 text-purple-600',
-    descripcion: 'Presentaciones en vivo con agrupaciones universitarias y artistas invitados.',
-    ubicacion: 'Auditorio Central',
-    autor: 'Cultura UNET',
-    imagen: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=300&q=80',
-    avatar: 'https://i.pravatar.cc/40?img=12'
-  },
-  {
-    id: 2,
-    titulo: 'Feria Gastronomica Universitaria',
-    categoria: 'Comida',
-    etiqueta: 'Comida',
-    tagColor: 'bg-orange-100 text-orange-600',
-    descripcion: 'Sabores regionales preparados por estudiantes emprendedores y chefs locales.',
-    ubicacion: 'Mini Hall',
-    autor: 'Bienestar Estudiantil',
-    imagen: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=300&q=80',
-    avatar: 'https://i.pravatar.cc/40?img=22'
-  },
-  {
-    id: 3,
-    titulo: 'Misa de Accion de Gracias',
-    categoria: 'Misa',
-    etiqueta: 'Misa',
-    tagColor: 'bg-sky-100 text-sky-600',
-    descripcion: 'Encuentro espiritual de cierre de semestre en la capilla universitaria.',
-    ubicacion: 'Capilla del B',
-    autor: 'Pastoral UNET',
-    imagen: 'https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=300&q=80',
-    avatar: 'https://i.pravatar.cc/40?img=32'
+// --- LISTAS DE DATOS REALES ---
+const eventos = ref([])
+const emprendimientos = ref([])
+
+// --- FILTROS DE CATEGORÍAS (Píldoras) ---
+const filtrosEventos = ['Todo', 'Concierto', 'Comida', 'Misa', 'Taller', 'Bazar']
+const filtroCatEventos = ref('Todo')
+
+const filtrosEmprendimientos = ['Todo', 'Ropa', 'Accesorios', 'Servicios', 'Comida']
+const filtroCatEmprend = ref('Todo')
+
+// --- CONEXIÓN AL BACKEND ---
+const cargarDatos = async () => {
+  cargando.value = true
+  try {
+    const [resEventos, resEmprend] = await Promise.all([
+      fetch('/api/eventos'),
+      fetch('/api/emprendimientos')
+    ])
+    
+    const [jsonEventos, jsonEmprend] = await Promise.all([
+      resEventos.json(),
+      resEmprend.json()
+    ])
+    
+    if (jsonEventos.success) eventos.value = jsonEventos.data
+    if (jsonEmprend.success) emprendimientos.value = jsonEmprend.data
+  } catch (error) {
+    console.error("Error al buscar datos:", error)
+  } finally {
+    cargando.value = false
   }
-]
-
-const emprendimientos = [
-  {
-    id: 101,
-    titulo: 'Ropa Creativa ULA',
-    categoria: 'Ropa',
-    etiqueta: 'Ropa',
-    tagColor: 'bg-emerald-100 text-emerald-600',
-    descripcion: 'Coleccion de prendas urbanas con disenos inspirados en la vida universitaria.',
-    ubicacion: 'Local 3, Bloque A',
-    autor: 'Ana Perez',
-    imagen: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=300&q=80',
-    avatar: 'https://i.pravatar.cc/40?img=5'
-  },
-  {
-    id: 102,
-    titulo: 'Accesorios Artesanales Merida',
-    categoria: 'Accesorios',
-    etiqueta: 'Accesorios',
-    tagColor: 'bg-amber-100 text-amber-700',
-    descripcion: 'Pulseras, collares y piezas tejidas a mano con materiales sostenibles.',
-    ubicacion: 'Pasillo de emprendimientos',
-    autor: 'Luis Gonzalez',
-    imagen: 'https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=300&q=80',
-    avatar: 'https://i.pravatar.cc/40?img=45'
-  },
-  {
-    id: 103,
-    titulo: 'Diseno de Flyers Academicos',
-    categoria: 'Servicios',
-    etiqueta: 'Servicios',
-    tagColor: 'bg-blue-100 text-blue-600',
-    descripcion: 'Creacion de piezas graficas para eventos estudiantiles y marcas personales.',
-    ubicacion: 'Cowork UNET',
-    autor: 'Maria Rivas',
-    imagen: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=300&q=80',
-    avatar: 'https://i.pravatar.cc/40?img=16'
-  },
-  {
-    id: 104,
-    titulo: 'Snack Bar Estudiantil',
-    categoria: 'Comida',
-    etiqueta: 'Comida',
-    tagColor: 'bg-orange-100 text-orange-600',
-    descripcion: 'Meriendas saludables y combos rapidos para estudiantes durante la jornada.',
-    ubicacion: 'Mini hall',
-    autor: 'Carlos Mora',
-    imagen: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=300&q=80',
-    avatar: 'https://i.pravatar.cc/40?img=29'
-  }
-]
-
-const normalizar = (valor) => valor.toLowerCase().trim()
-
-const coincideConQuery = (item) => {
-  const termino = normalizar(query.value)
-
-  if (!termino) {
-    return true
-  }
-
-  return [item.titulo, item.descripcion, item.categoria, item.autor]
-    .some((campo) => normalizar(campo).includes(termino))
 }
 
-const eventosFiltrados = computed(() => eventos.filter(coincideConQuery))
-const emprendimientosFiltrados = computed(() => emprendimientos.filter(coincideConQuery))
+// Ejecutar al entrar a la pantalla
+onMounted(() => {
+  cargarDatos()
+})
+
+// --- LÓGICA DE FILTRADO LOCAL ---
+const normalizar = (valor) => (valor ? valor.toString().toLowerCase().trim() : '')
+
+// Filtramos Eventos: Por categoría y luego por texto
+const eventosFiltrados = computed(() => {
+  return eventos.value.filter(item => {
+    // 1. Validar Filtro de Píldora
+    if (filtroCatEventos.value !== 'Todo' && item.category !== filtroCatEventos.value) return false;
+    
+    // 2. Validar Búsqueda de Texto
+    const termino = normalizar(query.value)
+    if (!termino) return true;
+    
+    return [item.title, item.description, item.category, item.organizer?.name]
+      .some((campo) => normalizar(campo).includes(termino))
+  })
+})
+
+// Filtramos Emprendimientos: Por categoría y luego por texto
+const emprendimientosFiltrados = computed(() => {
+  return emprendimientos.value.filter(item => {
+    // 1. Validar Filtro de Píldora
+    if (filtroCatEmprend.value !== 'Todo' && item.category !== filtroCatEmprend.value) return false;
+    
+    // 2. Validar Búsqueda de Texto
+    const termino = normalizar(query.value)
+    if (!termino) return true;
+    
+    return [item.title, item.description, item.category, item.owner?.name]
+      .some((campo) => normalizar(campo).includes(termino))
+  })
+})
+
+// --- HELPERS VISUALES ---
+// Genera un color bonito dependiendo de la categoría (como tu tagColor)
+const getColorEtiqueta = (categoria) => {
+  const cat = normalizar(categoria)
+  const colores = {
+    'comida': 'bg-orange-100 text-orange-600',
+    'concierto': 'bg-purple-100 text-purple-600',
+    'música': 'bg-purple-100 text-purple-600',
+    'misa': 'bg-sky-100 text-sky-600',
+    'taller': 'bg-emerald-100 text-emerald-600',
+    'ropa': 'bg-pink-100 text-pink-600',
+    'accesorios': 'bg-amber-100 text-amber-700',
+    'servicios': 'bg-blue-100 text-blue-600',
+  }
+  return colores[cat] || 'bg-gray-100 text-gray-600'
+}
+
+// Genera imagen con iniciales si el usuario no tiene avatar
+const generarAvatarGenerico = (nombre) => {
+  return `https://ui-avatars.com/api/?name=${nombre}&background=EBF5FF&color=1E3A8A`
+}
 </script>
 
 <style scoped>

@@ -106,7 +106,11 @@
 
     </main>
 
-    <AppFooter />
+    <BottomNav />
+
+    <div class="hidden md:block">
+      <AppFooter />
+    </div>
   </div>
 </template>
 
@@ -115,6 +119,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
+import BottomNav from '../components/BottomNav.vue'
 
 const route = useRoute()
 const router = useRouter()
