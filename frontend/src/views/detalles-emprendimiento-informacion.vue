@@ -75,9 +75,10 @@
       <div class="mt-8 md:mt-12 border-b border-gray-200">
         <ul class="flex w-full md:w-auto px-0 md:px-2 md:space-x-8">
           <li class="flex-1 md:flex-none text-center md:text-left">
-            <button @click="router.push('/detalles-emprendimiento-publicaciones')" class="w-full md:w-auto px-2 py-4 text-[14px] md:text-[15px] font-semibold text-gray-400 hover:text-gray-700 transition duration-150">
+            <button @click="router.push(`/emprendimientos/${route.params.id}/publicaciones`)" class="w-full md:w-auto px-2 py-4 text-[14px] md:text-[15px] font-semibold text-gray-400 hover:text-gray-700 transition duration-150">
               Publicaciones
             </button>
+
           </li>
           <li class="flex-1 md:flex-none text-center md:text-left">
             <button class="w-full md:w-auto px-2 py-4 text-[14px] md:text-[15px] font-bold text-[#1e3a8a] border-b-[3px] border-[#1e3a8a]">
