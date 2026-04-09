@@ -17,16 +17,21 @@
             <div class="w-10"></div> 
           </div>
 
-          <div class="relative bg-[#1e3aa8] h-[160px] flex flex-col items-center justify-center text-white">
-            <button class="mb-2 hover:opacity-80 transition-opacity">
+          <div class="relative bg-[#1e3aa8] h-[160px] flex flex-col items-center justify-center text-white overflow-hidden">
+            <img v-if="preview.cover" :src="preview.cover" class="absolute inset-0 w-full h-full object-cover opacity-60" alt="Portada" />
+            <label class="relative z-10 flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity">
+              <input type="file" accept="image/*" class="hidden" @change="onCoverChange" />
               <svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h3l2-3h6l2 3h3v12H4V7z"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 14h8"/></svg>
-            </button>
-            <p class="text-[10px] uppercase font-bold tracking-widest text-white/90">SUBIR FOTO DE PORTADA</p>
-            
+              <p class="text-[10px] uppercase font-bold tracking-widest text-white/90 mt-2">SUBIR FOTO DE PORTADA</p>
+            </label>
             <div class="absolute -bottom-10 left-6">
-              <button class="w-[84px] h-[84px] rounded-full bg-[#F3F4F6] border-4 border-white shadow-md flex items-center justify-center text-gray-300 hover:bg-gray-200 transition-colors">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h3l2-3h6l2 3h3v12H4V7z"/><circle cx="12" cy="14" r="3"/></svg>
-              </button>
+              <label class="block relative cursor-pointer">
+                <input type="file" accept="image/*" class="hidden" @change="onLogoChange" />
+                <div class="w-[84px] h-[84px] rounded-full bg-[#F3F4F6] border-4 border-white shadow-md flex items-center justify-center text-gray-300 hover:bg-gray-200 transition-colors overflow-hidden">
+                  <img v-if="preview.logo" :src="preview.logo" class="w-full h-full object-cover" alt="Logo" />
+                  <svg v-else class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h3l2-3h6l2 3h3v12H4V7z"/><circle cx="12" cy="14" r="3"/></svg>
+                </div>
+              </label>
             </div>
           </div>
 
@@ -99,20 +104,25 @@
           </div>
 
           <div class="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] overflow-hidden mb-10 border border-gray-100">
-            <div class="relative h-[220px] w-full bg-gray-200">
-              <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2000&auto=format&fit=crop" alt="Portada" class="w-full h-full object-cover" />
+            <div class="relative h-[220px] w-full bg-gray-200 overflow-hidden">
+              <img :src="preview.cover || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2000&auto=format&fit=crop'" alt="Portada" class="w-full h-full object-cover" />
               
-              <button class="absolute right-4 bottom-4 bg-white text-[#1e3a8a] text-[13px] font-bold px-4 py-2 rounded-lg flex items-center gap-2 shadow-sm hover:bg-gray-50 transition-colors border border-gray-200">
+              <label class="absolute right-4 bottom-4 bg-white text-[#1e3a8a] text-[13px] font-bold px-4 py-2 rounded-lg flex items-center gap-2 shadow-sm hover:bg-gray-50 transition-colors border border-gray-200 cursor-pointer">
+                <input type="file" accept="image/*" class="hidden" @change="onCoverChange" />
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 Cambiar Portada
-              </button>
+              </label>
             </div>
             
             <div class="relative h-[80px] w-full bg-white">
-              <div class="absolute -top-12 left-8 w-[96px] h-[96px] rounded-full border-4 border-white bg-[#0A1128] shadow-md flex flex-col items-center justify-center text-white">
-                <svg class="w-6 h-6 mb-1 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                <span class="text-[8px] font-bold tracking-widest text-gray-300">STARTUP</span>
-              </div>
+              <label class="absolute -top-12 left-8 w-[96px] h-[96px] rounded-full border-4 border-white bg-[#0A1128] shadow-md flex flex-col items-center justify-center text-white cursor-pointer hover:opacity-90 transition-opacity overflow-hidden">
+                <input type="file" accept="image/*" class="hidden" @change="onLogoChange" />
+                <img v-if="preview.logo" :src="preview.logo" class="absolute inset-0 w-full h-full object-cover" alt="Logo" />
+                <template v-else>
+                  <svg class="w-6 h-6 mb-1 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                  <span class="text-[8px] font-bold tracking-widest text-gray-300">LOGO</span>
+                </template>
+              </label>
               <div class="pl-[144px] pt-4">
                  <h2 class="text-[16px] font-bold text-[#001D6B] leading-tight">Logotipo del Proyecto</h2>
                  <p class="text-[12px] text-gray-500 font-medium mt-0.5">Recomendado: PNG circular 512×512px</p>
@@ -174,13 +184,19 @@
       </div>
     </main>
 
+    <!-- Error message -->
+    <div v-if="error" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-red-50 border border-red-200 text-red-700 text-[13px] font-semibold px-5 py-3 rounded-xl shadow-md">
+      {{ error }}
+    </div>
+
     <div class="hidden md:flex fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-3.5 px-8 lg:px-12 justify-end items-center gap-4 z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)]">
       <button @click="$router.back()" class="text-gray-500 hover:text-[#1e3a8a] font-bold text-[13.5px] transition-colors px-3 py-2">
         Cancelar
       </button>
-      <button @click.prevent="createEmprendimiento" class="inline-flex items-center gap-2 bg-[#1e3a8a] hover:bg-[#152a6b] text-white font-bold py-2.5 px-6 rounded-lg shadow-md transition-colors text-[13.5px]">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-        Publicar Emprendimiento
+      <button @click.prevent="createEmprendimiento" :disabled="uploading" class="inline-flex items-center gap-2 bg-[#1e3a8a] hover:bg-[#152a6b] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-2.5 px-6 rounded-lg shadow-md transition-colors text-[13.5px]">
+        <svg v-if="!uploading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+        <svg v-else class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+        {{ uploading ? 'Publicando...' : 'Publicar Emprendimiento' }}
       </button>
     </div>
 
@@ -188,8 +204,12 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
+import { fetchApi } from '../utils/api.js'
+
+const router = useRouter()
 
 const form = reactive({
   nombre: '',
@@ -199,8 +219,80 @@ const form = reactive({
   descripcion: ''
 })
 
-function createEmprendimiento() {
-  console.log('Crear emprendimiento', { ...form })
+// Image files selected by the user
+const files = reactive({ cover: null, logo: null })
+// Local preview URLs (object URLs)
+const preview = reactive({ cover: '', logo: '' })
+
+const uploading = ref(false)
+const error = ref('')
+
+function onCoverChange(e) {
+  const file = e.target.files[0]
+  if (!file) return
+  files.cover = file
+  preview.cover = URL.createObjectURL(file)
+}
+
+function onLogoChange(e) {
+  const file = e.target.files[0]
+  if (!file) return
+  files.logo = file
+  preview.logo = URL.createObjectURL(file)
+}
+
+async function uploadImages(emprendimientoId) {
+  if (!files.cover && !files.logo) return
+
+  const formData = new FormData()
+  if (files.cover) formData.append('coverImage', files.cover)
+  if (files.logo) formData.append('profileImage', files.logo)
+
+  const res = await fetchApi(`/api/uploads/emprendimiento/${emprendimientoId}`, {
+    method: 'POST',
+    body: formData
+  })
+  if (!res.ok) throw new Error('Error al subir imágenes')
+}
+
+async function createEmprendimiento() {
+  error.value = ''
+  if (!form.nombre || !form.categoria || !form.ubicacion) {
+    error.value = 'Por favor completa los campos obligatorios'
+    return
+  }
+
+  try {
+    uploading.value = true
+
+    // 1. Create emprendimiento with text fields
+    const body = JSON.stringify({
+      title: form.nombre,
+      category: form.categoria,
+      location: form.ubicacion,
+      description: form.descripcion,
+      socialLinks: { instagram: form.contacto }
+    })
+
+    const res = await fetchApi('/api/emprendimientos', {
+      method: 'POST',
+      body
+    })
+    const data = await res.json()
+
+    if (!data.success) throw new Error(data.message)
+
+    const id = data.data._id
+
+    // 2. Upload images if any were selected
+    await uploadImages(id)
+
+    router.push(`/detalles-emprendimiento-dueo/${id}`)
+  } catch (err) {
+    error.value = err.message || 'Error al crear el emprendimiento'
+  } finally {
+    uploading.value = false
+  }
 }
 </script>
 

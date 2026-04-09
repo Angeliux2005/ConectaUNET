@@ -5,19 +5,29 @@ import User from '../models/User.js';
 import Evento from '../models/Evento.js';
 import Emprendimiento from '../models/Emprendimiento.js';
 import Publicacion from '../models/Publicacion.js';
+import Comentario from '../models/Comentario.js';
 
 dotenv.config();
 
 const seed = async () => {
   await connectDB();
 
-  // Limpiar datos de corridas anteriores
-  await User.deleteMany({ username: { $in: ['mariaseed', 'carlosseed'] } });
-  await Emprendimiento.deleteMany({});
-  await Evento.deleteMany({});
-  await Publicacion.deleteMany({});
+  // Limpiar datos de corridas anteriores (solo usuarios seed)
+  const seedUsernames = ['mariaseed', 'carlosseed', 'anaseed', 'pedroseed'];
+  const oldSeedUsers = await User.find({ username: { $in: seedUsernames } }).select('_id');
+  const oldSeedIds = oldSeedUsers.map(u => u._id);
 
-  const [u1, u2] = await User.create([
+  if (oldSeedIds.length > 0) {
+    const oldEmps = await Emprendimiento.find({ owner: { $in: oldSeedIds } }).select('_id');
+    const oldEmpIds = oldEmps.map(e => e._id);
+    await Comentario.deleteMany({ publicacion: { $in: await Publicacion.find({ emprendimiento: { $in: oldEmpIds } }).distinct('_id') } });
+    await Publicacion.deleteMany({ emprendimiento: { $in: oldEmpIds } });
+    await Emprendimiento.deleteMany({ owner: { $in: oldSeedIds } });
+    await Evento.deleteMany({ organizer: { $in: oldSeedIds } });
+  }
+  await User.deleteMany({ username: { $in: seedUsernames } });
+
+  const [u1, u2, u3, u4] = await User.create([
     {
       username: 'mariaseed',
       email: 'maria.gonzalez@unet.edu.ve',
@@ -30,10 +40,24 @@ const seed = async () => {
       name: 'Carlos Perez',
       password: 'asd123',
     },
+    {
+      username: 'anaseed',
+      email: 'ana.lopez@unet.edu.ve',
+      name: 'Ana Lopez',
+      password: 'asd123',
+    },
+    {
+      username: 'pedroseed',
+      email: 'pedro.ramirez@unet.edu.ve',
+      name: 'Pedro Ramirez',
+      password: 'asd123',
+    },
   ]);
 
   console.log(`Usuario 1: ${u1.username} (${u1._id})`);
   console.log(`Usuario 2: ${u2.username} (${u2._id})`);
+  console.log(`Usuario 3: ${u3.username} (${u3._id})`);
+  console.log(`Usuario 4: ${u4.username} (${u4._id})`);
 
   const img = (id, w = 600, h = 400) => `https://picsum.photos/id/${id}/${w}/${h}`;
 
@@ -259,8 +283,13 @@ const seed = async () => {
     },
   ];
 
-  const emps = await Emprendimiento.insertMany(emprendimientos);
-  console.log('✓ 10 emprendimientos insertados');
+  const emprendimientosConSeguidores = emprendimientos.map(emp => ({
+    ...emp,
+    followers: emp.owner === u1._id ? [u2._id, u3._id, u4._id] : [u1._id, u3._id, u4._id]
+  }));
+
+  const emps = await Emprendimiento.insertMany(emprendimientosConSeguidores);
+  console.log('✓ 10 emprendimientos insertados con seguidores');
 
   await Evento.insertMany(eventos);
   console.log('✓ 10 eventos insertados');
@@ -323,8 +352,19 @@ const seed = async () => {
     { title: 'Torneos interfacultad: equipos inscribirse', content: 'Coordinamos el torneo de fútbol sala de mayo. Inscribe a tu equipo antes del 30 de abril.', image: img(422), emprendimiento: sportGear._id, author: u2._id },
   ];
 
-  await Publicacion.insertMany(publicaciones);
+  const pubsInsertadas = await Publicacion.insertMany(publicaciones);
   console.log('✓ 30 publicaciones insertadas (3 por emprendimiento)');
+
+  // ── Comentarios ─────────────────────────────────────────────────────────────
+  const comentarios = pubsInsertadas.map((pub) => {
+    return [
+      { content: '¡Se ve genial! ¿Qué precio tienen? Saludos.', author: u3._id, publicacion: pub._id, likes: [u1._id] },
+      { content: 'Excelente calidad. Totalmente recomendado para la comunidad.', author: u4._id, publicacion: pub._id, likes: [] }
+    ];
+  }).flat();
+
+  await Comentario.insertMany(comentarios);
+  console.log('✓ 60 comentarios insertados (2 por publicación)');
 
   await mongoose.disconnect();
   console.log('Seed completado.');

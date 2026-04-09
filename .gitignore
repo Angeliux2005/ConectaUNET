@@ -130,3 +130,6 @@ dist
 # Vite Output
 frontend/dist/
 frontend/dist-ssr/
+
+# Uploaded files (generated at runtime)
+backend/uploads/
