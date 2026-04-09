@@ -94,71 +94,104 @@
               <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#1e3a8a]"></div>
             </div>
 
-            <div v-else-if="(vistaActiva === 'eventos' && eventosFiltrados.length === 0) || (vistaActiva === 'emprendimientos' && emprendimientosFiltrados.length === 0)" class="text-center py-20 text-gray-500 font-medium bg-white md:bg-transparent rounded-2xl md:rounded-none shadow-inner md:shadow-none p-6">
+            <!-- Empty state -->
+            <div v-else-if="esTabVacio" class="text-center py-20 text-gray-500 font-medium bg-white md:bg-transparent rounded-2xl md:rounded-none shadow-inner md:shadow-none p-6">
               <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
               No hay elementos para mostrar en esta categoría.
             </div>
 
-            <div v-else class="flex flex-col gap-4 md:gap-8">
-              
+            <div v-else>
+
+              <!-- EVENTOS: mis eventos / asistiré / guardados -->
               <template v-if="vistaActiva === 'eventos'">
-                <article v-for="evento in eventosFiltrados" :key="evento._id" class="bg-white rounded-2xl md:rounded-[28px] p-4 md:p-6 shadow-sm md:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100 flex flex-col">
-                  <div class="flex gap-4">
-                    <div class="w-[72px] h-[72px] md:w-[160px] md:h-[160px] shrink-0 rounded-lg md:rounded-2xl bg-gray-200 overflow-hidden">
-                      <img :src="evento.coverImage || 'https://images.unsplash.com/photo-1497493292307-31c376b6e479?q=80&w=2000'" class="w-full h-full object-cover" :alt="evento.title" />
-                    </div>
-                    <div class="flex flex-col flex-grow justify-center">
-                      <h3 class="text-[14px] md:text-[22px] font-bold text-[#1F2937] md:text-[#001D6B] leading-tight mb-0.5 md:mb-2">{{ evento.title }}</h3>
-                      <p class="text-[10px] md:text-[14px] text-gray-400 md:text-gray-500 font-medium mb-2 md:mb-4">{{ evento.organizer?.name || 'Organizador' }} - {{ formatearFecha(evento.date) }}</p>
-                      <div class="space-y-1 md:space-y-2">
-                        <div class="flex items-center gap-1.5 md:gap-2 text-[10px] md:text-[14px] text-gray-500 font-medium">
-                          <svg class="w-3.5 h-3.5 md:w-5 md:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                          {{ evento.location }}
-                        </div>
-                        <div class="flex items-center gap-1.5 md:gap-2 text-[10px] md:text-[14px] text-gray-500 font-medium">
-                          <svg class="w-3.5 h-3.5 md:w-5 md:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                          {{ evento.timeRange || '10:00 AM' }}
+                <div class="flex flex-col gap-4 md:gap-8">
+                  <article v-for="evento in eventosFiltrados" :key="evento._id" class="bg-white rounded-2xl md:rounded-[28px] p-4 md:p-6 shadow-sm md:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100 flex flex-col">
+                    <div class="flex gap-4">
+                      <div class="w-[72px] h-[72px] md:w-[160px] md:h-[160px] shrink-0 rounded-lg md:rounded-2xl bg-gray-200 overflow-hidden">
+                        <img :src="evento.coverImage || 'https://images.unsplash.com/photo-1497493292307-31c376b6e479?q=80&w=2000'" class="w-full h-full object-cover" :alt="evento.title" />
+                      </div>
+                      <div class="flex flex-col flex-grow justify-center">
+                        <h3 class="text-[14px] md:text-[22px] font-bold text-[#1F2937] md:text-[#001D6B] leading-tight mb-0.5 md:mb-2">{{ evento.title }}</h3>
+                        <p class="text-[10px] md:text-[14px] text-gray-400 md:text-gray-500 font-medium mb-2 md:mb-4">{{ evento.organizer?.name || 'Organizador' }} - {{ formatearFecha(evento.date) }}</p>
+                        <div class="space-y-1 md:space-y-2">
+                          <div class="flex items-center gap-1.5 md:gap-2 text-[10px] md:text-[14px] text-gray-500 font-medium">
+                            <svg class="w-3.5 h-3.5 md:w-5 md:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            {{ evento.location }}
+                          </div>
+                          <div class="flex items-center gap-1.5 md:gap-2 text-[10px] md:text-[14px] text-gray-500 font-medium">
+                            <svg class="w-3.5 h-3.5 md:w-5 md:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            {{ evento.timeRange || '10:00 AM' }}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="mt-4 md:mt-6 flex gap-2 md:gap-4 w-full">
-                    <button v-if="tabEventos === 'mis_eventos'" @click="$router.push(`/editar-evento/${evento._id}`)" class="flex-1 bg-white border border-gray-200 text-gray-700 font-bold text-[12px] md:text-[14px] py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-gray-50 transition-colors">
-                      Editar Evento
-                    </button>
-                    <button @click="$router.push(`/eventos/${evento._id}`)" class="flex-1 bg-[#1e3a8a] text-white font-bold text-[12px] md:text-[14px] py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-[#152a6b] shadow-sm transition-colors">
-                      Ver Evento
-                    </button>
-                  </div>
-                </article>
+                    <div class="mt-4 md:mt-6 flex gap-2 md:gap-4 w-full">
+                      <button v-if="tabEventos === 'mis_eventos'" @click="$router.push(`/editar-evento/${evento._id}`)" class="flex-1 bg-white border border-gray-200 text-gray-700 font-bold text-[12px] md:text-[14px] py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-gray-50 transition-colors">
+                        Editar Evento
+                      </button>
+                      <button @click="$router.push(`/eventos/${evento._id}`)" class="flex-1 bg-[#1e3a8a] text-white font-bold text-[12px] md:text-[14px] py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-[#152a6b] shadow-sm transition-colors">
+                        Ver Evento
+                      </button>
+                    </div>
+                  </article>
+                </div>
               </template>
 
-              <template v-else>
-                <article v-for="emp in emprendimientosFiltrados" :key="emp._id" class="bg-white rounded-2xl md:rounded-[28px] overflow-hidden shadow-sm md:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100 flex flex-col sm:flex-row h-auto sm:h-[280px]">
-                  <div class="w-full sm:w-[320px] h-[140px] sm:h-full shrink-0 bg-slate-900 relative">
-                    <img :src="emp.coverImage || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070'" class="w-full h-full object-cover opacity-80" :alt="emp.title" />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>
+              <!-- EMPRENDIMIENTOS: mis emprendimientos / seguidos -->
+              <template v-else-if="vistaActiva === 'emprendimientos' && tabEmprendimientos !== 'likes'">
+                <div class="flex flex-col gap-4 md:gap-8">
+                  <article v-for="emp in emprendimientosFiltrados" :key="emp._id" class="bg-white rounded-2xl md:rounded-[28px] overflow-hidden shadow-sm md:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)] border border-gray-100 flex flex-col sm:flex-row h-auto sm:h-[280px]">
+                    <div class="w-full sm:w-[320px] h-[140px] sm:h-full shrink-0 bg-slate-900 relative">
+                      <img :src="emp.coverImage || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070'" class="w-full h-full object-cover opacity-80" :alt="emp.title" />
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>
+                    </div>
+                    <div class="flex flex-col flex-grow p-4 sm:p-8 relative">
+                      <div class="mb-1">
+                        <span class="text-[#B8860B] font-black text-[10px] sm:text-[11px] tracking-widest uppercase">{{ emp.category }}</span>
+                      </div>
+                      <h3 class="text-[20px] sm:text-[28px] font-black text-[#001D6B] mb-1 md:mb-2 leading-tight">{{ emp.title }}</h3>
+                      <p class="text-[13px] sm:text-[16px] text-gray-500 font-medium mb-3 sm:mb-6 leading-relaxed line-clamp-2">{{ emp.description }}</p>
+                      <div class="flex items-center gap-2 sm:gap-3 text-[13px] sm:text-[14.5px] text-gray-800 font-bold mb-4 sm:mb-8">
+                        <svg class="w-4 h-4 md:w-5 md:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        {{ emp.location }}
+                      </div>
+                      <div class="mt-auto flex gap-2 w-full">
+                        <button v-if="tabEmprendimientos === 'mis_emprendimientos'" @click="$router.push(`/editar-emprendimiento/${emp._id}`)" class="flex-1 sm:flex-none flex items-center justify-center bg-white border border-gray-200 md:border-2 md:border-[#1e3a8a] text-gray-700 md:text-[#1e3a8a] hover:bg-gray-50 font-bold py-2 md:py-2.5 px-2 sm:px-6 rounded-lg md:rounded-xl transition-colors text-[11px] md:text-[14px]">
+                          Editar Info
+                        </button>
+                        <button @click="$router.push(`/emprendimientos/${emp._id}`)" class="flex-1 sm:flex-none flex items-center justify-center bg-[#1e3a8a] md:bg-[#001D6B] hover:bg-[#152a6b] md:hover:bg-[#001242] text-white font-bold py-2 md:py-2.5 px-2 sm:px-6 rounded-lg md:rounded-xl shadow-md transition-colors text-[11px] md:text-[14px]">
+                          Ver Emprendimiento
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              </template>
+
+              <!-- LIKES: publicaciones likeadas -->
+              <template v-else-if="vistaActiva === 'emprendimientos' && tabEmprendimientos === 'likes'">
+                <div class="grid grid-cols-3 gap-1 md:gap-2">
+                  <div
+                    v-for="pub in publicacionesLikeadas"
+                    :key="pub._id"
+                    @click="$router.push(`/publicaciones/${pub._id}`)"
+                    class="relative aspect-square bg-gray-100 overflow-hidden cursor-pointer group rounded-sm md:rounded-lg"
+                  >
+                    <img
+                      v-if="pub.image"
+                      :src="pub.image"
+                      :alt="pub.title"
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div v-else class="w-full h-full flex flex-col items-center justify-center p-2 bg-[#EBF5FF]">
+                      <svg class="w-6 h-6 text-[#1e3a8a] mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                      <p class="text-[9px] md:text-[11px] font-bold text-[#1e3a8a] text-center line-clamp-2">{{ pub.title }}</p>
+                    </div>
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                      <svg class="w-7 h-7 text-white drop-shadow" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
                   </div>
-                  <div class="flex flex-col flex-grow p-4 sm:p-8 relative">
-                    <div class="mb-1">
-                      <span class="text-[#B8860B] font-black text-[10px] sm:text-[11px] tracking-widest uppercase">{{ emp.category }}</span>
-                    </div>
-                    <h3 class="text-[20px] sm:text-[28px] font-black text-[#001D6B] mb-1 md:mb-2 leading-tight">{{ emp.title }}</h3>
-                    <p class="text-[13px] sm:text-[16px] text-gray-500 font-medium mb-3 sm:mb-6 leading-relaxed line-clamp-2">{{ emp.description }}</p>
-                    <div class="flex items-center gap-2 sm:gap-3 text-[13px] sm:text-[14.5px] text-gray-800 font-bold mb-4 sm:mb-8">
-                      <svg class="w-4 h-4 md:w-5 md:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                      {{ emp.location }}
-                    </div>
-                    <div class="mt-auto flex gap-2 w-full">
-                      <button v-if="tabEmprendimientos === 'mis_emprendimientos'" @click="$router.push(`/editar-emprendimiento/${emp._id}`)" class="flex-1 sm:flex-none flex items-center justify-center bg-white border border-gray-200 md:border-2 md:border-[#1e3a8a] text-gray-700 md:text-[#1e3a8a] hover:bg-gray-50 font-bold py-2 md:py-2.5 px-2 sm:px-6 rounded-lg md:rounded-xl transition-colors text-[11px] md:text-[14px]">
-                        Editar Info
-                      </button>
-                      <button @click="$router.push(`/emprendimientos/${emp._id}`)" class="flex-1 sm:flex-none flex items-center justify-center bg-[#1e3a8a] md:bg-[#001D6B] hover:bg-[#152a6b] md:hover:bg-[#001242] text-white font-bold py-2 md:py-2.5 px-2 sm:px-6 rounded-lg md:rounded-xl shadow-md transition-colors text-[11px] md:text-[14px]">
-                        Ver Emprendimiento
-                      </button>
-                    </div>
-                  </div>
-                </article>
+                </div>
               </template>
 
             </div>
@@ -195,6 +228,7 @@ const tabEmprendimientos = ref('mis_emprendimientos')
 // Datos de la BD
 const eventos = ref([])
 const emprendimientos = ref([])
+const publicacionesLikeadas = ref([])
 const cargando = ref(true)
 const currentUser = ref(null)
 
@@ -202,44 +236,53 @@ const currentUser = ref(null)
 
 const eventosFiltrados = computed(() => {
   if (!eventos.value || !currentUser.value) return []
-
   const userId = currentUser.value._id || currentUser.value.id
 
   if (tabEventos.value === 'mis_eventos') {
     return eventos.value.filter(e => {
       const orgId = e.organizer?._id || e.organizer
-      return orgId === userId
+      return orgId?.toString() === userId
     })
   }
-
   if (tabEventos.value === 'asistire') {
     return eventos.value.filter(e =>
       e.attendees && e.attendees.some(id => (id?._id || id)?.toString() === userId)
     )
   }
-
+  if (tabEventos.value === 'guardados') {
+    return eventos.value.filter(e =>
+      e.savedBy && e.savedBy.some(id => (id?._id || id)?.toString() === userId)
+    )
+  }
   return []
 })
 
 const emprendimientosFiltrados = computed(() => {
   if (!emprendimientos.value || !currentUser.value) return []
-
   const userId = currentUser.value._id || currentUser.value.id
 
   if (tabEmprendimientos.value === 'mis_emprendimientos') {
     return emprendimientos.value.filter(e => {
       const ownerId = e.owner?._id || e.owner
-      return ownerId === userId
+      return ownerId?.toString() === userId
     })
   }
-
   if (tabEmprendimientos.value === 'seguidos') {
     return emprendimientos.value.filter(e =>
       e.followers && e.followers.some(id => (id?._id || id)?.toString() === userId)
     )
   }
+  if (tabEmprendimientos.value === 'likes') {
+    return [] // Se maneja por separado con publicacionesLikeadas
+  }
+  return []
+})
 
-  return [] 
+const esTabVacio = computed(() => {
+  if (cargando.value) return false
+  if (vistaActiva.value === 'eventos') return eventosFiltrados.value.length === 0
+  if (tabEmprendimientos.value === 'likes') return publicacionesLikeadas.value.length === 0
+  return emprendimientosFiltrados.value.length === 0
 })
 
 // --- LLAMADAS A LA API ---
@@ -249,18 +292,21 @@ const cargarDatosPerfil = async () => {
     cargando.value = true
 
     // FIX: AHORA USAMOS fetchApi QUE GESTIONA EL PUERTO Y EL TOKEN SOLA
-    const [resEventos, resEmprend] = await Promise.all([
+    const [resEventos, resEmprend, resLikes] = await Promise.all([
       fetchApi('/api/eventos'),
-      fetchApi('/api/emprendimientos')
+      fetchApi('/api/emprendimientos'),
+      fetchApi('/api/publicaciones/liked')
     ])
 
-    const [jsonEventos, jsonEmprend] = await Promise.all([
+    const [jsonEventos, jsonEmprend, jsonLikes] = await Promise.all([
       resEventos.json(),
-      resEmprend.json()
+      resEmprend.json(),
+      resLikes.json()
     ])
 
     if (jsonEventos.success) eventos.value = jsonEventos.data
     if (jsonEmprend.success) emprendimientos.value = jsonEmprend.data
+    if (jsonLikes.success) publicacionesLikeadas.value = jsonLikes.data
 
   } catch (error) {
     console.error("Error conectando con el backend:", error)

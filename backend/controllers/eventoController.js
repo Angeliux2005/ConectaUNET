@@ -232,3 +232,19 @@ export const toggleSave = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const getRelatedEventos = async (req, res) => {
+  try {
+    const { exclude } = req.query;
+    const filter = exclude ? { _id: { $ne: exclude } } : {};
+    const eventos = await Evento.aggregate([
+      { $match: filter },
+      { $sample: { size: 3 } }
+    ]);
+    // populate organizer manually after aggregate
+    await Evento.populate(eventos, { path: 'organizer', select: 'name username avatar' });
+    res.json({ success: true, data: eventos });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

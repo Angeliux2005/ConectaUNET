@@ -10,11 +10,14 @@ import {
   getMuroComentarios,
   addMuroComentario,
   updateMuroComentario,
-  deleteMuroComentario
+  deleteMuroComentario,
+  getRelatedEventos
 } from '../controllers/eventoController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
+
+router.get('/related', getRelatedEventos);
 
 router.route('/')
   .get(getEventos)

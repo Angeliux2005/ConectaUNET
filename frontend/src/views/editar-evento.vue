@@ -9,7 +9,7 @@
       </router-link>
 
       <div class="hidden md:flex items-center space-x-4">
-        <button @click="isNotificationsOpen = true"
+        <button @click="$router.push('/notificaciones')"
           class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-50 text-gray-600 transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -287,7 +287,6 @@ const files = reactive({ cover: null })
 const saving = ref(false)
 const error = ref('')
 const success = ref('')
-const isNotificationsOpen = ref(false)
 
 const form = reactive({
   nombre: '',
