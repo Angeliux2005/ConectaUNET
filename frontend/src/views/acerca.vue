@@ -10,7 +10,7 @@ const brandBlue = '#213A8F';
 // Función para volver al inicio
 const goHome = () => {
   console.log('Redirigiendo al inicio...');
-  router.push('/');
+  router.push('/eventos');
 };
 </script>
 
@@ -84,10 +84,10 @@ const goHome = () => {
       </div>
 
       <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-[#6B7280]">
-        <a href="#" class="hover:text-gray-900 hover:underline transition-colors">Privacidad</a>
-        <a href="#" class="hover:text-gray-900 hover:underline transition-colors">Términos</a>
-        <a href="#" class="hover:text-gray-900 hover:underline transition-colors">Contáctanos</a>
-        <a href="#" class="font-medium hover:underline transition-colors" :style="{ color: brandBlue }">Acerca de ConectaUNET</a>
+        <a href="#" class="hover:text-gray-900 hover:underline transition-colors" @click="router.push('/privacidad')">Privacidad</a>
+        <a href="#" class="hover:text-gray-900 hover:underline transition-colors" @click="router.push('/terminos')">Términos</a>
+        <a href="#" class="hover:text-gray-900 hover:underline transition-colors" @click="router.push('/contacto')">Contáctanos</a>
+        <a href="#" class="font-medium hover:underline transition-colors" :style="{ color: brandBlue }" @click="router.push('/acerca')">Acerca de ConectaUNET</a>
       </div>
 
     </footer>
