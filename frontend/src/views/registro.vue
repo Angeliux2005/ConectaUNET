@@ -14,17 +14,17 @@ const confirmPassword = ref('');
 const brandBlue = '#213A8F';
 
 // Funcion para enviar información al back (tiene autenticación)
-const handleRegister = () => {
-  if (password === confirmPassword) {
-    fetch('/api/auth/register', {
+const handleRegister = async () => {
+  if (password.value === confirmPassword.value) {
+    await fetch('/api/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        username: username,
-        email: email,
-        password: password,
+        username: username.value,
+        email: email.value,
+        password: password.value,
       })
     })
   }
