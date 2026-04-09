@@ -32,10 +32,21 @@ const handleLogin = async () => {
 
     //Console.log de debug
     console.log('Datos listos para enviar al backend:', {
-      login: emailOrUser.value,
-      password: password.value,
+
     });
 
+    if (password.value === confirmPassword.value) {
+      await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          login: emailOrUser.value,
+          password: password.value,
+        })
+      })
+    }
 
     //localStorage.setItem('token', 'tu_token_generado');
     router.push('/eventos'); 
