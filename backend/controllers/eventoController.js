@@ -80,7 +80,10 @@ export const deleteEvento = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Evento no encontrado' });
     }
 
-    if (evento.organizer.toString() !== req.user._id.toString()) {
+    const esDueno = evento.organizer.toString() === req.user._id.toString();
+    const esAdmin = req.user.role === 'admin';
+
+    if (!esDueno && !esAdmin) {
       return res.status(403).json({ success: false, message: 'No tienes permiso para eliminar este evento' });
     }
 

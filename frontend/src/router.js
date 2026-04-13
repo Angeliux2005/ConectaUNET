@@ -24,6 +24,7 @@ import Notificaciones from './views/notificaciones.vue'
 import MuroEvento from './views/muro-evento.vue'
 import EditarEmprendimiento from './views/editar-emprendimiento.vue'
 import EditarPerfil from './views/editar-perfil.vue'
+import NuevaPublicacion from './views/nueva-publicacion.vue'
 
 const routes = [
   { name: 'Login', path: '/', component: Login },
@@ -49,6 +50,12 @@ const routes = [
   { name: 'Buscar', path: '/buscar', component: Buscar },
   { name: 'NuevoEvento', path: '/nuevo-evento', component: NuevoEvento },
   { name: 'NuevoEmprendimiento', path: '/nuevo-emprendimiento', component: NuevoEmprendimiento },
+  {
+    path: '/emprendimientos/:id/nueva-publicacion',
+    name: 'nueva-publicacion',
+    component: NuevaPublicacion,
+    meta: { requiresAuth: true }
+  },
   { name: 'Notificaciones', path: '/notificaciones', component: Notificaciones },
   { name: '404 - Not Found', path: '/:pathMatch(.*)*', component: NotFound }
 ]

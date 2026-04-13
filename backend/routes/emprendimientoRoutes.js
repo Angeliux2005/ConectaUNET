@@ -13,6 +13,7 @@ import {
 import {
   createPublicacion
 } from '../controllers/publicacionController.js';
+import { uploadPublicacion } from '../middleware/upload.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -33,6 +34,6 @@ router.post('/:id/like', protect, toggleLike);
 
 router.route('/:id/publicaciones')
   .get(getPublicacionesByEmprendimiento)
-  .post(protect, createPublicacion);
+  .post(protect, uploadPublicacion, createPublicacion);
 
 export default router;

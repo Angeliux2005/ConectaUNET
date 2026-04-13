@@ -94,13 +94,24 @@
         </ul>
       </div>
 
+      <div v-if="esMio" class="mt-6 px-4 md:px-0 flex justify-end animate-fade-in-up">
+        <button @click="$router.push(`/emprendimientos/${emp._id}/nueva-publicacion`)" class="bg-[#1e3a8a] text-white font-bold py-2.5 px-6 rounded-xl flex items-center gap-2 hover:bg-[#152a6b] transition-colors shadow-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+          Nueva Publicación
+        </button>
+      </div>
+
       <div v-if="loadingPubs" class="mt-8 md:mt-10 flex justify-center py-12">
         <div class="w-8 h-8 border-4 border-[#1e3a8a] border-t-transparent rounded-full animate-spin"></div>
       </div>
 
-      <div v-else-if="publicaciones.length === 0" class="mt-8 md:mt-10 text-center py-16 text-gray-400">
+      <div v-else-if="publicaciones.length === 0" class="mt-8 md:mt-10 text-center py-16 text-gray-400 flex flex-col items-center">
         <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-        <p class="text-[15px] font-medium">Este emprendimiento aún no tiene publicaciones</p>
+        <p class="text-[15px] font-medium">Este emprendimiento aún no tiene publicaciones.</p>
+        
+        <button v-if="esMio" @click="$router.push(`/emprendimientos/${emp._id}/nueva-publicacion`)" class="mt-4 text-[#1e3a8a] font-bold text-[14px] hover:underline">
+          + Crea tu primera publicación aquí
+        </button>
       </div>
 
       <div v-else class="mt-8 md:mt-10 px-px md:px-0 grid grid-cols-3 gap-px md:gap-8">

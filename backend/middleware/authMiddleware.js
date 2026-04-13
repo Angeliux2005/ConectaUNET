@@ -4,10 +4,7 @@ import User from '../models/User.js';
 export const protect = async (req, res, next) => {
   let token;
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
+  if (req.headers.authorization?.startsWith('Bearer')) {
     try {
       token = req.headers.authorization.split(' ')[1];
 
@@ -24,5 +21,17 @@ export const protect = async (req, res, next) => {
 
   if (!token) {
     res.status(401).json({ success: false, message: 'Not authorized, no token' });
+  }
+};
+
+// Middleware para verificar si el usuario es administrador
+export const admin = (req, res, next) => {
+  if (req.user?.role === 'admin') {
+    next();
+  } else {
+    res.status(401).json({
+      success: false,
+      message: 'No autorizado. Se requieren permisos de administrador.'
+    });
   }
 };

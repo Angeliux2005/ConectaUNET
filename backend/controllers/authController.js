@@ -207,3 +207,25 @@ export const forgotPassword = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const createSuperAdmin = async (req, res) => {
+  const { name, email, password, username, secretKey } = req.body;
+
+  if (secretKey !== process.env.SUPER_SECRET_ADMIN_KEY) {
+    return res.status(403).json({ message: 'Acceso Denegado. Llave incorrecta.' });
+  }
+
+  try {
+    await User.create({
+      name,
+      email,
+      password,
+      username,
+      role: 'admin'
+    });
+
+    res.status(201).json({ message: 'Admin supremo creado con éxito' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

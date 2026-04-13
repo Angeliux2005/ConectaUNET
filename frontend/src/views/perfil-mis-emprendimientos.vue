@@ -22,7 +22,18 @@
               {{ currentUser ? '@' + currentUser.username : '' }}
             </p>
 
-            <div class="mt-2 md:mt-3 bg-gray-100 text-gray-600 font-bold text-[11px] md:text-[13px] px-4 md:px-5 py-1.5 md:py-2 rounded-full tracking-wide text-center">
+            <div 
+              v-if="currentUser?.role === 'admin'" 
+              class="mt-2 md:mt-3 bg-red-100 text-red-700 border border-red-200 font-black text-[11px] md:text-[13px] px-4 md:px-5 py-1.5 md:py-2 rounded-full tracking-widest uppercase text-center flex items-center gap-1.5"
+            >
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 3.99L19.53 8v3c0 4.33-2.92 8.4-7.53 9.49-4.61-1.09-7.53-5.16-7.53-9.49V8L12 4.99zM12 7c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-4 6v1c0 1.33 2.67 2 4 2s4-.67 4-2v-1H8z"/></svg>
+              Administrador
+            </div>
+            
+            <div 
+              v-else 
+              class="mt-2 md:mt-3 bg-gray-100 text-gray-600 font-bold text-[11px] md:text-[13px] px-4 md:px-5 py-1.5 md:py-2 rounded-full tracking-wide text-center"
+            >
               {{ currentUser?.career || 'Universitario' }}
             </div>
 
@@ -31,6 +42,11 @@
             <button @click="$router.push('/editar-perfil')" class="mt-4 md:mt-0 w-[140px] md:w-full bg-white border border-gray-200 md:border-2 md:border-[#1e3a8a] text-gray-700 md:text-[#1e3a8a] hover:bg-gray-50 md:hover:bg-[#1e3a8a] md:hover:text-white font-bold py-2 md:py-3.5 rounded-lg md:rounded-xl transition-all duration-300 text-[12px] md:text-[15px] flex items-center justify-center gap-2 shadow-sm md:shadow-none">
               <svg class="w-3.5 h-3.5 md:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
               Editar Info
+            </button>
+
+            <button @click="cerrarSesion" class="mt-3 md:mt-3 w-[140px] md:w-full bg-red-50/50 hover:bg-red-100 text-red-600 font-bold py-2 md:py-3.5 rounded-lg md:rounded-xl transition-colors duration-300 text-[12px] md:text-[15px] flex items-center justify-center gap-2">
+              <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+              Cerrar Sesión
             </button>
           </div>
         </aside>
@@ -332,6 +348,14 @@ const irAPublicar = () => {
     router.push('/nuevo-evento')
   } else {
     router.push('/nuevo-emprendimiento')
+  }
+}
+
+const cerrarSesion = () => {
+  if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    router.push('/')
   }
 }
 

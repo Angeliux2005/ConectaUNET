@@ -42,9 +42,21 @@
           <img :src="avatar" alt="Autor" class="w-10 h-10 rounded-full object-cover shadow-sm bg-gray-100" />
           <span class="text-[15px] font-bold text-gray-900">{{ autor }}</span>
         </div>
-        <button @click.stop="compartir" class="text-gray-400 hover:text-gray-600 transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-        </button>
+
+        <div class="flex items-center gap-2">
+          <button
+            v-if="isAdmin"
+            @click.stop="borrarElementoAdmin"
+            class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-2 rounded-full transition-colors tooltip"
+            title="Borrar como Administrador"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+          </button>
+
+          <button @click.stop="compartir" class="text-gray-400 hover:text-gray-600 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+          </button>
+        </div>
       </div>
     </div>
   </article>
@@ -56,6 +68,9 @@ import { useRouter } from 'vue-router'
 import { fetchApi } from '../utils/api.js'
 
 const router = useRouter()
+const currentUser = JSON.parse(localStorage.getItem('user') || 'null')
+const isAdmin = currentUser?.role === 'admin'
+const emit = defineEmits(['actualizarLista'])
 
 const props = defineProps({
   imagen: String,
@@ -103,8 +118,32 @@ const toggleSave = async () => {
 
 const navegar = () => router.push(props.enlaceDetalle)
 
+const borrarElementoAdmin = async () => {
+  if (!confirm(`ADMINISTRADOR: ¿Estás seguro de que deseas ELIMINAR permanentemente esta publicación ("${props.titulo}")? Esta acción no se puede deshacer.`)) return
+
+  try {
+    const tipoEndpoint = props.enlaceDetalle.includes('emprendimientos') ? 'emprendimientos' : 'eventos'
+    const idDesdeEnlace = props.enlaceDetalle.split('/').findLast(Boolean)
+    const targetId = props.eventoId || idDesdeEnlace
+
+    const res = await fetchApi(`/api/${tipoEndpoint}/${targetId}`, { method: 'DELETE' })
+    const data = await res.json()
+
+    if (data.success) {
+      alert('Publicación eliminada correctamente.')
+      emit('actualizarLista')
+      globalThis.location.reload()
+    } else {
+      alert('Error: ' + data.message)
+    }
+  } catch (error) {
+    console.error('Error al borrar:', error)
+    alert('Error de conexión al intentar borrar.')
+  }
+}
+
 const compartir = async () => {
-  const url = `${window.location.origin}${props.enlaceDetalle}`
+  const url = `${globalThis.location.origin}${props.enlaceDetalle}`
   if (navigator.share) {
     await navigator.share({ title: props.titulo, text: props.descripcion, url })
   } else {

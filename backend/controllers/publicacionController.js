@@ -4,12 +4,20 @@ import Emprendimiento from '../models/Emprendimiento.js';
 
 export const createPublicacion = async (req, res) => {
   try {
-    const { emprendimientoId } = req.params;
-
-    const emprendimiento = await Emprendimiento.findById(emprendimientoId);
+    const emprendimiento = await Emprendimiento.findById(req.params.id);
     if (!emprendimiento) {
       return res.status(404).json({ success: false, message: 'Emprendimiento no encontrado' });
     }
+
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'Por favor añade una imagen' });
+    }
+
+    const normalizedPath = req.file.path.replaceAll('\\', '/');
+    const uploadsRelativePath = normalizedPath.includes('/uploads/')
+      ? normalizedPath.split('/uploads/')[1]
+      : normalizedPath;
+    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${uploadsRelativePath}`;
 
     if (emprendimiento.owner.toString() !== req.user._id.toString()) {
       return res.status(403).json({
@@ -19,8 +27,10 @@ export const createPublicacion = async (req, res) => {
     }
 
     const publicacion = await Publicacion.create({
-      ...req.body,
-      emprendimiento: emprendimientoId,
+      title: req.body.title,
+      content: req.body.content,
+      image: imageUrl,
+      emprendimiento: emprendimiento._id,
       author: req.user._id
     });
 

@@ -90,7 +90,10 @@ export const deleteEmprendimiento = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Emprendimiento no encontrado' });
     }
 
-    if (emprendimiento.owner.toString() !== req.user._id.toString()) {
+    const esDueno = emprendimiento.owner.toString() === req.user._id.toString();
+    const esAdmin = req.user.role === 'admin';
+
+    if (!esDueno && !esAdmin) {
       return res.status(403).json({ success: false, message: 'No tienes permiso para eliminar este emprendimiento' });
     }
 
