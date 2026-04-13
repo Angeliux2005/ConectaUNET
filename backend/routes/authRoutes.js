@@ -6,6 +6,7 @@ import {
   updateUserProfile,
   updatePassword,
   forgotPassword,
+  resetPassword,
   createSuperAdmin
 } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
@@ -22,5 +23,6 @@ router.route('/profile')
 
 router.put('/updatepassword', protect, updatePassword);
 router.post('/forgotpassword', forgotPassword);
+router.put('/resetpassword/:token', resetPassword);
 
 export default router;

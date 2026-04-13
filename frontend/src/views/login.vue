@@ -111,7 +111,7 @@ const handleLogin = async () => {
               <label for="password" class="text-xs font-semibold text-[#6B7280]">
                 Contraseña
               </label>
-              <a href="#" :style="{ color: brandBlue }" class="text-xs font-bold hover:underline">
+              <a href="#" :style="{ color: brandBlue }" class="text-xs font-bold hover:underline" @click.prevent="router.push('/recuperar-contrasena')">
                 ¿Olvidaste tu contraseña?
               </a>
             </div>

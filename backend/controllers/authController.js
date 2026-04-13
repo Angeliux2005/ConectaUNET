@@ -1,5 +1,7 @@
 import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
+import crypto from 'node:crypto';
+import nodemailer from 'nodemailer';
 
 const nameFromEmail = (email) => {
   const local = email.split('@')[0]; // e.g. "nombre.apellido"
@@ -183,26 +185,80 @@ export const updatePassword = async (req, res) => {
 };
 
 export const forgotPassword = async (req, res) => {
-  try {
-    const { emailOrUser } = req.body;
-    if (!emailOrUser) {
-      return res.status(400).json({ success: false, message: 'Ingresa tu correo o usuario.' });
-    }
+  const { emailOrUser } = req.body;
 
+  try {
     const user = await User.findOne({
       $or: [{ email: emailOrUser }, { username: emailOrUser }]
     });
 
-    // Siempre respondemos igual para no revelar si el usuario existe
-    res.json({
-      success: true,
-      message: 'Si tu correo está registrado, recibirás instrucciones pronto.'
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+    }
+
+    const resetToken = crypto.randomBytes(20).toString('hex');
+
+    user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+    await user.save();
+
+    const resetUrl = `http://localhost:5173/restablecer-contrasena/${resetToken}`;
+
+    const transporter = nodemailer.createTransport({
+      service: process.env.EMAIL_SERVICE,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
     });
 
-    if (user) {
-      // Aquí iría el envío de email cuando se configure el servicio de correo
-      console.log(`[Recuperación] Usuario ${user.email} solicitó recuperación de contraseña.`);
+    const mensaje = `
+      <h1>Recuperacion de Contrasena - ConectaUNET</h1>
+      <p>Has solicitado restablecer tu contrasena. Haz clic en el siguiente enlace para crear una nueva:</p>
+      <a href="${resetUrl}" clicktracking=off>${resetUrl}</a>
+      <p>Este enlace es valido por 10 minutos.</p>
+    `;
+
+    try {
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: user.email,
+        subject: 'Restablece tu contrasena de ConectaUNET',
+        html: mensaje
+      });
+      res.status(200).json({ success: true, message: 'Correo enviado' });
+    } catch (error) {
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save();
+      console.error(error);
+      return res.status(500).json({ success: false, message: 'Error enviando el correo' });
     }
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: 'Token invalido o caducado' });
+    }
+
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    res.status(200).json({ success: true, message: 'Contrasena actualizada correctamente' });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

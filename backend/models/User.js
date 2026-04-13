@@ -34,6 +34,8 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user'
   },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
   career: {
     type: String,
     default: 'Sin Carrera Asignada'

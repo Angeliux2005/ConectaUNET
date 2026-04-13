@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from './views/login.vue'
 import Registro from './views/registro.vue'
 import RecuperarContrasena from './views/recuperar-contrasena.vue'
+import RestablecerContrasena from './views/restablecer-contrasena.vue'
 import DetallesEmprendimientoDueo from './views/detalles-emprendimiento-dueo.vue'
 import DetallesEmprendimientoPublicaciones from './views/detalles-emprendimiento-publicaciones.vue'
 import Eventos from './views/eventos.vue'
@@ -30,6 +31,7 @@ const routes = [
   { name: 'Login', path: '/', component: Login },
   { name: 'Registro', path: '/registro', component: Registro },
   { name: 'RecuperarContrasena', path: '/recuperar-contrasena', component: RecuperarContrasena },
+  { name: 'RestablecerContrasena', path: '/restablecer-contrasena/:token', component: RestablecerContrasena },
   { name: 'Privacidad', path: '/privacidad', component: Privacidad },
   { name: 'Terminos', path: '/terminos', component: Terminos },
   { name: 'Contacto', path: '/contacto', component: Contacto },
