@@ -59,7 +59,7 @@ ConectaUNET/
 ### Tecnologias
 
 - Frontend: Vue 3, Vue Router, Vite, Tailwind CSS.
-- Backend: Node.js, Express 5, Mongoose, JWT, Multer.
+- Backend: Node.js, Express 5, Mongoose, JWT, Multer, Nodemailer.
 - Base de datos: MongoDB.
 
 ### Puesta en marcha local
@@ -90,6 +90,10 @@ En `backend/.env`:
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/conectaunet
 JWT_SECRET=coloca_aqui_un_secreto_seguro
+SUPER_SECRET_ADMIN_KEY=coloca_una_llave_super_admin_segura
+EMAIL_SERVICE=gmail
+EMAIL_USER=tu_correo@dominio.com
+EMAIL_PASS=tu_clave_de_app_o_password_smtp
 ```
 
 Nota: El frontend tiene proxy configurado hacia `http://localhost:5000`, por eso se recomienda usar `PORT=5000`.
@@ -116,6 +120,10 @@ Variables usadas por la API:
 - `PORT`: Puerto del servidor (fallback: `3000`).
 - `MONGO_URI`: Conexion a MongoDB (fallback local incluido).
 - `JWT_SECRET`: Clave para firmar tokens JWT.
+- `SUPER_SECRET_ADMIN_KEY`: Llave para crear un super administrador via endpoint protegido.
+- `EMAIL_SERVICE`: Proveedor usado por Nodemailer (ejemplo: `gmail`).
+- `EMAIL_USER`: Correo remitente para recuperacion de contrasena.
+- `EMAIL_PASS`: Clave SMTP o App Password del correo remitente.
 
 ### Scripts disponibles
 
@@ -135,6 +143,8 @@ Frontend (`frontend/package.json`):
 
 - Health check: `GET /api/health`
 - Base URL local esperada: `http://localhost:5000`
+- Recuperacion de contrasena: `POST /api/auth/forgotpassword`
+- Restablecer contrasena: `PUT /api/auth/resetpassword/:token`
 - Documentacion detallada de endpoints: `backend/docs/endpoints.md`
 
 ### Enlaces del proyecto
@@ -198,7 +208,7 @@ ConectaUNET/
 ### Tech stack
 
 - Frontend: Vue 3, Vue Router, Vite, Tailwind CSS.
-- Backend: Node.js, Express 5, Mongoose, JWT, Multer.
+- Backend: Node.js, Express 5, Mongoose, JWT, Multer, Nodemailer.
 - Database: MongoDB.
 
 ### Local setup
@@ -229,6 +239,10 @@ In `backend/.env`:
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/conectaunet
 JWT_SECRET=put_a_secure_secret_here
+SUPER_SECRET_ADMIN_KEY=put_a_secure_super_admin_key
+EMAIL_SERVICE=gmail
+EMAIL_USER=your_email@domain.com
+EMAIL_PASS=your_app_password_or_smtp_password
 ```
 
 Note: The frontend proxy points to `http://localhost:5000`, so using `PORT=5000` is recommended.
@@ -255,6 +269,10 @@ API variables:
 - `PORT`: Server port (fallback: `3000`).
 - `MONGO_URI`: MongoDB connection string (local fallback included).
 - `JWT_SECRET`: Secret key for JWT signing.
+- `SUPER_SECRET_ADMIN_KEY`: Key used to create super admin users via protected endpoint.
+- `EMAIL_SERVICE`: Provider used by Nodemailer (example: `gmail`).
+- `EMAIL_USER`: Sender email used for password recovery.
+- `EMAIL_PASS`: SMTP password or app password for the sender email.
 
 ### Available scripts
 
@@ -274,6 +292,8 @@ Frontend (`frontend/package.json`):
 
 - Health check: `GET /api/health`
 - Expected local base URL: `http://localhost:5000`
+- Password recovery: `POST /api/auth/forgotpassword`
+- Password reset: `PUT /api/auth/resetpassword/:token`
 - Full endpoint reference: `backend/docs/endpoints.md`
 
 ### Project links
