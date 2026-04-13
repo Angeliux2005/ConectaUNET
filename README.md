@@ -117,7 +117,7 @@ npm run dev
 
 Variables usadas por la API:
 
-- `PORT`: Puerto del servidor (fallback: `3000`).
+- `PORT`: Puerto del servidor (fallback: `3000`, recomendado: `5000` por el proxy del frontend).
 - `MONGO_URI`: Conexion a MongoDB (fallback local incluido).
 - `JWT_SECRET`: Clave para firmar tokens JWT.
 - `SUPER_SECRET_ADMIN_KEY`: Llave para crear un super administrador via endpoint protegido.
@@ -266,7 +266,7 @@ npm run dev
 
 API variables:
 
-- `PORT`: Server port (fallback: `3000`).
+- `PORT`: Server port (fallback: `3000`, recommended: `5000` due to the frontend proxy).
 - `MONGO_URI`: MongoDB connection string (local fallback included).
 - `JWT_SECRET`: Secret key for JWT signing.
 - `SUPER_SECRET_ADMIN_KEY`: Key used to create super admin users via protected endpoint.
